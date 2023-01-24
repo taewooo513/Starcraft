@@ -1,0 +1,252 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Core\Manager\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Core\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Core\Main\stdafx</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageManager.cpp">
+      <Filter>Core\Manager\ImageManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Core\Manager\ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Core\Manager\ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CTimer.cpp">
+      <Filter>Core\Util\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerManager.cpp">
+      <Filter>Core\Manager\TimerManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>Core\Util\MyUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="IOFillManager.cpp">
+      <Filter>Core\Manager\FileManager</Filter>
+    </ClCompile>
+    <ClCompile Include="WinMain.cpp" />
+    <ClCompile Include="WinMain.cpp">
+      <Filter>Game\Object\Boss\Pattern</Filter>
+    </ClCompile>
+    <ClCompile Include="CSound.cpp">
+      <Filter>Core\Manager\SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CSoundMgr.cpp">
+      <Filter>Core\Manager\SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CSound.cpp">
+      <Filter>Core\Manager\SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CSoundMgr.cpp">
+      <Filter>Core\Manager\SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CSound.cpp">
+      <Filter>Core\Manager\SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CSoundMgr.cpp">
+      <Filter>Core\Manager\SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyManager.cpp">
+      <Filter>Core\Manager\KeyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Core\Manager\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp" />
+    <ClCompile Include="LoadImage.cpp">
+      <Filter>Core\Manager\ImageManager</Filter>
+    </ClCompile>
+    <ClCompile Include="WalkUnit.cpp">
+      <Filter>Game\Unit\WalkUnit</Filter>
+    </ClCompile>
+    <ClCompile Include="FlyUnit.cpp">
+      <Filter>Game\Unit\FlyUnit</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Game\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Marine.cpp">
+      <Filter>Game\Unit\Terran\Marine</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBat.cpp">
+      <Filter>Game\Unit\Terran\FireBat</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGameScene.cpp" />
+    <ClCompile Include="SpaceConstructionVehicle.cpp">
+      <Filter>Game\Unit\Terran\SCV</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Build.cpp">
+      <Filter>Game\Build</Filter>
+    </ClCompile>
+    <ClCompile Include="Barrack.cpp" />
+    <ClCompile Include="BuildExplosionEffect.cpp" />
+    <ClCompile Include="EffectManager.cpp" />
+    <ClCompile Include="Effect.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Core\Manager\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="singleton.h">
+      <Filter>Core\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>Core\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Core\Main\stdafx</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageManager.h">
+      <Filter>Core\Manager\ImageManager</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyManager.h">
+      <Filter>Core\Manager\KeyManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Core\Manager\ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Core\Manager\ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CTimer.h">
+      <Filter>Core\Util\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerManager.h">
+      <Filter>Core\Manager\TimerManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Core\Util\MyUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="IOFillManager.h">
+      <Filter>Core\Manager\FileManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CSoundMgr.h">
+      <Filter>Core\Manager\SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CSound.h">
+      <Filter>Core\Manager\SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CSound.h">
+      <Filter>Core\Manager\SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CSoundMgr.h">
+      <Filter>Core\Manager\SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Core\Manager\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h" />
+    <ClInclude Include="WalkUnit.h">
+      <Filter>Game\Unit\WalkUnit</Filter>
+    </ClInclude>
+    <ClInclude Include="FlyUnit.h">
+      <Filter>Game\Unit\FlyUnit</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Game\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Marine.h">
+      <Filter>Game\Unit\Terran\Marine</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBat.h">
+      <Filter>Game\Unit\Terran\FireBat</Filter>
+    </ClInclude>
+    <ClInclude Include="MainGameScene.h" />
+    <ClInclude Include="SpaceConstructionVehicle.h">
+      <Filter>Game\Unit\Terran\SCV</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Build.h">
+      <Filter>Game\Build</Filter>
+    </ClInclude>
+    <ClInclude Include="Barrack.h" />
+    <ClInclude Include="BuildExplosionEffect.h" />
+    <ClInclude Include="EffectManager.h" />
+    <ClInclude Include="Effect.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{cf8433bd-7075-4003-a6a7-fcb870133b70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Manager">
+      <UniqueIdentifier>{be349cf7-cac6-4c31-822b-c67d54e7cf28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Manager\ImageManager">
+      <UniqueIdentifier>{97340737-561e-48ca-b053-d0c0c53c0b2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Manager\KeyManager">
+      <UniqueIdentifier>{160734f0-554d-4af1-921e-77c1282e78a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Manager\ObjectManager">
+      <UniqueIdentifier>{ac7a1757-844b-414d-a470-b71f5708a69c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Util">
+      <UniqueIdentifier>{d986a7ed-42a6-4bb0-b647-f384867dabd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Util\Timer">
+      <UniqueIdentifier>{ae3ed177-4fcf-4182-806a-7419f9e28e98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Main">
+      <UniqueIdentifier>{b95eb196-5c6c-4095-9639-19624250f899}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Main\stdafx">
+      <UniqueIdentifier>{db3244d0-43db-45d8-b3d4-ce776a5b3575}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Manager\TimerManager">
+      <UniqueIdentifier>{68e9d4aa-1788-4e9b-822c-3f82837c76c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Util\MyUtil">
+      <UniqueIdentifier>{f4e45859-f3b1-47ad-84d8-80df8f004e2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Manager\FileManager">
+      <UniqueIdentifier>{08c9d0b8-8bd5-4ba2-aed8-4579ae603bfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Manager\SoundManager">
+      <UniqueIdentifier>{91bb3578-5794-420b-b725-0a442f12b050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Manager\SceneManager">
+      <UniqueIdentifier>{43a4cb9e-c00f-4977-abc1-bedd5ecc97af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{5d57079b-c630-4589-a21b-2d1b9ec794ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Unit">
+      <UniqueIdentifier>{07c38c9e-d6a0-47de-8ab3-d69fc4a73599}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Unit\WalkUnit">
+      <UniqueIdentifier>{e70d73b5-e685-4bd9-8805-3769e234344b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Unit\FlyUnit">
+      <UniqueIdentifier>{ca53a9d9-f8ce-4cb9-9de0-80aab3a3d6c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Build">
+      <UniqueIdentifier>{3fc3af51-6bfe-4ddc-8352-a8f6dbcb4973}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Build\Terran">
+      <UniqueIdentifier>{f344dbb1-e313-4f67-9a81-10ed97447837}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Unit\Terran">
+      <UniqueIdentifier>{b53c222a-6caa-4e76-9553-a0612e14d50c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Unit\Terran\Marine">
+      <UniqueIdentifier>{6f91f43b-c02c-4c80-b505-f4708ec4b56e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Unit\Terran\FireBat">
+      <UniqueIdentifier>{3c4085b1-fbcb-41f8-9f6e-177e1be57922}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Unit\Terran\SCV">
+      <UniqueIdentifier>{03114c72-cddd-44bd-9475-b82d72379b8a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
