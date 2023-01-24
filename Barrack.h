@@ -3,9 +3,7 @@
 class Barrack : public Build
 {
 private:
-	const float m_maxCompleteTime = 50.5f;
-	float m_completeTime;
-	int m_buildIndex;;
+
 public:
 	CImage* m_buildImage[4];
 

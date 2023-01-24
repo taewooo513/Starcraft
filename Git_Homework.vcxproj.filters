@@ -59,37 +59,48 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Core\Manager\SceneManager</Filter>
     </ClCompile>
-    <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="LoadImage.cpp">
       <Filter>Core\Manager\ImageManager</Filter>
     </ClCompile>
     <ClCompile Include="WalkUnit.cpp">
-      <Filter>Game\Unit\WalkUnit</Filter>
+      <Filter>Game\Object\Unit\WalkUnit</Filter>
     </ClCompile>
     <ClCompile Include="FlyUnit.cpp">
-      <Filter>Game\Unit\FlyUnit</Filter>
+      <Filter>Game\Object\Unit\FlyUnit</Filter>
     </ClCompile>
     <ClCompile Include="Unit.cpp">
-      <Filter>Game\Unit</Filter>
+      <Filter>Game\Object\Unit</Filter>
     </ClCompile>
     <ClCompile Include="Marine.cpp">
-      <Filter>Game\Unit\Terran\Marine</Filter>
+      <Filter>Game\Object\Unit\Terran\Marine</Filter>
     </ClCompile>
     <ClCompile Include="FireBat.cpp">
-      <Filter>Game\Unit\Terran\FireBat</Filter>
+      <Filter>Game\Object\Unit\Terran\FireBat</Filter>
     </ClCompile>
-    <ClCompile Include="MainGameScene.cpp" />
     <ClCompile Include="SpaceConstructionVehicle.cpp">
-      <Filter>Game\Unit\Terran\SCV</Filter>
+      <Filter>Game\Object\Unit\Terran\SCV</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Build.cpp">
-      <Filter>Game\Build</Filter>
+      <Filter>Game\Object\Build</Filter>
     </ClCompile>
-    <ClCompile Include="Barrack.cpp" />
-    <ClCompile Include="BuildExplosionEffect.cpp" />
-    <ClCompile Include="EffectManager.cpp" />
-    <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Barrack.cpp">
+      <Filter>Game\Object\Build\Terran</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectManager.cpp">
+      <Filter>Core\Manager\EffectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Core\Manager\EffectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Game\Scene\TestScene</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGameScene.cpp">
+      <Filter>Game\Scene\MainGameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -143,34 +154,45 @@
     <ClInclude Include="Scene.h">
       <Filter>Core\Manager\SceneManager</Filter>
     </ClInclude>
-    <ClInclude Include="TestScene.h" />
     <ClInclude Include="WalkUnit.h">
-      <Filter>Game\Unit\WalkUnit</Filter>
+      <Filter>Game\Object\Unit\WalkUnit</Filter>
     </ClInclude>
     <ClInclude Include="FlyUnit.h">
-      <Filter>Game\Unit\FlyUnit</Filter>
+      <Filter>Game\Object\Unit\FlyUnit</Filter>
     </ClInclude>
     <ClInclude Include="Unit.h">
-      <Filter>Game\Unit</Filter>
+      <Filter>Game\Object\Unit</Filter>
     </ClInclude>
     <ClInclude Include="Marine.h">
-      <Filter>Game\Unit\Terran\Marine</Filter>
+      <Filter>Game\Object\Unit\Terran\Marine</Filter>
     </ClInclude>
     <ClInclude Include="FireBat.h">
-      <Filter>Game\Unit\Terran\FireBat</Filter>
+      <Filter>Game\Object\Unit\Terran\FireBat</Filter>
     </ClInclude>
-    <ClInclude Include="MainGameScene.h" />
     <ClInclude Include="SpaceConstructionVehicle.h">
-      <Filter>Game\Unit\Terran\SCV</Filter>
+      <Filter>Game\Object\Unit\Terran\SCV</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Build.h">
-      <Filter>Game\Build</Filter>
+      <Filter>Game\Object\Build</Filter>
     </ClInclude>
-    <ClInclude Include="Barrack.h" />
-    <ClInclude Include="BuildExplosionEffect.h" />
-    <ClInclude Include="EffectManager.h" />
-    <ClInclude Include="Effect.h" />
+    <ClInclude Include="Barrack.h">
+      <Filter>Game\Object\Build\Terran</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectManager.h">
+      <Filter>Core\Manager\EffectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Core\Manager\EffectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>Game\Scene\TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="MainGameScene.h">
+      <Filter>Game\Scene\MainGameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -218,32 +240,53 @@
     <Filter Include="Game">
       <UniqueIdentifier>{5d57079b-c630-4589-a21b-2d1b9ec794ea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Unit">
+    <Filter Include="Core\Manager\EffectManager">
+      <UniqueIdentifier>{bc6de301-6b11-4dfe-9cf2-144020e87adb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Effect">
+      <UniqueIdentifier>{96c7a82c-1e6f-4f7e-bfea-c8a073743f43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object">
+      <UniqueIdentifier>{5ced4a1e-92b1-4b20-997b-13ad13274964}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Unit">
       <UniqueIdentifier>{07c38c9e-d6a0-47de-8ab3-d69fc4a73599}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Unit\WalkUnit">
+    <Filter Include="Game\Object\Unit\WalkUnit">
       <UniqueIdentifier>{e70d73b5-e685-4bd9-8805-3769e234344b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Unit\FlyUnit">
+    <Filter Include="Game\Object\Unit\FlyUnit">
       <UniqueIdentifier>{ca53a9d9-f8ce-4cb9-9de0-80aab3a3d6c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Build">
-      <UniqueIdentifier>{3fc3af51-6bfe-4ddc-8352-a8f6dbcb4973}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Build\Terran">
-      <UniqueIdentifier>{f344dbb1-e313-4f67-9a81-10ed97447837}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Unit\Terran">
+    <Filter Include="Game\Object\Unit\Terran">
       <UniqueIdentifier>{b53c222a-6caa-4e76-9553-a0612e14d50c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Unit\Terran\Marine">
+    <Filter Include="Game\Object\Unit\Terran\Marine">
       <UniqueIdentifier>{6f91f43b-c02c-4c80-b505-f4708ec4b56e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Unit\Terran\FireBat">
+    <Filter Include="Game\Object\Unit\Terran\FireBat">
       <UniqueIdentifier>{3c4085b1-fbcb-41f8-9f6e-177e1be57922}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Unit\Terran\SCV">
+    <Filter Include="Game\Object\Unit\Terran\SCV">
       <UniqueIdentifier>{03114c72-cddd-44bd-9475-b82d72379b8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Build">
+      <UniqueIdentifier>{3fc3af51-6bfe-4ddc-8352-a8f6dbcb4973}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Build\Terran">
+      <UniqueIdentifier>{f344dbb1-e313-4f67-9a81-10ed97447837}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene">
+      <UniqueIdentifier>{1498f842-3746-4836-8a09-2e95309181c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\TestScene">
+      <UniqueIdentifier>{5199cd08-3b40-42cd-be46-79b27da121cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\MainGameScene">
+      <UniqueIdentifier>{7e0fe190-e2de-4086-a73c-ae05cb275427}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{7f759635-1664-4883-9b0e-345156fcaa3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

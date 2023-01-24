@@ -6,10 +6,11 @@ protected:
 	float m_hp;
 	float m_costM;
 	float m_costG;
-
-	float m_makeDelay;
+	float m_maxHp;
 	queue<Unit> m_unitQueue;
-
+	const float m_maxCompleteTime = 50.5f;
+	float m_completeTime;
+	int m_buildIndex;
 public:
 
 	Build();
@@ -20,5 +21,7 @@ public:
 	virtual void Render() override;
 	virtual void Release() override;
 	virtual void UIRender() override;
+
+	virtual void AddBuild();
 };
 
