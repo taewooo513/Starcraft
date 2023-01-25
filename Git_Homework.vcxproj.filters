@@ -101,6 +101,7 @@
     <ClCompile Include="Player.cpp">
       <Filter>Game\Player</Filter>
     </ClCompile>
+    <ClCompile Include="MapReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -193,6 +194,7 @@
     <ClInclude Include="Player.h">
       <Filter>Game\Player</Filter>
     </ClInclude>
+    <ClInclude Include="MapReader.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">

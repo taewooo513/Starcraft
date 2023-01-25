@@ -9,7 +9,7 @@ public:
 
 	vector<Effect*> m_effects;
 
-	void AddEffect(string key, Vector2 pos, int size, float timeDelay);
+	Effect * AddEffect(string key, Vector2 pos, float size, float timeDelay);
 	void Update();
 	void Render();
 	void Release();

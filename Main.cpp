@@ -23,9 +23,9 @@ void Main::Init()
 
 void Main::Update()
 {
+	EFFECTMANAGER->Update();
 	OBJECTMANAGER->Update();
 	SCENEMANAGER->Update();
-	EFFECTMANAGER->Update();
 }
 
 void Main::Render()
@@ -33,8 +33,8 @@ void Main::Render()
 	m_d2dContext->BeginDraw();
 	SCENEMANAGER->Render();
 	OBJECTMANAGER->Render();
-	EFFECTMANAGER->Render();
 	//TIMERMANAGER->Render();
+	EFFECTMANAGER->Render();
 	SCENEMANAGER->UIRender();
 	OBJECTMANAGER->UIRender();
 	TIMERMANAGER->Render();

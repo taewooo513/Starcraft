@@ -5,8 +5,9 @@ private:
 	float m_scale;
 	Vector2 position;
 	vImage* m_image;
-	bool m_isDestroy;
 public:
+	bool m_isDestroy;
+	bool m_isEnd;
 	Effect() {}
 	virtual ~Effect() {}
 	void Setting(string key, Vector2 pos, float scale, float timeDelay);

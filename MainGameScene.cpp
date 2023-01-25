@@ -12,7 +12,7 @@ MainGameScene::~MainGameScene()
 
 void MainGameScene::Init()
 {
-	OBJECTMANAGER->AddObject(new Barrack, "Unit", WINSIZE_X/2, WINSIZE_Y/2, 1);
+	OBJECTMANAGER->AddObject(new SpaceConstructionVehicle, "Unit", WINSIZE_X/2, WINSIZE_Y/2, 1);
 }
 
 void MainGameScene::Update()

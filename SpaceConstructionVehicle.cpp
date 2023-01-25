@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SpaceConstructionVehicle.h"
-
+#include "Barrack.h"
 SpaceConstructionVehicle::SpaceConstructionVehicle()
 {
 }
@@ -11,6 +11,8 @@ SpaceConstructionVehicle::~SpaceConstructionVehicle()
 
 void SpaceConstructionVehicle::Init()
 {
+	m_spark = nullptr;
+	m_nowBuild = nullptr;
 	m_actionImage_1[0] = IMAGEMANAGER->FindImage("scv_action_1_1");
 	m_actionImage_1[1] = IMAGEMANAGER->FindImage("scv_action_1_2");
 	m_actionImage_1[2] = IMAGEMANAGER->FindImage("scv_action_1_3");
@@ -46,6 +48,31 @@ void SpaceConstructionVehicle::Init()
 
 void SpaceConstructionVehicle::Move()
 {
+}
+
+void SpaceConstructionVehicle::Update()
+{
+	if (m_nowBuild != nullptr)
+	{
+		m_nowBuild->AddBuild();
+		if (m_spark == nullptr)
+		{
+			m_spark = EFFECTMANAGER->AddEffect("SCVEffect", { position.x - 35,position.y-40 }, 1.7, 0.1);
+		}
+		else if (m_spark->m_isEnd == true)
+		{
+			m_spark->m_isDestroy = true;
+			m_spark = nullptr;
+		}
+		if (m_nowBuild->isComplete == true)
+		{
+			m_nowBuild = nullptr;
+		}
+		if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
+		{
+			m_nowBuild = nullptr;
+		}
+	}
 }
 
 void SpaceConstructionVehicle::Render()
@@ -95,12 +122,34 @@ void SpaceConstructionVehicle::Render()
 		m_dir = 8;
 	}
 
-	IMAGEMANAGER->CenterRenderBlendBlack(m_idleImage[(int)m_dir], position, 1.5f, 0, isR);
+	if (page == 1)
+	{
+		if (KEYMANAGER->GetOnceKeyDown('B'))
+		{
+			m_nowBuild = new Barrack;
+			OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x, position.y, 0);
+		}
+	}
+
+	if (KEYMANAGER->GetOnceKeyDown(VK_F1))
+	{
+		index++;
+	}
+
+	if (m_nowBuild == nullptr)
+	{
+		IMAGEMANAGER->CenterRenderBlendBlack(m_idleImage[(int)m_dir], position, 1.5f, 0, isR);
+	}
+	else
+	{
+		IMAGEMANAGER->CenterRenderBlendBlack(m_actionImage_1[(int)m_dir], position, 1.5f, 0, isR);
+	}
+	
 }
 
 void SpaceConstructionVehicle::UIRender()
 {
-	
+
 	/*
 		AddImage("cmdicons0106", L"./Resources/Icon/cmdicons0106.bmp"); // 커멘드센터
 		AddImage("cmdicons0109", L"./Resources/Icon/cmdicons0109.bmp"); // 서플라이 디포트
@@ -171,11 +220,16 @@ void SpaceConstructionVehicle::UIRender()
 		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0112"), { UIPosition[6].x - 4 ,UIPosition[6].y - 7 }, 1.7, 0, 0);
 
 		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[7].x + 25,UIPosition[7].y + 25 }, 1.7, 0, 0);
-		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0125"), { UIPosition[7].x - 2 ,UIPosition[7].y  }, 1.7, 0, 0);
+		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0125"), { UIPosition[7].x - 2 ,UIPosition[7].y }, 1.7, 0, 0);
 	}
 	//IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), UIPosition[8], 1.7, 0, 0);
 }
 
 void SpaceConstructionVehicle::Attack()
 {
+}
+
+void SpaceConstructionVehicle::BuildingConstruction()
+{
+
 }

@@ -158,6 +158,7 @@
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainGameScene.cpp" />
+    <ClCompile Include="MapReader.cpp" />
     <ClCompile Include="Marine.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="MainGameScene.h" />
+    <ClInclude Include="MapReader.h" />
     <ClInclude Include="Marine.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />

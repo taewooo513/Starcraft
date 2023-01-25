@@ -74,16 +74,15 @@ public:
 class vImage
 {
 private:
-
 	vector<CImage*> m_images;
 
 	bool m_isEnd = false;
 	bool m_isLoop = false;
 
-	float m_nowFrame;
-	float m_timeDelay;
+	float m_nowFrame = 0;
+	float m_timeDelay = 0;
 
-	int m_frame;
+	int m_frame = 0;
 
 public:
 	vImage() {}
@@ -127,7 +126,6 @@ public:
 			}
 			m_nowFrame = 0;
 		}
-
 		IMAGEMANAGER->CenterRenderBlendBlack(m_images[m_frame], vec, scale, rot, isReverse);
 	}
 
@@ -148,10 +146,6 @@ public:
 
 	void Release()
 	{
-		for (auto iter : m_images)
-		{
-			SAFE_DELETE(iter);
-		}
 		m_images.clear();
 	}
 

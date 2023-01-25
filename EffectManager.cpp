@@ -9,12 +9,13 @@ EffectManager::~EffectManager()
 {
 }
 
-void EffectManager::AddEffect(string key, Vector2 pos, int size, float timeDelay)
+Effect* EffectManager::AddEffect(string key, Vector2 pos, float size, float timeDelay)
 {
 	Effect* effect = new Effect;
 	effect->Setting(key, pos, size, timeDelay);
 	effect->Init();
 	m_effects.push_back(effect);
+	return effect;
 }
 
 void EffectManager::Update()

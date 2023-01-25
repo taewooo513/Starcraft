@@ -326,4 +326,5 @@ void ImageManager::ImageLoad()
 	// ÀÌÆåÆ®
 	AddImageVector("f2", L"./Resources/f2/tbangx00", 0, 13); // °Ç¹° Æø¹ß
 
+	AddImageVector("SCVEffect", L"./Resources/SCVEffect/scvspark00", 0, 9); // °Ç¹° Æø¹ß
 }

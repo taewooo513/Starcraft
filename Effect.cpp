@@ -3,9 +3,9 @@
 
 void Effect::Setting(string key, Vector2 pos, float scale, float timeDelay)
 {
-	m_image = IMAGEMANAGER->FindImageVector(key);
+	m_image = IMAGEMANAGER->AddImageVectorCopy(key);
 	m_image->Setting(timeDelay, false);
-
+	m_isEnd = false;
 	m_scale = scale;
 	position = pos;
 }
@@ -18,7 +18,7 @@ void Effect::Update()
 {
 	if (m_image->GetIsEnd())
 	{
-		m_isDestroy = true;
+		m_isEnd = true;
 	}
 }
 
@@ -29,6 +29,5 @@ void Effect::Render()
 
 void Effect::Release()
 {
-	m_image->Release();
 	SAFE_DELETE(m_image);
 }

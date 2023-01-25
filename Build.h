@@ -12,6 +12,7 @@ protected:
 	float m_completeTime;
 	int m_buildIndex;
 public:
+	bool isComplete = false;
 
 	Build();
 	~Build();
@@ -23,5 +24,6 @@ public:
 	virtual void UIRender() override;
 
 	virtual void AddBuild();
+	virtual void SelectBuild();
 };
 

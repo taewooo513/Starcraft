@@ -26,7 +26,6 @@ void Barrack::Init()
 
 void Barrack::Update()
 {
-	
 }
 
 void Barrack::Render()
