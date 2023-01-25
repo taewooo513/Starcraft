@@ -1,6 +1,5 @@
 #pragma once
 #include "singleton.h"
-
 class CImage
 {
 private:
@@ -15,7 +14,10 @@ public:
 	{
 		alpha = 1;
 	}
-
+	CImage() 
+	{
+		alpha = 1;
+	}
 	~CImage()
 	{
 		bitmap->Release();
@@ -31,10 +33,11 @@ public:
 };
 
 class vImage;
-
+class MapReader;
 class ImageManager : public Singleton<ImageManager>
 {
 private:
+	MapReader* mapReader;
 	IWICImagingFactory* factory = nullptr;
 	ID2D1DeviceContext* m_d2dContext;
 	IDXGISwapChain1* m_swapChain;
@@ -65,8 +68,8 @@ public:
 	void Render(CImage* img, Vector2 vec, float scale, float rot);
 	void RenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot);
 	void CenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse);
-
-
+	void MapRender();
+	void LoadMap();
 };
 
 #define IMAGEMANAGER ImageManager::GetInstance()

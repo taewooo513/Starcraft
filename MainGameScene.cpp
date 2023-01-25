@@ -2,6 +2,7 @@
 #include "MainGameScene.h"
 #include "SpaceConstructionVehicle.h"
 #include "Barrack.h"
+#include "MapReader.h"
 MainGameScene::MainGameScene()
 {
 }
@@ -21,6 +22,7 @@ void MainGameScene::Update()
 
 void MainGameScene::Render()
 {
+	IMAGEMANAGER->MapRender();
 	//IMAGEMANAGER->Render(IMAGEMANAGER->FindImage("titleBackGround"), { 0,0 }, 1.7f, 0);
 }
 

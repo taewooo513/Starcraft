@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ImageManager.h"
-
+#include "MapReader.h"
 ImageManager::ImageManager()
 {
 }
@@ -53,12 +53,12 @@ void ImageManager::Init(ID2D1DeviceContext* context, IDXGISwapChain1* swapChain)
 	ComPtr<ID2D1ColorContext> displayColorContext;
 
 	context->CreateColorContext(D2D1_COLOR_SPACE_SRGB, nullptr, 0, &displayColorContext);
-
 	blendEffect->SetValue(
 		D2D1_COLORMANAGEMENT_PROP_DESTINATION_COLOR_CONTEXT,
 		displayColorContext.Get()
 	);
 	ImageLoad();
+	LoadMap();
 }
 
 void ImageManager::CameraSetting()
@@ -129,18 +129,30 @@ void ImageManager::CenterRenderBlendBlack(CImage* img, Vector2 vec, float scale,
 	m_d2dContext->DrawImage(blendEffect);
 }
 
+void ImageManager::MapRender()
+{
+	mapReader->MapRender();
+}
+
+void ImageManager::LoadMap()
+{
+	mapReader = new MapReader;
+	mapReader->Init(m_d2dContext);
+}
+
 ID2D1Bitmap* ImageManager::AddBitmap(std::wstring path, UINT* Width, UINT* Height)
 {
 	ID2D1Bitmap* bitmap;
 	IWICBitmapDecoder* decoder = nullptr;
 	factory->CreateDecoderFromFilename(path.c_str(), 0, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &decoder);
 
+
+
 	IWICBitmapFrameDecode* frameDecode = nullptr;
 	decoder->GetFrame(0, &frameDecode);
 
 	IWICFormatConverter* converter = nullptr;
 	factory->CreateFormatConverter(&converter);
-
 	converter->Initialize(frameDecode, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, 0, 0.0, WICBitmapPaletteTypeCustom);
 	m_d2dContext->CreateBitmapFromWicBitmap(converter, 0, &bitmap);
 	converter->GetSize(Width, Height);
