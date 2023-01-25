@@ -59,6 +59,9 @@
 #include <d2d1effectauthor.h>  
 #include <d2d1effecthelpers.h>
 
+#include "./Storm/SFmpqapi.h"
+#include "./Storm/SFmpq_static.h"
+
 #pragma comment(lib , "Dwrite.lib")
 #pragma comment( lib, "dxerr.lib" )
 #pragma comment( lib, "dxguid.lib" )
@@ -68,6 +71,12 @@
 #include <wincodecsdk.h>
 #pragma comment(lib,"windowscodecs.lib")
 #pragma endregion
+
+#pragma comment(lib,"./Storm/SFmpq.lib")
+#pragma comment(lib,"./Storm/SFmpq_static.lib")
+
+
+
 
 
 using namespace std;
@@ -152,6 +161,68 @@ using namespace Microsoft::WRL;
 //{
 //	return;
 //}
+
+typedef struct
+{
+	ID2D1Bitmap* bitmap;
+	typedef struct
+	{
+		struct CV5Data
+		{
+			unsigned char Someting[20];
+			unsigned short MegaTileIndex[16];
+		} pCV5Data[4096];
+	} CV5;
+
+	typedef struct
+	{
+		struct VF4Data
+		{
+			enum flags
+			{
+				eWalkBlock = 0x0001,
+				eMidBlock = 0x0002,
+				eHighBlock = 0x0004,
+				eBlocksView = 0x0008,
+				eRamp = 0x0010,
+			};
+			unsigned short flag[16];
+		} pVX4Data[65536];
+	} VF4;
+
+	typedef struct
+	{
+		struct VX4Data
+		{
+			unsigned short VR4Index[16];
+		} data[65536];
+	} VX4;
+
+	typedef struct
+	{
+		struct VR4Data
+		{
+			unsigned char color[64];
+		} pVR4Data[32768];
+	} VR4;
+
+	typedef struct
+	{
+		struct WPEData
+		{
+			unsigned char r;
+			unsigned char g;
+			unsigned char b;
+			unsigned char padding;
+		} data[256];
+	} WPE;
+
+	CV5* cv5;
+	VF4* vf4;
+	VR4* vr4;
+	VX4* vx4;
+	WPE* wpe;
+} TileSetData;
 
 extern ID2D1Device* g_device;
 extern ComPtr<ID3D11Device> g_d3dDevice;
