@@ -195,6 +195,7 @@
       <Filter>Game\Player</Filter>
     </ClInclude>
     <ClInclude Include="MapReader.h" />
+    <ClInclude Include="Storm\Storm.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">

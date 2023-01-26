@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "MapReader.h"
-
+#include <packon.h>
 void MapReader::Init(ID2D1DeviceContext* context)
 {
 	tileSetData = new TileSetData;
@@ -13,11 +13,11 @@ void MapReader::Init(ID2D1DeviceContext* context)
 	FILE* cv5File;
 
 	fopen_s(&file, "./Resources/map/MTXM", "rb");
-	fopen_s(&wpeFile, "./Resources/map/jungle.wpe", "rb");
-	fopen_s(&cv5File, "./Resources/map/jungle.cv5", "rb");
-	fopen_s(&vr4File, "./Resources/map/jungle.vr4", "rb");
-	fopen_s(&vx4File, "./Resources/map/jungle.vx4", "rb");
-	fopen_s(&vf4File, "./Resources/map/jungle.vf4", "rb");
+	fopen_s(&wpeFile, "./Resources/map/platform.wpe", "rb");
+	fopen_s(&cv5File, "./Resources/map/platform.cv5", "rb");
+	fopen_s(&vr4File, "./Resources/map/platform.vr4", "rb");
+	fopen_s(&vx4File, "./Resources/map/platform.vx4", "rb");
+	fopen_s(&vf4File, "./Resources/map/platform.vf4", "rb");
 
 	if (file == NULL || cv5File == NULL || wpeFile == NULL || vr4File == NULL || vx4File == NULL)
 	{
@@ -51,44 +51,48 @@ void MapReader::Init(ID2D1DeviceContext* context)
 	const int w = 32 * 128;
 	const int h = 32 * 128;
 
-	RGBAbyte* imageData = new RGBAbyte[w * h];
-	arr2D<RGBAbyte>img(imageData, w);
+	vector<vector<arr2D<RGBAbyte>>> imgRgbBytes;
 
-	for (int i = 0; i < 128; i++)
+	for (int y = 0; y < 128; y++)
 	{
-		for (int j = 0; j < 128; j++)
+		for (int x = 0; x < 128; x++)
 		{
-			int group = mtxm[i][j] >> 4;
-			int index = mtxm[i][j] & 0xf;
+			vector<arr2D<RGBAbyte>>imgs;
+			int group = mtxm[y][x] >> 4;
+			int index = mtxm[y][x] & 0xf;
 
-			int megaTile = tileSetData->cv5->pCV5Data[group].MegaTileIndex[index];
-			for (int y = 0; y < 4; y++)
+			int megaTile = tileSetData->cv5->group[group].MegaTileIndex[index];
+
+			for (int subY = 0; subY < 4; subY++)
 			{
-				for (int x = 0; x < 4; x++)
+				for (int subX = 0; subX < 4; subX++)
 				{
-					int miniTileIndex = tileSetData->vx4->data[megaTile].VR4Index[y * 4 + x] >> 1;
-					bool flipped = (tileSetData->vx4->data[megaTile].VR4Index[y * 4 + x] & 1) == true;
+					int miniTileIndex = tileSetData->vx4->data[megaTile].VR4Index[subY * 4 + subX] >> 1;
+					bool flipped = (tileSetData->vx4->data[megaTile].VR4Index[subY * 4 + subX] & 1) == true;
 
 					const TileSetData::VR4::VR4Data& _vr4 = tileSetData->vr4->pVR4Data[miniTileIndex];
 
-					const int draw_offsetX = j * 32 + x * 8;
-					const int draw_offsetY = i * 32 + y * 8;
+					RGBAbyte* img = new RGBAbyte[8 * 8];
+					arr2D<RGBAbyte> imgss(img, 8);
 
-					for (int k = 0; k < 8; k++)
+					for (int j = 0; j < 8; )
 					{
-						for (int l = 0; l < 8; l++)
+						for (int i = 0; i < 8; )
 						{
-							int drawX = draw_offsetX + (flipped ? 7 - l : l);
-							int drawY = draw_offsetY + k;
-
-							const TileSetData::WPE::WPEData& wre = tileSetData->wpe->data[_vr4.color[(y << 3) + x]];
+							int siz = j * 8 + flipped == true ? 7 - i : i;
+							//cout << siz << endl;
+							const TileSetData::WPE::WPEData& wre = tileSetData->wpe->data[_vr4.color[siz]];
 							RGBAbyte colr = { wre.b, wre.g,wre.r,255 };
-							img[drawY][drawX] = colr;
+							int index = j * 8 +  i;
+							imgss._p[index] = colr;
+							i++;
 						}
+						j++;
 					}
+					imgs.push_back(imgss);
 				}
 			}
-
+			imgRgbBytes.push_back(imgs);
 		}
 	}
 
@@ -102,27 +106,68 @@ void MapReader::Init(ID2D1DeviceContext* context)
 	s.height = h;
 	s.width = w;
 	const void* b;
+
 	HRESULT hr = context->CreateBitmap(s, pros, &tileSetData->bitmap);
-	D2D1_RECT_U rect = { 0,0,w,h };
-	hr = tileSetData->bitmap->CopyFromMemory(&rect, img._p, img._pitch);
-	int sizeff = sizeof(img._p);
-	cout << hr;
+
+	int count = 0;
+	int count2 = 0;
+	for (auto& iter : imgRgbBytes)
+	{
+		int c = count % 128;
+		int d = count / 128;
+		count2 = 0;
+		for (auto& _iter : iter)
+		{
+			if (count <= 0 && count2 <= 4)
+			{
+
+				int cc = count2 % 4;
+				int dd = count2 / 4;
+
+				D2D1_RECT_U rect = { 32 * c + 8 * cc ,32 * d + 8 * (dd) ,32 * c + 8 + 8 * (cc), 32 * d + 8 + 8 * (dd) };
+				HRESULT hr = tileSetData->bitmap->CopyFromMemory(&rect, _iter._p, 8);
+			}
+			count2++;
+		}
+		count++;
+	}
+
+	for (auto iter : imgRgbBytes)
+	{
+		for (auto _iter : iter)
+		{
+			SAFE_DELETE(_iter._p);
+		}
+	}
+
 }
 
 void MapReader::MapRender()
 {
+
 	D2D_MATRIX_3X2_F matT, matS;
 	if (KEYMANAGER->GetStayKeyDown(VK_LEFT))
 	{
-		xoff -= DELTA_TIME * 100;
+		xoff -= DELTA_TIME * 200;
 	}
 	if (KEYMANAGER->GetStayKeyDown(VK_RIGHT))
 	{
-		xoff += DELTA_TIME * 100;
+		xoff += DELTA_TIME * 200;
 	}
-	matT = D2D1::Matrix3x2F::Translation(0 - xoff, 0);
-	matS = D2D1::Matrix3x2F::Scale(0.1, 0.1);
+	if (KEYMANAGER->GetStayKeyDown(VK_UP))
+	{
+		yoff -= DELTA_TIME * 200;
+	}
+	if (KEYMANAGER->GetStayKeyDown(VK_DOWN))
+	{
+		yoff += DELTA_TIME * 200;
+	}
+	m_context->Clear();
+
+	matT = D2D1::Matrix3x2F::Translation(0 - xoff, 0 - yoff);
+	matS = D2D1::Matrix3x2F::Scale(3.5f, 3.5f);
 
 	m_context->SetTransform(matT * matS);
+
 	m_context->DrawBitmap(tileSetData->bitmap);
 }

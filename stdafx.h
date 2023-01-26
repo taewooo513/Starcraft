@@ -59,8 +59,8 @@
 #include <d2d1effectauthor.h>  
 #include <d2d1effecthelpers.h>
 
-#include "./Storm/SFmpqapi.h"
-#include "./Storm/SFmpq_static.h"
+//#include "./Storm/SFmpqapi.h"
+//#include "./Storm/SFmpq_static.h"
 
 #pragma comment(lib , "Dwrite.lib")
 #pragma comment( lib, "dxerr.lib" )
@@ -72,12 +72,8 @@
 #pragma comment(lib,"windowscodecs.lib")
 #pragma endregion
 
-#pragma comment(lib,"./Storm/SFmpq.lib")
-#pragma comment(lib,"./Storm/SFmpq_static.lib")
-
-
-
-
+//#pragma comment(lib,"./Storm/SFmpq.lib")
+//#pragma comment(lib,"./Storm/SFmpq_static.lib")
 
 using namespace std;
 
@@ -171,7 +167,7 @@ typedef struct
 		{
 			unsigned char Someting[20];
 			unsigned short MegaTileIndex[16];
-		} pCV5Data[4096];
+		} group[4096];
 	} CV5;
 
 	typedef struct
