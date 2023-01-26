@@ -12,10 +12,10 @@ public:
 
 typedef struct
 {
-	unsigned char r;
-	unsigned char g;
-	unsigned char b;
-	unsigned char padding;
+	BYTE r;
+	BYTE g;
+	BYTE b;
+	BYTE padding;
 } RGBAbyte;
 
 
