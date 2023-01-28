@@ -46,8 +46,6 @@ void Build::AddBuild()
 		{
 			m_buildIndex = int(m_completeTime) / int(m_maxCompleteTime / 4);
 		}
-		cout << m_hp << endl;
-		cout << m_completeTime << endl;
 	}
 }
 

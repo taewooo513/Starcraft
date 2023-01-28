@@ -22,6 +22,7 @@ void MainGameScene::Update()
 
 void MainGameScene::Render()
 {
+	IMAGEMANAGER->MapRender();
 	//IMAGEMANAGER->Render(IMAGEMANAGER->FindImage("titleBackGround"), { 0,0 }, 1.7f, 0);
 }
 
@@ -32,5 +33,6 @@ void MainGameScene::Release()
 void MainGameScene::UIRender()
 {
 	IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("playerUI"), { 0,0 }, 1.6f, 0);
-	IMAGEMANAGER->MapRender();
+	IMAGEMANAGER->UIMapRender();
+
 }

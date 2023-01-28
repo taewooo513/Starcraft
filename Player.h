@@ -8,9 +8,12 @@ public:
 	int m_maxPopulation;
 
 	Build* m_selectBuild;
-	vector<Unit> m_selectUnits;
+	Unit* m_selectUnit;
+	vector<Unit*> m_selectUnits;
 
-	vector<Build> m_builds;
-	vector<Unit> m_units;
+	vector<Build*> m_builds;
+	vector<Unit*> m_units;
+
+	void Init();
 };
 

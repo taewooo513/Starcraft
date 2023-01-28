@@ -38,6 +38,7 @@ void Main::Render()
 	OBJECTMANAGER->UIRender();
 	SCENEMANAGER->UIRender();
 	TIMERMANAGER->Render();
+
 	m_d2dContext->EndDraw();
 
 	DXGI_PRESENT_PARAMETERS param = { 0 };

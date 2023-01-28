@@ -41,5 +41,7 @@ public:
 	~MapReader() {}
 	void Init(ID2D1DeviceContext* context);
 	void MapRender();
+	void UIMapRender();
+
 };
 

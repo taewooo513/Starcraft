@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="Barrack.cpp" />
     <ClCompile Include="Build.cpp" />
+    <ClCompile Include="CommandCenter.cpp" />
     <ClCompile Include="CSound.cpp" />
     <ClCompile Include="CSoundMgr.cpp" />
     <ClCompile Include="CTimer.cpp" />
@@ -185,6 +186,7 @@
   <ItemGroup>
     <ClInclude Include="Barrack.h" />
     <ClInclude Include="Build.h" />
+    <ClInclude Include="CommandCenter.h" />
     <ClInclude Include="CSound.h" />
     <ClInclude Include="CSoundMgr.h" />
     <ClInclude Include="CTimer.h" />

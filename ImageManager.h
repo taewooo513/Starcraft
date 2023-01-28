@@ -38,6 +38,8 @@ class ImageManager : public Singleton<ImageManager>
 {
 private:
 	MapReader* mapReader;
+	D2D1_ELLIPSE* elipse;
+
 	IWICImagingFactory* factory = nullptr;
 	ID2D1DeviceContext* m_d2dContext;
 	IDXGISwapChain1* m_swapChain;
@@ -69,6 +71,8 @@ public:
 	void RenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot);
 	void CenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse);
 	void MapRender();
+	void UIMapRender();
+	void DrawCircle(Vector2 vec, float scaleX, float scaleY);
 	void LoadMap();
 };
 

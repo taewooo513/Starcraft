@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SpaceConstructionVehicle.h"
 #include "Barrack.h"
+#include "CommandCenter.h"
 SpaceConstructionVehicle::SpaceConstructionVehicle()
 {
 }
@@ -79,6 +80,7 @@ void SpaceConstructionVehicle::Render()
 {
 	float rot = atan2(position.x - _ptMouse.x, position.y - _ptMouse.y) * -1;
 	bool isR = false;
+	IMAGEMANAGER->DrawCircle(position, 12, 9);
 
 	if (rot <= -3.141592 / 9.f * 0.5f && -3.141592 + 3.141592 / 9.f * 0.5f)
 	{
@@ -122,18 +124,18 @@ void SpaceConstructionVehicle::Render()
 		m_dir = 8;
 	}
 
-	if (page == 1)
+	if (page == 0)
 	{
 		if (KEYMANAGER->GetOnceKeyDown('B'))
 		{
 			m_nowBuild = new Barrack;
 			OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x, position.y, 0);
 		}
-	}
-
-	if (KEYMANAGER->GetOnceKeyDown(VK_F1))
-	{
-		index++;
+		if (KEYMANAGER->GetOnceKeyDown('C'))
+		{
+			m_nowBuild = new CommandCenter;
+			OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x, position.y, 0);
+		}
 	}
 
 	if (m_nowBuild == nullptr)

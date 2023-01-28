@@ -59,6 +59,8 @@ void ImageManager::Init(ID2D1DeviceContext* context, IDXGISwapChain1* swapChain)
 	);
 	ImageLoad();
 	LoadMap();
+	elipse = new D2D1_ELLIPSE;
+
 }
 
 void ImageManager::CameraSetting()
@@ -132,6 +134,30 @@ void ImageManager::CenterRenderBlendBlack(CImage* img, Vector2 vec, float scale,
 void ImageManager::MapRender()
 {
 	mapReader->MapRender();
+}
+
+void ImageManager::UIMapRender()
+{
+	mapReader->UIMapRender();
+}
+
+void ImageManager::DrawCircle(Vector2 vec, float scaleX, float scaleY)
+{
+	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
+
+	matS = D2D1::Matrix3x2F::Scale(scaleX, scaleY);
+	matP = D2D1::Matrix3x2F::Translation(vec.x, vec.y);
+	matW = matS * matP;
+
+	m_d2dContext->SetTransform(matW);
+
+	ComPtr<ID2D1SolidColorBrush> brush;
+	elipse->point = { 0, 0 };
+	elipse->radiusX = 2;
+	elipse->radiusY = 2;
+
+	m_d2dContext->CreateSolidColorBrush({ 0,255,0,255 }, &brush);
+	m_d2dContext->DrawEllipse(elipse, brush.Get(), 0.1f);
 }
 
 void ImageManager::LoadMap()
@@ -287,6 +313,15 @@ void ImageManager::ImageLoad()
 	AddImage("cmdicons0230", L"./Resources/Icon/cmdicons0230.bmp"); // attack 
 	AddImage("cmdicons0229", L"./Resources/Icon/cmdicons0229.bmp"); // stop
 	AddImage("cmdicons0228", L"./Resources/Icon/cmdicons0228.bmp"); // move
+
+	// 커멘드 센터 
+	AddImage("control0000", L"./Resources/Bulid/CommandCenter/control0000.bmp"); // 일반상태 
+	AddImage("control0001", L"./Resources/Bulid/CommandCenter/control0001.bmp"); // 완성전단계
+	AddImage("control0002", L"./Resources/Bulid/CommandCenter/control0002.bmp"); // Up 1
+	AddImage("control0003", L"./Resources/Bulid/CommandCenter/control0003.bmp"); // Up 2
+	AddImage("control0004", L"./Resources/Bulid/CommandCenter/control0004.bmp"); // Up 3
+	AddImage("controlt", L"./Resources/Bulid/CommandCenter/controlt.bmp"); // 유닛 생성중
+
 
 	// 베럭 짓는중
 	AddImage("tbldlrg0000", L"./Resources/Bulid/Buliding/tbldlrg0000.bmp"); // move

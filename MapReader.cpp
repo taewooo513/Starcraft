@@ -72,7 +72,6 @@ void MapReader::Init(ID2D1DeviceContext* context)
 			int index = mtxm[y][x] & 0xf;
 
 			int megaTile = tileSetData->cv5->group[group].MegaTileIndex[index];
-			const TileSetData::VF4::VF4Data& _vf4 = tileSetData->vf4->pVX4Data[group];
 
 			for (int subY = 0; subY < 4; subY++)
 			{
@@ -81,8 +80,9 @@ void MapReader::Init(ID2D1DeviceContext* context)
 
 					int miniTileIndex = tileSetData->vx4->data[megaTile].VR4Index[subY * 4 + subX] >> 1;
 					bool flipped = (tileSetData->vx4->data[megaTile].VR4Index[subY * 4 + subX] & 1) == true;
-
+					const TileSetData::VF4::VF4Data& _vf4 = tileSetData->vf4->pVX4Data[megaTile];
 					const TileSetData::VR4::VR4Data& _vr4 = tileSetData->vr4->pVR4Data[miniTileIndex];
+
 
 					int offsetX = x * 32 + subX * 8;
 					int offsetY = y * 32 + subY * 8;
@@ -98,14 +98,13 @@ void MapReader::Init(ID2D1DeviceContext* context)
 							int indexX = offsetX + (flipped == true ? 7 - i : i);
 							int indexY = (offsetY + j) * w;
 
-							if (_vf4.flag[subY * 4 + subX] == 1)
+							colr[indexY + indexX] = { wre.b, wre.g,wre.r,255 };
+						
+							if (_vf4.flag[subY * 4 + subX] == 3)
 							{
 								colr[indexY + indexX] = { wre.b, wre.g, 0,255 };
 							}
-							else
-							{
-								colr[indexY + indexX] = { wre.b, wre.g,wre.r,255 };
-							}
+
 							i++;
 						}
 						j++;
@@ -122,14 +121,6 @@ void MapReader::Init(ID2D1DeviceContext* context)
 void MapReader::MapRender()
 {
 	D2D_MATRIX_3X2_F matT, matS;
-
-	matT = D2D1::Matrix3x2F::Translation(11, 560);
-	matS = D2D1::Matrix3x2F::Scale(0.0495f, 0.0495f);
-
-	m_context->SetTransform(matS * matT);
-
-	m_context->DrawBitmap(tileSetData->bitmap);
-
 
 	if (KEYMANAGER->GetStayKeyDown(VK_LEFT))
 	{
@@ -149,6 +140,18 @@ void MapReader::MapRender()
 	}
 	matT = D2D1::Matrix3x2F::Translation(-xoff, -yoff);
 	matS = D2D1::Matrix3x2F::Scale(1.7f, 1.7f);
+
+	m_context->SetTransform(matS * matT);
+
+	m_context->DrawBitmap(tileSetData->bitmap);
+}
+
+void MapReader::UIMapRender()
+{
+	D2D_MATRIX_3X2_F matT, matS;
+
+	matT = D2D1::Matrix3x2F::Translation(11, 560);
+	matS = D2D1::Matrix3x2F::Scale(0.0495f, 0.0495f);
 
 	m_context->SetTransform(matS * matT);
 

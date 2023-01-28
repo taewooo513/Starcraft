@@ -83,9 +83,6 @@
     <ClCompile Include="Build.cpp">
       <Filter>Game\Object\Build</Filter>
     </ClCompile>
-    <ClCompile Include="Barrack.cpp">
-      <Filter>Game\Object\Build\Terran</Filter>
-    </ClCompile>
     <ClCompile Include="EffectManager.cpp">
       <Filter>Core\Manager\EffectManager</Filter>
     </ClCompile>
@@ -102,6 +99,12 @@
       <Filter>Game\Player</Filter>
     </ClCompile>
     <ClCompile Include="MapReader.cpp" />
+    <ClCompile Include="Barrack.cpp">
+      <Filter>Game\Object\Build\Terran\Barrack</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandCenter.cpp">
+      <Filter>Game\Object\Build\Terran\CommandCenter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -176,9 +179,6 @@
     <ClInclude Include="Build.h">
       <Filter>Game\Object\Build</Filter>
     </ClInclude>
-    <ClInclude Include="Barrack.h">
-      <Filter>Game\Object\Build\Terran</Filter>
-    </ClInclude>
     <ClInclude Include="EffectManager.h">
       <Filter>Core\Manager\EffectManager</Filter>
     </ClInclude>
@@ -196,6 +196,12 @@
     </ClInclude>
     <ClInclude Include="MapReader.h" />
     <ClInclude Include="Storm\Storm.h" />
+    <ClInclude Include="Barrack.h">
+      <Filter>Game\Object\Build\Terran\Barrack</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandCenter.h">
+      <Filter>Game\Object\Build\Terran\CommandCenter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -290,6 +296,12 @@
     </Filter>
     <Filter Include="Game\Player">
       <UniqueIdentifier>{7f759635-1664-4883-9b0e-345156fcaa3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Build\Terran\Barrack">
+      <UniqueIdentifier>{bfa5ecd8-1490-4e68-bcbb-f4c35e466750}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Build\Terran\CommandCenter">
+      <UniqueIdentifier>{ece936ce-114a-4e37-8b46-0506fe8725dc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

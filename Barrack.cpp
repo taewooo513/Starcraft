@@ -16,6 +16,7 @@ void Barrack::Init()
 	m_buildImage[2] = IMAGEMANAGER->FindImage("tbldlrg0002");
 	m_buildImage[3] = IMAGEMANAGER->FindImage("tbarrack0001");
 
+	m_maxCompleteTime = 50.5f;
 	m_completeTime = 0;
 	m_costM = 100;
 	m_costG = 0;

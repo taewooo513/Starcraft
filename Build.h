@@ -8,7 +8,7 @@ protected:
 	float m_costG;
 	float m_maxHp;
 	queue<Unit> m_unitQueue;
-	const float m_maxCompleteTime = 50.5f;
+	float m_maxCompleteTime = 50.5f;
 	float m_completeTime;
 	int m_buildIndex;
 public:
