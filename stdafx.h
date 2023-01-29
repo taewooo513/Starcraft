@@ -141,6 +141,15 @@ struct Vector2
 {
 	float x;
 	float y;
+	Vector2 operator - (Vector2 lvec)
+	{
+		return { x - lvec.x,y - lvec.y };
+	}
+
+	Vector2 operator + (Vector2 lvec)
+	{
+		return { x + lvec.x,y + lvec.y };
+	}
 };
 #define DELTA_TIME g_TimeScale *  TimerManager::GetInstance()->GetElapsedTime()
 

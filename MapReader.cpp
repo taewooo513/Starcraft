@@ -99,8 +99,8 @@ void MapReader::Init(ID2D1DeviceContext* context)
 							int indexY = (offsetY + j) * w;
 
 							colr[indexY + indexX] = { wre.b, wre.g,wre.r,255 };
-						
-							if (_vf4.flag[subY * 4 + subX] == 3)
+
+							if (_vf4.flag[subY * 4 + subX] != 3 && _vf4.flag[subY * 4 + subX] != 1 && _vf4.flag[subY * 4 + subX] != 2 && _vf4.flag[subY * 4 + subX] != 0 && _vf4.flag[subY * 4 + subX] != 8)
 							{
 								colr[indexY + indexX] = { wre.b, wre.g, 0,255 };
 							}
@@ -118,27 +118,12 @@ void MapReader::Init(ID2D1DeviceContext* context)
 	SAFE_DELETE(colr);
 }
 
-void MapReader::MapRender()
+void MapReader::MapRender(Vector2 mapPos)
 {
 	D2D_MATRIX_3X2_F matT, matS;
 
-	if (KEYMANAGER->GetStayKeyDown(VK_LEFT))
-	{
-		xoff -= 10;
-	}
-	else if (KEYMANAGER->GetStayKeyDown(VK_RIGHT))
-	{
-		xoff += 10;
-	}
-	if (KEYMANAGER->GetStayKeyDown(VK_UP))
-	{
-		yoff -= 10;
-	}
-	else if (KEYMANAGER->GetStayKeyDown(VK_DOWN))
-	{
-		yoff += 10;
-	}
-	matT = D2D1::Matrix3x2F::Translation(-xoff, -yoff);
+
+	matT = D2D1::Matrix3x2F::Translation(-IMAGEMANAGER->GetCameraPosition().x, -IMAGEMANAGER->GetCameraPosition().y);
 	matS = D2D1::Matrix3x2F::Scale(1.7f, 1.7f);
 
 	m_context->SetTransform(matS * matT);

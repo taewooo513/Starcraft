@@ -40,7 +40,7 @@ public:
 	MapReader() {}
 	~MapReader() {}
 	void Init(ID2D1DeviceContext* context);
-	void MapRender();
+	void MapRender(Vector2 mapPos);
 	void UIMapRender();
 
 };

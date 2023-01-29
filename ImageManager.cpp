@@ -82,6 +82,11 @@ void ImageManager::Render(CImage* img, Vector2 vec, float scale, float rot)
 
 void ImageManager::RenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot)
 {
+	UIRenderBlendBlack(img, { vec.x - GetCameraPosition().x, vec.y - GetCameraPosition().y }, scale, rot);
+}
+
+void ImageManager::UIRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot)
+{
 	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
 
 	matR = D2D1::Matrix3x2F::Rotation(rot, { 0,0 });
@@ -102,6 +107,11 @@ void ImageManager::RenderBlendBlack(CImage* img, Vector2 vec, float scale, float
 }
 
 void ImageManager::CenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse)
+{
+	UICenterRenderBlendBlack(img, { vec.x - GetCameraPosition().x, vec.y - GetCameraPosition().y }, scale, rot, isReverse);
+}
+
+void ImageManager::UICenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse)
 {
 	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
 
@@ -133,7 +143,7 @@ void ImageManager::CenterRenderBlendBlack(CImage* img, Vector2 vec, float scale,
 
 void ImageManager::MapRender()
 {
-	mapReader->MapRender();
+	mapReader->MapRender(GetCameraPosition());
 }
 
 void ImageManager::UIMapRender()
@@ -146,7 +156,7 @@ void ImageManager::DrawCircle(Vector2 vec, float scaleX, float scaleY)
 	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
 
 	matS = D2D1::Matrix3x2F::Scale(scaleX, scaleY);
-	matP = D2D1::Matrix3x2F::Translation(vec.x, vec.y);
+	matP = D2D1::Matrix3x2F::Translation(vec.x - GetCameraPosition().x, vec.y - GetCameraPosition().y);
 	matW = matS * matP;
 
 	m_d2dContext->SetTransform(matW);
@@ -158,6 +168,20 @@ void ImageManager::DrawCircle(Vector2 vec, float scaleX, float scaleY)
 
 	m_d2dContext->CreateSolidColorBrush({ 0,255,0,255 }, &brush);
 	m_d2dContext->DrawEllipse(elipse, brush.Get(), 0.1f);
+}
+
+void ImageManager::DrawRect(Vector2 startPos, Vector2 endPos)
+{
+	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
+
+	matP = D2D1::Matrix3x2F::Translation(0, 0);
+	matW = matP;
+
+	m_d2dContext->SetTransform(matW);
+
+	ComPtr<ID2D1SolidColorBrush> brush;
+	m_d2dContext->CreateSolidColorBrush({ 0,255,0,255 }, &brush);
+	m_d2dContext->DrawRectangle({ startPos.x,startPos.y ,endPos.x ,endPos.y}, brush.Get(), 1.5);
 }
 
 void ImageManager::LoadMap()
@@ -272,6 +296,12 @@ void ImageManager::ImageLoad()
 
 	AddImage("playerUI", L"./Resources/UI/playerUI.png");
 
+	AddImage("tcmdbtns0018", L"./Resources/UI2/tcmdbtns0018.bmp"); //SCV
+
+
+	// SCV
+	AddImage("grpwire0007", L"./Resources/Icon2/grpwire0007.bmp"); //SCV
+
 	AddImage("scv_idle_1", L"./Resources/scv/scv0000.bmp");
 	AddImage("scv_idle_2", L"./Resources/scv/scv0002.bmp");
 	AddImage("scv_idle_3", L"./Resources/scv/scv0004.bmp");
@@ -340,6 +370,8 @@ void ImageManager::ImageLoad()
 
 	AddImage("tcmdbtns0000", L"./Resources/UI2/tcmdbtns0000.bmp");
 
+	AddImage("targg0001", L"./Resources/cursor/targg0001.bmp"); // 클릭시 위치나오는거
+
 	AddImage("cmdicons0106", L"./Resources/Icon/cmdicons0106.bmp"); // 커멘드센터
 	AddImage("cmdicons0109", L"./Resources/Icon/cmdicons0109.bmp"); // 서플라이 디포트
 	AddImage("cmdicons0110", L"./Resources/Icon/cmdicons0110.bmp"); // 가스
@@ -374,4 +406,9 @@ void ImageManager::ImageLoad()
 	AddImageVector("f2", L"./Resources/f2/tbangx00", 0, 13); // 건물 폭발
 
 	AddImageVector("SCVEffect", L"./Resources/SCVEffect/scvspark00", 0, 9); // 건물 폭발
+
+	// 마우스 커서
+	AddImageVector("arrow0000", L"./Resources/cursor/arrow00", 0, 4); // 일반
+	AddImage("drag0000", L"./Resources/cursor/drag0000.bmp"); // 드래그
+
 }

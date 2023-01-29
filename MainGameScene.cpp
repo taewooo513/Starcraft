@@ -13,26 +13,29 @@ MainGameScene::~MainGameScene()
 
 void MainGameScene::Init()
 {
-	OBJECTMANAGER->AddObject(new SpaceConstructionVehicle, "Unit", WINSIZE_X/2, WINSIZE_Y/2, 1);
+	player1 = new Player;
+	player1->Init();
 }
 
 void MainGameScene::Update()
 {
+	player1->Update();
 }
 
 void MainGameScene::Render()
 {
-	IMAGEMANAGER->MapRender();
+	player1->Render();
 	//IMAGEMANAGER->Render(IMAGEMANAGER->FindImage("titleBackGround"), { 0,0 }, 1.7f, 0);
 }
 
 void MainGameScene::Release()
 {
+	player1->Release();
+
+	SAFE_DELETE(player1);
 }
 
 void MainGameScene::UIRender()
 {
-	IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("playerUI"), { 0,0 }, 1.6f, 0);
-	IMAGEMANAGER->UIMapRender();
-
+	player1->UIRender();
 }

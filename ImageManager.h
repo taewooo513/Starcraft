@@ -14,7 +14,7 @@ public:
 	{
 		alpha = 1;
 	}
-	CImage() 
+	CImage()
 	{
 		alpha = 1;
 	}
@@ -45,6 +45,8 @@ private:
 	IDXGISwapChain1* m_swapChain;
 	ID2D1Effect* blendEffect;
 
+	Vector2 m_cameraPosition = { 0,0 };
+
 	map <string, CImage*>m_imageList;
 	map <string, vImage*> m_vImageList;
 
@@ -69,11 +71,28 @@ public:
 
 	void Render(CImage* img, Vector2 vec, float scale, float rot);
 	void RenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot);
+	void UIRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot);
+
 	void CenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse);
+	void UICenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse);
+
 	void MapRender();
 	void UIMapRender();
 	void DrawCircle(Vector2 vec, float scaleX, float scaleY);
+	void DrawRect(Vector2 startPos, Vector2 endPos);
+
 	void LoadMap();
+
+	void CameraSetPosition(Vector2 vec)
+	{
+		m_cameraPosition.x = vec.x;
+		m_cameraPosition.y = vec.y;
+	}
+
+	Vector2 GetCameraPosition()
+	{
+		return m_cameraPosition;
+	}
 };
 
 #define IMAGEMANAGER ImageManager::GetInstance()
@@ -108,6 +127,35 @@ public:
 		m_nowFrame = 0;
 		m_isEnd = false;
 	}
+
+
+	void UIRenderBlendBlack(Vector2 vec, float scale, float rot, bool isReverse)
+	{
+		if (m_isEnd == false)
+			m_nowFrame += DELTA_TIME;
+
+		if (m_nowFrame >= m_timeDelay)
+		{
+			if (m_frame >= GetImageSize() - 1)
+			{
+				if (m_isLoop == true)
+				{
+					m_frame = 0;
+				}
+				else
+				{
+					m_isEnd = true;
+				}
+			}
+			else
+			{
+				m_frame++;
+			}
+			m_nowFrame = 0;
+		}
+		IMAGEMANAGER->UIRenderBlendBlack(m_images[m_frame], vec, scale, rot);
+	}
+
 
 	void CenterRenderBlendBlack(Vector2 vec, float scale, float rot, bool isReverse)
 	{

@@ -7,13 +7,19 @@ protected:
 	float m_speed;
 	float m_defense;
 	float m_attack;
-	float m_dest;
+	Vector2 m_dest;
 	float m_attackSpeed;
 	int m_tribe;
 	int m_state;//중형 대형 소형 
 	bool m_isAttackAble;
 	bool m_isMoveAble;
+	bool m_isClick;
+	Vector2 m_destination = { 0,0 };
+	RECT clickRect;
 public:
+	float rot = 0; // 이미지 각도
+	float rot2 = 0; // 움직임 각도
+
 	Unit() {}
 	virtual ~Unit() {}
 	// Object을(를) 통해 상속됨
@@ -25,5 +31,20 @@ public:
 
 	virtual void Move() = 0;
 	virtual void Attack() = 0;
+
+	RECT GetClickRect()
+	{
+		return clickRect;
+	}
+
+	Vector2 GetPosition()
+	{
+		return position;
+	}
+
+	void SetDestPosition(Vector2 pos)
+	{
+		m_dest = pos;
+	}
 };
 
