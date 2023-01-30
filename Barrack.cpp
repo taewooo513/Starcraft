@@ -33,11 +33,11 @@ void Barrack::Render()
 {
 	if (m_buildIndex < 4)
 	{
-		IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x,position.y }, 1.5, 0, false);
+		IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 50,position.y - 50 }, 1.5, 0);
 	}
 	else
 	{
-		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { position.x,position.y }, 1.5, 0, false);
+		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { position.x - 50,position.y - 50 }, 1.5, 0);
 	}
 }
 

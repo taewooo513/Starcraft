@@ -54,6 +54,7 @@ void SpaceConstructionVehicle::Move()
 
 void SpaceConstructionVehicle::Update()
 {
+
 	if (m_dest.x != 0 && m_dest.y != 0)
 	{
 		rot = atan2(position.x - m_dest.x, position.y - m_dest.y) * -1;
@@ -91,18 +92,47 @@ void SpaceConstructionVehicle::Update()
 			m_nowBuild = nullptr;
 		}
 	}
+	else
+	{
+		if (m_spark != nullptr)
+		{
+			m_spark->m_isDestroy = true;
+			m_spark = nullptr;
+		}
+	}
 	clickRect = { int(position.x - 20) , int(position.y - 20) , int(position.x + 20) , int(position.y + 20) };
 	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x;
 	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x;
 	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y;
 	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y;
+
+	if (m_isBuild == true)
+	{
+		page = 0;
+
+		if (m_speed == 0)
+		{
+			switch (buildIndex)
+			{
+			case eCommandCenter:
+				m_nowBuild = new CommandCenter;
+				m_isBuild = false;
+				buildIndex = 0;
+				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x, position.y, 0);
+				break;
+			case eBarrack:
+				m_nowBuild = new Barrack;
+				m_isBuild = false;
+				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x, position.y, 0);
+				buildIndex = 0;
+				break;
+			}
+		}
+	}
 }
 
 void SpaceConstructionVehicle::Render()
 {
-	//IMAGEMANAGER->DrawRect({ (float)clickRect.left,(float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
-
-
 	bool isR = false;
 	if (m_isClick == true)
 	{
@@ -180,23 +210,53 @@ void SpaceConstructionVehicle::UIRender()
 	m_isClick = true;
 	if (page == 1)
 	{
-		if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
+		if (buildIndex == 0)
 		{
-			page = 0;
+			if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
+			{
+				page = 0;
+			}
+			if (KEYMANAGER->GetOnceKeyDown('B'))
+			{
+				buildIndex = eBarrack;
+				//m_nowBuild = new Barrack;
+				//OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x, position.y, 0);
+				page = 0;
+			}
+			if (KEYMANAGER->GetOnceKeyDown('C'))
+			{
+				buildIndex = eCommandCenter;
+				//m_nowBuild = new CommandCenter;
+				//OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x, position.y, 0);
+				page = 0;
+			}
 		}
-		if (KEYMANAGER->GetOnceKeyDown('B'))
+		else
 		{
-			m_nowBuild = new Barrack;
-			OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x, position.y, 0);
-			page = 0;
-		}
-		if (KEYMANAGER->GetOnceKeyDown('C'))
-		{
-			m_nowBuild = new CommandCenter;
-			OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x, position.y, 0);
-			page = 0;
+			if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
+			{
+				buildIndex = 0;
+			}
 		}
 	}
+
+	switch (buildIndex)
+	{
+	case eCommandCenter:
+		IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)), (float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) }
+		, {
+			(float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f
+,
+			(float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight()		});
+
+		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { (float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)), (float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) - 50 }, 1.5, 0);
+		break;
+	case eBarrack:
+		IMAGEMANAGER->DrawRect({ (float)_ptMouse.x,(float)_ptMouse.y }, { (float)_ptMouse.x + IMAGEMANAGER->FindImage("tbarrack0000")->GetWidth(),(float)_ptMouse.y + IMAGEMANAGER->FindImage("tbarrack0000")->GetHeight() });
+		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { (float)_ptMouse.x - 50,(float)_ptMouse.y - 50 }, 1.5, 0);
+		break;
+	}
+
 
 	if (m_nowBuild == nullptr)
 	{

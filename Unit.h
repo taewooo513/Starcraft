@@ -13,10 +13,10 @@ protected:
 	int m_state;//중형 대형 소형 
 	bool m_isAttackAble;
 	bool m_isMoveAble;
-	bool m_isClick;
 	Vector2 m_destination = { 0,0 };
 	RECT clickRect;
 public:
+	bool m_isClick;
 	float rot = 0; // 이미지 각도
 	float rot2 = 0; // 움직임 각도
 
