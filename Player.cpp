@@ -9,7 +9,7 @@ void Player::Init()
 	m_isCameraClick = true;
 	m_cursorImage = IMAGEMANAGER->AddImageVectorCopy("arrow0000");
 	m_cursorImage->Setting(0.15, true);
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 200; i++)
 	{
 		Unit* scv = new SpaceConstructionVehicle;
 		OBJECTMANAGER->AddObject(scv, "Unit", WINSIZE_X / 2, WINSIZE_Y / 2, 1);
@@ -27,7 +27,6 @@ void Player::Init()
 
 void Player::Update()
 {
-	cout << _ptMouse.x << endl;
 	if (KEYMANAGER->GetOnceKeyDown(VK_RBUTTON))
 	{
 		m_clickRad = 0;
@@ -62,6 +61,21 @@ void Player::Update()
 			m_clickEndX = _ptMouse.x;
 			m_clickEndY = _ptMouse.y;
 		}
+		if (m_selectUnit != nullptr)
+		{
+			if (typeid(*m_selectUnit).name() == typeid(SpaceConstructionVehicle).name())
+			{
+				m_rClickPos.x = _ptMouse.x + IMAGEMANAGER->GetCameraPosition().x;
+				m_rClickPos.y = _ptMouse.y + IMAGEMANAGER->GetCameraPosition().y;
+				SpaceConstructionVehicle* scv = dynamic_cast<SpaceConstructionVehicle*>(m_selectUnit);
+				if (scv->buildIndex != 0)
+				{
+					m_selectUnit->SetDestPosition({ (float)_ptMouse.x,(float)_ptMouse.y });
+					m_selectUnit->rot2 = atan2(m_rClickPos.y - m_selectUnit->GetPosition().y, m_rClickPos.x - m_selectUnit->GetPosition().x);
+					scv->m_isBuild = true;
+				}
+			}
+		}
 	}
 	else if (KEYMANAGER->GetStayKeyDown(VK_LBUTTON))
 	{
@@ -88,13 +102,13 @@ void Player::Update()
 			if (mouseMapX > 0 && mouseMapY > 0)
 				IMAGEMANAGER->CameraSetPosition({ mouseMapX * ((4096.f) / mapWidth),mouseMapY * (4096.f / mapHeight) });
 		}
+
 	}
 	if (m_isClick == true && KEYMANAGER->GetOnceKeyUp(VK_LBUTTON))
 	{
 		m_isClick = false;
-		m_selectUnit = nullptr;
-		m_selectUnits.clear();
 		m_isCameraClick = false;
+		int count = 0;
 		for (auto iter : m_units)
 		{
 			if (m_clickStartX > m_clickEndX)
@@ -122,13 +136,21 @@ void Player::Update()
 			{
 				if (IntersectRect(&pRt, &rtMouse, &iter->GetClickRect()))
 				{
+					if (count == 0)
+					{
+						m_selectUnits.clear();
+						m_selectUnit = nullptr;
+					}
 					m_selectUnits.push_back(iter);
+					count++;
 				}
 			}
 			else
 			{
 				if (PtInRect(&iter->GetClickRect(), _ptMouse))
 				{
+					if (m_selectUnits.size() != 0)
+						m_selectUnits.clear();
 					m_selectUnit = iter;
 					break;
 				}
@@ -213,6 +235,7 @@ void Player::UIRender()
 	int count = 0;
 	for (auto iter : m_selectUnits)
 	{
+		iter->m_isClick = true;
 		IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0018"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.8, 0);
 		IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("grpwire0007"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 1.7, 0);
 		count++;

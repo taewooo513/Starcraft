@@ -10,11 +10,20 @@ private:
 	CImage* m_actionImage_1[9];
 	CImage* m_actionImage_2[9];
 	CImage* m_buttom;
-	Build* m_nowBuild;
 	Effect* m_spark;
+	enum eBuildClass
+	{
+		eBegin,
+		eCommandCenter,
+		eBarrack,
+	};
+
 	int page = 0;
 	int index = 0;
 public:
+	int buildIndex = 0;
+	bool m_isBuild = false;
+	Build* m_nowBuild;
 	SpaceConstructionVehicle();
 	~SpaceConstructionVehicle();
 	virtual void Init() override;
