@@ -152,20 +152,136 @@ void MapReader::UIMapRender()
 
 void MapReader::MapRegionSetting()
 {
-	//for (int i = 0; i < 15; i++)
-	//{
-	//	for (int j = 0; j < 15; j++)
-	//	{
-	//		//mapRegions[i][j] = new MapRegions;
-	//		for (int x = 0; miniTiles[(int)mapRegions[i][j]->pos.x + x][(int)mapRegions[i][j]->pos.y] != 0; x++)
-	//		{
-	//		//	mapRegions[i][j]->pos = { (float)(4096.f / 16.f * i + 1.7 / 16.f),(float)(4096.f / 16.f * j + 1.7 / 16.f) };
-	//
-	//
-	//		}
-	//		//mapRegions[i][j]->tileIndexFlag = miniTiles[(int)mapRegions[i][j]->pos.x][(int)mapRegions[i][j]->pos.y];
-	//	}
-	//}
+	int width = 128;
+	int height = 128;
+	int res = 32; //region scale
 
+	queue <MapRegions*> vectorList;
+	Regions* region = new Regions;
+	for (int i = 0; i < 4096; i++)
+	{
+		//regionsIds[i] = new int[4096] {-1, };
+		for (int j = 0; j < 4096; j++)
+		{
+			region->regionsIds[i][j] = -1;
+		}
+	}
+	bool found = false;
+	int regionId = 0;
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			int cx = x * res + res;
+			int cy = y * res + res;
 
+			int error = 0;
+			while (error < 5)
+			{
+				found = false;
+				for (int i = 0; i < 2 * error + 1; i++)
+				{
+					for (int j = 0; j < 2 * error + 1; j++)
+					{
+						if (miniTiles[cy / 32 + 1][cx / 32 + 1] == 1)
+						{
+							cx += i - error;
+							cy += j - error;
+							found = true;
+							break;
+						}
+					}
+					if (found == true)
+					{
+						break;
+					}
+				}
+				if (found == true)
+				{
+					break;
+				}
+				error += 1;
+			}
+			if (found == false)
+			{
+				continue;
+			}
+			if (cy != 4096)
+			{
+				vectorList.push(new MapRegions{ Vector2{ (float)cx,(float)cy } ,regionId });
+				region->regionsIds[cy][cx] = regionId;
+				regionId++;
+			}
+		}
+	}
+
+	int c = 0;
+	while (vectorList.empty() == false)
+	{
+		auto iter = vectorList.front();
+		int tileX = iter->pos.x;
+		int tileY = iter->pos.y;
+		c++;
+
+		if (tileX > 0)
+		{
+			if (tileY < 4096)
+			{
+				int regionId = region->regionsIds[tileY][tileX - 1];
+				if (regionId == -1)
+				{
+					region->regionsIds[tileY][tileX - 1] = region->regionsIds[tileY][tileX];
+					vectorList.push(new MapRegions{ Vector2{ (float)tileX - 32,(float)tileY },0 });
+				}
+				else if (regionId != iter->regionId)
+				{
+
+				}
+			}
+		}
+		if (tileX < 4095)
+		{
+			if (tileY < 4096)
+			{
+				int regionId = region->regionsIds[tileY][tileX + 1];
+				if (regionId == -1)
+				{
+					region->regionsIds[tileY][tileX + 1] = region->regionsIds[tileY][tileX];
+					vectorList.push(new MapRegions{ Vector2{ (float)tileX + 32,(float)tileY },0 });
+				}
+				else if (regionId != iter->regionId)
+				{
+
+				}
+			}
+		}
+		if (tileY != 0 && tileY < 4096)
+		{
+			int regionId = region->regionsIds[tileY - 1][tileX];
+			if (regionId == -1)
+			{
+				region->regionsIds[tileY - 1][tileX] = region->regionsIds[tileY - 1][tileX];
+				vectorList.push(new MapRegions{ Vector2{ (float)tileX,(float)tileY - 32},0 });
+			}
+			else if (regionId != iter->regionId)
+			{
+
+			}
+		}
+		if (tileY < 4096)
+		{
+			int regionId = region->regionsIds[tileY + 1][tileX];
+			if (regionId == -1)
+			{
+				region->regionsIds[tileY + 1][tileX] = region->regionsIds[tileY + 1][tileX];
+				vectorList.push(new MapRegions{ Vector2{ (float)tileX ,(float)tileY + 32},0 });
+			}
+			else if (regionId != iter->regionId)
+			{
+
+			}
+		}
+		vectorList.pop();
+	}
+	cout << "";
 }
