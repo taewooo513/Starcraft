@@ -9,7 +9,7 @@ void Player::Init()
 	m_isCameraClick = true;
 	m_cursorImage = IMAGEMANAGER->AddImageVectorCopy("arrow0000");
 	m_cursorImage->Setting(0.15, true);
-	for (int i = 0; i < 200; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		Unit* scv = new SpaceConstructionVehicle;
 		OBJECTMANAGER->AddObject(scv, "Unit", WINSIZE_X / 2, WINSIZE_Y / 2, 1);

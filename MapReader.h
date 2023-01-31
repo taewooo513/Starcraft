@@ -18,6 +18,11 @@ typedef struct
 	BYTE padding;
 } RGBAbyte;
 
+struct MapRegions
+{
+	Vector2 pos;
+	int tileIndexFlag[8][8] = { 0 };
+};
 
 class MapReader
 {
@@ -37,11 +42,13 @@ private:
 
 	ID2D1DeviceContext* m_context;
 public:
+	int miniTiles[128 * 4][128 * 4];
+	MapRegions* mapRegions[15][15];
 	MapReader() {}
 	~MapReader() {}
 	void Init(ID2D1DeviceContext* context);
 	void MapRender(Vector2 mapPos);
 	void UIMapRender();
-
+	void MapRegionSetting();
 };
 

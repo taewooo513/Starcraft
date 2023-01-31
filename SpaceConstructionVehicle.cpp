@@ -181,8 +181,6 @@ void SpaceConstructionVehicle::Render()
 		m_dir = 8;
 	}
 
-
-
 	if (m_nowBuild == nullptr)
 	{
 		IMAGEMANAGER->CenterRenderBlendBlack(m_idleImage[(int)m_dir], position, 1.5f, 0, isR);
@@ -244,12 +242,10 @@ void SpaceConstructionVehicle::UIRender()
 	switch (buildIndex)
 	{
 	case eCommandCenter:
-		IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)), (float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) }
-			, {
+		IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)), (float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) },{
 				(float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f,
-				(float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight()
+				(float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight() 
 			});
-
 		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { (float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)), (float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) - 50 }, 1.5, 0);
 		break;
 	case eBarrack:
@@ -270,7 +266,6 @@ void SpaceConstructionVehicle::UIRender()
 			{
 				page = 1;
 			}
-
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0230"), { UIPosition[2].x - 1 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
 

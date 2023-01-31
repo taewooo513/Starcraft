@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MapReader.h"
 #include <packon.h>
+
 void MapReader::Init(ID2D1DeviceContext* context)
 {
 	tileSetData = new TileSetData;
@@ -99,29 +100,35 @@ void MapReader::Init(ID2D1DeviceContext* context)
 							int indexY = (offsetY + j) * w;
 
 							colr[indexY + indexX] = { wre.b, wre.g,wre.r,255 };
-
-							if (_vf4.flag[subY * 4 + subX] != 3 && _vf4.flag[subY * 4 + subX] != 1 && _vf4.flag[subY * 4 + subX] != 2 && _vf4.flag[subY * 4 + subX] != 0 && _vf4.flag[subY * 4 + subX] != 8)
-							{
-								colr[indexY + indexX] = { wre.b, wre.g, 0,255 };
-							}
-
 							i++;
 						}
 						j++;
+					}
+
+					if (_vf4.flag[subY * 4 + subX] == 1 || _vf4.flag[subY * 4 + subX] == 3 || _vf4.flag[subY * 4 + subX] == 3 || _vf4.flag[subY * 4 + subX] == 19 || _vf4.flag[subY * 4 + subX] == 17)
+					{
+						miniTiles[offsetY / 8][offsetX / 8] = 1;
+					}
+					else
+					{
+						miniTiles[offsetY / 8][offsetX / 8] = 0;
 					}
 				}
 			}
 		}
 	}
+
+	MapRegionSetting();
+
 	D2D1_RECT_U rect = { 0 , 0 ,w , h };
 	tileSetData->bitmap->CopyFromMemory(&rect, colr, 4 * w);
 	SAFE_DELETE(colr);
+	SAFE_DELETE(mtxmdata);
 }
 
 void MapReader::MapRender(Vector2 mapPos)
 {
 	D2D_MATRIX_3X2_F matT, matS;
-
 
 	matT = D2D1::Matrix3x2F::Translation(-IMAGEMANAGER->GetCameraPosition().x, -IMAGEMANAGER->GetCameraPosition().y);
 	matS = D2D1::Matrix3x2F::Scale(1.7f, 1.7f);
@@ -141,4 +148,24 @@ void MapReader::UIMapRender()
 	m_context->SetTransform(matS * matT);
 
 	m_context->DrawBitmap(tileSetData->bitmap);
+}
+
+void MapReader::MapRegionSetting()
+{
+	//for (int i = 0; i < 15; i++)
+	//{
+	//	for (int j = 0; j < 15; j++)
+	//	{
+	//		//mapRegions[i][j] = new MapRegions;
+	//		for (int x = 0; miniTiles[(int)mapRegions[i][j]->pos.x + x][(int)mapRegions[i][j]->pos.y] != 0; x++)
+	//		{
+	//		//	mapRegions[i][j]->pos = { (float)(4096.f / 16.f * i + 1.7 / 16.f),(float)(4096.f / 16.f * j + 1.7 / 16.f) };
+	//
+	//
+	//		}
+	//		//mapRegions[i][j]->tileIndexFlag = miniTiles[(int)mapRegions[i][j]->pos.x][(int)mapRegions[i][j]->pos.y];
+	//	}
+	//}
+
+
 }
