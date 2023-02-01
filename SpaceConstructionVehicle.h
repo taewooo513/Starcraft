@@ -32,6 +32,7 @@ public:
 	virtual void Render() override;
 	virtual void UIRender() override;
 	virtual void Attack() override;
+
 	void BuildingConstruction();
 };
 

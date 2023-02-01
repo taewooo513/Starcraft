@@ -1,6 +1,8 @@
 #pragma once
 #include "Build.h"
 #include "Unit.h"
+#include "MapReader.h"
+
 class Player
 {
 private:
@@ -24,11 +26,23 @@ private:
 	float m_clickEndY;
 
 public:
-	void Astar();
+	void Astar(Vector2 startPos, Vector2 endPos);
 	void Init();
 	void Update();
 	void Render();
+	vector<Vector2 > testDraw;
 	void UIRender();
 	void Release();
+
+	struct comp {
+		bool operator()(pair<float, MapRegions*>A, pair<float, MapRegions*>B)
+		{
+			if (A.first > B.first)
+				return true;
+			else if (A.first == B.first)
+				return A > B;
+			return false;
+		}
+	};
 };
 

@@ -262,8 +262,14 @@ void MapReader::MapRegionSetting()
 					}
 					if (isAble == false)
 					{
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(0, mapRegions[regionId]));
-						mapRegions[regionId]->nearRegions.push_back(make_pair(0, mapRegions[nowRegionIds]));
+						float dx = abs(mapRegions[nowRegionIds]->pos.x - mapRegions[regionId]->pos.x);
+						float dy = abs(mapRegions[nowRegionIds]->pos.y - mapRegions[regionId]->pos.y);
+						float e1 = abs(dx - dy);
+						float e2 = min(dx, dy);
+						float dest = e1 * 10 + e2 * 14;
+
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
+						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
 					}
 				}
 			}
@@ -283,7 +289,7 @@ void MapReader::MapRegionSetting()
 					bool isAble = false;
 					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
-						if (_iter.second->regionId == regionId)
+						if (_iter.second->regionId == regionId || _iter.second->regionId == nowRegionIds)
 						{
 							isAble = true;
 							break;
@@ -291,8 +297,14 @@ void MapReader::MapRegionSetting()
 					}
 					if (isAble == false)
 					{
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(0, mapRegions[regionId]));
-						mapRegions[regionId]->nearRegions.push_back(make_pair(0, mapRegions[region->regionsIds[tileY][tileX]]));
+						float dx = abs(mapRegions[nowRegionIds]->pos.x - mapRegions[regionId]->pos.x);
+						float dy = abs(mapRegions[nowRegionIds]->pos.y - mapRegions[regionId]->pos.y);
+						float e1 = abs(dx - dy);
+						float e2 = min(dx, dy);
+						float dest = e1 * 10 + e2 * 14;
+
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
+						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
 					}
 				}
 			}
@@ -320,8 +332,14 @@ void MapReader::MapRegionSetting()
 					}
 					if (isAble == false)
 					{
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(0, mapRegions[regionId]));
-						mapRegions[regionId]->nearRegions.push_back(make_pair(0, mapRegions[nowRegionIds]));
+						float dx = abs(mapRegions[nowRegionIds]->pos.x - mapRegions[regionId]->pos.x);
+						float dy = abs(mapRegions[nowRegionIds]->pos.y - mapRegions[regionId]->pos.y);
+						float e1 = abs(dx - dy);
+						float e2 = min(dx, dy);
+						float dest = e1 * 10 + e2 * 14;
+
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
+						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
 					}
 				}
 			}
@@ -349,8 +367,13 @@ void MapReader::MapRegionSetting()
 					}
 					if (isAble == false)
 					{
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(0, mapRegions[regionId]));
-						mapRegions[regionId]->nearRegions.push_back(make_pair(0, mapRegions[nowRegionIds]));
+						float dx = abs(mapRegions[nowRegionIds]->pos.x - mapRegions[regionId]->pos.x);
+						float dy = abs(mapRegions[nowRegionIds]->pos.y - mapRegions[regionId]->pos.y);
+						float e1 = abs(dx - dy);
+						float e2 = min(dx, dy);
+						float dest = e1 * 10 + e2 * 14;
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
+						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
 					}
 				}
 			}
@@ -418,7 +441,7 @@ void MapReader::RenderLine()
 	//{
 	//	for (auto _iter : iter->nearRegions)
 	//	{
-	//		IMAGEMANAGER->DrawLine({ iter->pos.x * 1.7f * 8, iter->pos.y * 1.7f * 8 }, { _iter.second->pos.x * 1.7f * 8, _iter.second->pos.y * 1.7f * 8 });
+	//		IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
 	//	}
 	//}
 }

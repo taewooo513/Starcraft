@@ -23,7 +23,8 @@ struct MapRegions
 	Vector2 pos;
 	int regionId;
 	RECT self = { 0,0,0,0 };
-	vector<pair<float,MapRegions*>> nearRegions;
+	vector<pair<float, MapRegions*>> nearRegions;
+	bool openNode = false;
 	void AddRegion(int x, int y)
 	{
 		if (x < self.left)
@@ -64,10 +65,9 @@ private:
 	TileSetData::VR4* vr4;
 	TileSetData::VX4* vx4;
 	TileSetData::WPE* wpe;
-	Regions* region;
-
 	ID2D1DeviceContext* m_context;
 public:
+	Regions* region;
 	int miniTiles[128 * 4][128 * 4];
 	vector<MapRegions*> mapRegions;
 	MapReader() {}

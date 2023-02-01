@@ -146,9 +146,23 @@ struct Vector2
 		return { x - lvec.x,y - lvec.y };
 	}
 
+	Vector2 operator / (float d)
+	{
+		return { x / d, y / d };
+	}
+
 	Vector2 operator + (Vector2 lvec)
 	{
 		return { x + lvec.x,y + lvec.y };
+	}
+
+	Vector2 operator * (float lvec)
+	{
+		return { x * lvec,y * lvec };
+	}
+	bool operator == (Vector2 lvec)
+	{
+		return { x == lvec.x && y * lvec.y };
 	}
 };
 #define DELTA_TIME g_TimeScale *  TimerManager::GetInstance()->GetElapsedTime()

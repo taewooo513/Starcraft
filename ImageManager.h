@@ -84,6 +84,7 @@ public:
 
 	void DrawRegion();
 	void LoadMap();
+	MapReader* GetMapReader() { return mapReader; }
 
 	void CameraSetPosition(Vector2 vec)
 	{
