@@ -181,7 +181,29 @@ void ImageManager::DrawRect(Vector2 startPos, Vector2 endPos)
 
 	ComPtr<ID2D1SolidColorBrush> brush;
 	m_d2dContext->CreateSolidColorBrush({ 0,255,0,255 }, &brush);
-	m_d2dContext->DrawRectangle({ startPos.x,startPos.y ,endPos.x ,endPos.y}, brush.Get(), 1.5);
+	m_d2dContext->DrawRectangle({ startPos.x,startPos.y ,endPos.x ,endPos.y }, brush.Get(), 1.5);
+}
+
+void ImageManager::DrawLine(Vector2 startPos, Vector2 endPos)
+{
+	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
+
+	matP = D2D1::Matrix3x2F::Translation(-GetCameraPosition().x, -GetCameraPosition().y);
+	matW = matP;
+
+	m_d2dContext->SetTransform(matW);
+
+	ComPtr<ID2D1SolidColorBrush> brush;
+	m_d2dContext->CreateSolidColorBrush({ 0,255,0,255 }, &brush);
+	
+	HDC dc;
+
+	m_d2dContext->DrawLine({ startPos.x,startPos.y }, { endPos.x,endPos.y }, brush.Get());
+}
+
+void ImageManager::DrawRegion()
+{
+	mapReader->RenderLine();
 }
 
 void ImageManager::LoadMap()
@@ -195,8 +217,6 @@ ID2D1Bitmap* ImageManager::AddBitmap(std::wstring path, UINT* Width, UINT* Heigh
 	ID2D1Bitmap* bitmap;
 	IWICBitmapDecoder* decoder = nullptr;
 	factory->CreateDecoderFromFilename(path.c_str(), 0, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &decoder);
-
-
 
 	IWICBitmapFrameDecode* frameDecode = nullptr;
 	decoder->GetFrame(0, &frameDecode);

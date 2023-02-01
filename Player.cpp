@@ -2,6 +2,10 @@
 #include "Player.h"
 #include "SpaceConstructionVehicle.h"
 
+void Player::Astar()
+{
+}
+
 void Player::Init()
 {
 	m_clickRad = 0;
@@ -96,13 +100,17 @@ void Player::Update()
 			int mapWidth = mapRect.right - mapRect.left;
 			int mapHeight = mapRect.bottom - mapRect.top;
 
-			float mouseMapX = _ptMouse.x - mapRect.left;
-			float mouseMapY = _ptMouse.y - mapRect.top;
+			float xx = (mapWidth / 4096.f * WINSIZE_X / 2);
+			float yy = (mapWidth / 4296.f * WINSIZE_Y / 2);
+			float mouseMapX = _ptMouse.x - xx - mapRect.left > 0 ? _ptMouse.x - xx - mapRect.left : 0;
+			float mouseMapY = _ptMouse.y - yy - mapRect.top > 0 ? _ptMouse.y - yy - mapRect.top : 0;
+			mapWidth -= xx * 3;
+			mapHeight -= yy * 3;
 
-			if (mouseMapX > 0 && mouseMapY > 0)
-				IMAGEMANAGER->CameraSetPosition({ mouseMapX * ((4096.f) / mapWidth),mouseMapY * (4096.f / mapHeight) });
+			float camPosX = mouseMapX * ((4096.f) / mapWidth) < 4096 + WINSIZE_X - 20 ? mouseMapX * ((4096.f) / mapWidth) : 4096 + WINSIZE_X - 20;
+			float camPosY = mouseMapY * ((4296.f / mapHeight)) < 4296.f + WINSIZE_Y - 20 ? mouseMapY * ((4296.f) / mapHeight) : 4296.f + WINSIZE_Y - 20;
+			IMAGEMANAGER->CameraSetPosition({ camPosX ,camPosY });
 		}
-
 	}
 	if (m_isClick == true && KEYMANAGER->GetOnceKeyUp(VK_LBUTTON))
 	{
@@ -174,14 +182,14 @@ void Player::Update()
 		}
 		if (KEYMANAGER->GetStayKeyDown(VK_RIGHT))
 		{
-			if (IMAGEMANAGER->GetCameraPosition().x < 128 * 32 * 1.7f - WINSIZE_X)
+			if (IMAGEMANAGER->GetCameraPosition().x < 128 * 32 * 1.5f - WINSIZE_X)
 			{
 				IMAGEMANAGER->CameraSetPosition({ IMAGEMANAGER->GetCameraPosition().x + DELTA_TIME * 800, IMAGEMANAGER->GetCameraPosition().y });
 			}
 		}
 		if (KEYMANAGER->GetStayKeyDown(VK_DOWN))
 		{
-			if (IMAGEMANAGER->GetCameraPosition().y < 128 * 32 * 1.7f - WINSIZE_Y)
+			if (IMAGEMANAGER->GetCameraPosition().y < 128 * 32 * 1.5f - WINSIZE_Y)
 			{
 				IMAGEMANAGER->CameraSetPosition({ IMAGEMANAGER->GetCameraPosition().x , IMAGEMANAGER->GetCameraPosition().y + DELTA_TIME * 800 });
 			}
@@ -240,6 +248,13 @@ void Player::UIRender()
 		IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("grpwire0007"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 1.7, 0);
 		count++;
 	}
+	float mapWidth = mapRect.right - mapRect.left;
+	float mapHeight = mapRect.bottom - mapRect.top;
+
+	float xx = (mapWidth / (4096.f + WINSIZE_X * 2.f) * IMAGEMANAGER->GetCameraPosition().x);
+	float yy = (mapHeight / (4096.f + WINSIZE_Y * 2.5f) * IMAGEMANAGER->GetCameraPosition().y);
+	IMAGEMANAGER->DrawRect({ 10 + xx ,560 + yy }, { 10 + xx + float(mapWidth / (4096.f + WINSIZE_X * 2.f) * WINSIZE_X), 560 + yy + float(mapHeight / (4096.f + WINSIZE_Y * 2.5f) * WINSIZE_Y) });
+
 
 	if (m_selectUnit != nullptr)
 	{

@@ -107,18 +107,31 @@ void MapReader::Init(ID2D1DeviceContext* context)
 
 					if (_vf4.flag[subY * 4 + subX] == 1 || _vf4.flag[subY * 4 + subX] == 3 || _vf4.flag[subY * 4 + subX] == 3 || _vf4.flag[subY * 4 + subX] == 19 || _vf4.flag[subY * 4 + subX] == 17)
 					{
-						miniTiles[offsetY / 8][offsetX / 8] = 1;
+						miniTiles[y * 4 + subY][x * 4 + subX] = 1;
 					}
 					else
 					{
-						miniTiles[offsetY / 8][offsetX / 8] = 0;
+						miniTiles[y * 4 + subY][x * 4 + subX] = 0;
 					}
 				}
 			}
 		}
 	}
-
 	MapRegionSetting();
+
+	//for (int i = 0; i < 4096; i++)
+	//{
+	//	for (int j = 0; j < 4096; j++)
+	//	{
+	//		//int ids = miniTiles[j/8][i/8]
+	//		int ids = region->regionsIds[i / 8][j / 8];
+	//		if (ids != -1)
+	//		{
+	//			colr[i * 4096 + j] = { (unsigned char)(ids * 20) ,(unsigned char)(ids * 20),0,255 };
+	//		}
+	//	}
+	//}
+
 
 	D2D1_RECT_U rect = { 0 , 0 ,w , h };
 	tileSetData->bitmap->CopyFromMemory(&rect, colr, 4 * w);
@@ -131,7 +144,7 @@ void MapReader::MapRender(Vector2 mapPos)
 	D2D_MATRIX_3X2_F matT, matS;
 
 	matT = D2D1::Matrix3x2F::Translation(-IMAGEMANAGER->GetCameraPosition().x, -IMAGEMANAGER->GetCameraPosition().y);
-	matS = D2D1::Matrix3x2F::Scale(1.7f, 1.7f);
+	matS = D2D1::Matrix3x2F::Scale(1.5f, 1.5f);
 
 	m_context->SetTransform(matS * matT);
 
@@ -157,11 +170,11 @@ void MapReader::MapRegionSetting()
 	int res = 32; //region scale
 
 	queue <MapRegions*> vectorList;
-	Regions* region = new Regions;
-	for (int i = 0; i < 4096; i++)
+	region = new Regions;
+	for (int i = 0; i < 512; i++)
 	{
 		//regionsIds[i] = new int[4096] {-1, };
-		for (int j = 0; j < 4096; j++)
+		for (int j = 0; j < 512; j++)
 		{
 			region->regionsIds[i][j] = -1;
 		}
@@ -183,13 +196,14 @@ void MapReader::MapRegionSetting()
 				{
 					for (int j = 0; j < 2 * error + 1; j++)
 					{
-						if (miniTiles[cy / 32 + 1][cx / 32 + 1] == 1)
-						{
-							cx += i - error;
-							cy += j - error;
-							found = true;
-							break;
-						}
+						if (cy < 4095 && cx < 4095)
+							if (miniTiles[cy / 8 + 1][cx / 8 + 1] == 1)
+							{
+								cx += i - error;
+								cy += j - error;
+								found = true;
+								break;
+							}
 					}
 					if (found == true)
 					{
@@ -208,8 +222,9 @@ void MapReader::MapRegionSetting()
 			}
 			if (cy != 4096)
 			{
-				vectorList.push(new MapRegions{ Vector2{ (float)cx,(float)cy } ,regionId });
-				region->regionsIds[cy][cx] = regionId;
+				vectorList.push(new MapRegions{ Vector2{ (float)(int)(cx / 8),(float)(int)(cy / 8) } ,regionId });
+				region->regionsIds[cy / 8][cx / 8] = regionId;
+				mapRegions.push_back(new MapRegions{ Vector2{ (float)(int)(cx / 8),(float)(int)(cy / 8) } ,regionId,{(int)(cx / 8),(int)(cy / 8),(int)(cx / 8),(int)(cy / 8)} });
 				regionId++;
 			}
 		}
@@ -221,67 +236,189 @@ void MapReader::MapRegionSetting()
 		auto iter = vectorList.front();
 		int tileX = iter->pos.x;
 		int tileY = iter->pos.y;
+		int nowRegionIds = region->regionsIds[tileY][tileX];
 		c++;
 
 		if (tileX > 0)
 		{
-			if (tileY < 4096)
+			int regionId = region->regionsIds[tileY][tileX - 1];
+			if (miniTiles[tileY][tileX - 1] == 1)
 			{
-				int regionId = region->regionsIds[tileY][tileX - 1];
 				if (regionId == -1)
 				{
-					region->regionsIds[tileY][tileX - 1] = region->regionsIds[tileY][tileX];
-					vectorList.push(new MapRegions{ Vector2{ (float)tileX - 32,(float)tileY },0 });
+					region->regionsIds[tileY][tileX - 1] = nowRegionIds;
+					vectorList.push(new MapRegions{ Vector2{ (float)tileX - 1,(float)tileY },nowRegionIds });
 				}
-				else if (regionId != iter->regionId)
+				else if (regionId != nowRegionIds)
 				{
-
+					bool isAble = false;
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
+					{
+						if (_iter.second->regionId == regionId)
+						{
+							isAble = true;
+							break;
+						}
+					}
+					if (isAble == false)
+					{
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(0, mapRegions[regionId]));
+						mapRegions[regionId]->nearRegions.push_back(make_pair(0, mapRegions[nowRegionIds]));
+					}
 				}
 			}
 		}
 		if (tileX < 4095)
 		{
-			if (tileY < 4096)
+			if (miniTiles[tileY][tileX + 1] == 1)
 			{
 				int regionId = region->regionsIds[tileY][tileX + 1];
 				if (regionId == -1)
 				{
-					region->regionsIds[tileY][tileX + 1] = region->regionsIds[tileY][tileX];
-					vectorList.push(new MapRegions{ Vector2{ (float)tileX + 32,(float)tileY },0 });
+					region->regionsIds[tileY][tileX + 1] = nowRegionIds;
+					vectorList.push(new MapRegions{ Vector2{ (float)tileX + 1,(float)tileY },0 });
 				}
-				else if (regionId != iter->regionId)
+				else if (regionId != nowRegionIds)
 				{
-
+					bool isAble = false;
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
+					{
+						if (_iter.second->regionId == regionId)
+						{
+							isAble = true;
+							break;
+						}
+					}
+					if (isAble == false)
+					{
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(0, mapRegions[regionId]));
+						mapRegions[regionId]->nearRegions.push_back(make_pair(0, mapRegions[region->regionsIds[tileY][tileX]]));
+					}
 				}
 			}
 		}
-		if (tileY != 0 && tileY < 4096)
+		if (tileY != 0)
 		{
-			int regionId = region->regionsIds[tileY - 1][tileX];
-			if (regionId == -1)
+			if (miniTiles[tileY - 1][tileX] == 1)
 			{
-				region->regionsIds[tileY - 1][tileX] = region->regionsIds[tileY - 1][tileX];
-				vectorList.push(new MapRegions{ Vector2{ (float)tileX,(float)tileY - 32},0 });
-			}
-			else if (regionId != iter->regionId)
-			{
-
+				int regionId = region->regionsIds[tileY - 1][tileX];
+				if (regionId == -1)
+				{
+					region->regionsIds[tileY - 1][tileX] = region->regionsIds[tileY][tileX];
+					vectorList.push(new MapRegions{ Vector2{ (float)tileX,(float)tileY - 1},0 });
+				}
+				else if (regionId != region->regionsIds[tileY][tileX])
+				{
+					bool isAble = false;
+					for (auto _iter : mapRegions[region->regionsIds[tileY][tileX]]->nearRegions)
+					{
+						if (_iter.second->regionId == regionId)
+						{
+							isAble = true;
+							break;
+						}
+					}
+					if (isAble == false)
+					{
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(0, mapRegions[regionId]));
+						mapRegions[regionId]->nearRegions.push_back(make_pair(0, mapRegions[nowRegionIds]));
+					}
+				}
 			}
 		}
-		if (tileY < 4096)
+		if (tileY < 512)
 		{
-			int regionId = region->regionsIds[tileY + 1][tileX];
-			if (regionId == -1)
+			if (miniTiles[tileY + 1][tileX] == 1)
 			{
-				region->regionsIds[tileY + 1][tileX] = region->regionsIds[tileY + 1][tileX];
-				vectorList.push(new MapRegions{ Vector2{ (float)tileX ,(float)tileY + 32},0 });
-			}
-			else if (regionId != iter->regionId)
-			{
-
+				int regionId = region->regionsIds[tileY + 1][tileX];
+				if (regionId == -1)
+				{
+					region->regionsIds[tileY + 1][tileX] = region->regionsIds[tileY][tileX];
+					vectorList.push(new MapRegions{ Vector2{ (float)tileX ,(float)tileY + 1},0 });
+				}
+				else if (regionId != nowRegionIds)
+				{
+					bool isAble = false;
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
+					{
+						if (_iter.second->regionId == regionId)
+						{
+							isAble = true;
+							break;
+						}
+					}
+					if (isAble == false)
+					{
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(0, mapRegions[regionId]));
+						mapRegions[regionId]->nearRegions.push_back(make_pair(0, mapRegions[nowRegionIds]));
+					}
+				}
 			}
 		}
+		SAFE_DELETE(vectorList.front());
 		vectorList.pop();
 	}
-	cout << "";
+
+	for (int y = 0; y < 512; y++)
+	{
+		for (int x = 0; x < 512; x++)
+		{
+			int t = region->regionsIds[y][x];
+			if (t == -1)
+			{
+				continue;
+			}
+			mapRegions[t]->AddRegion(x, y);
+		}
+	}
+
+	for (auto iter : mapRegions)
+	{
+		for (auto& _iter : iter->nearRegions)
+		{
+			float destXY = 0;
+			float dx = abs(iter->pos.x - _iter.second->pos.x);
+			float dy = abs(iter->pos.y - _iter.second->pos.y);
+			float e1 = abs(dx - dy);
+			float e2 = min(dx, dy);
+			destXY = e1 * 10 + e2 * 14;
+			_iter.first = destXY;
+		}
+	}
+	/*int total_connectivity_id = 1;
+	for (auto iter : mapRegions)
+	{
+
+	}*/
+	/*
+	* def create_region_connectivity():
+	region_deque = deque()
+	total_connectivity_id = 1
+
+	   for region in Managers.game_map.all_regions:
+		if region.connectivity_id == -1:
+			region.connectivity_id = total_connectivity_id
+			total_connectivity_id += 1
+			region_deque.append(region)
+
+		while region_deque:
+			temp = region_deque.popleft()
+			current_id = temp.connectivity_id
+
+			for neighbor in temp.neighbors.keys():
+				if neighbor.connectivity_id == -1:
+					neighbor.connectivity_id = current_id
+					region_deque.append(neighbor)
+	*/
+}
+
+void MapReader::RenderLine()
+{
+	//for (auto iter : mapRegions)
+	//{
+	//	for (auto _iter : iter->nearRegions)
+	//	{
+	//		IMAGEMANAGER->DrawLine({ iter->pos.x * 1.7f * 8, iter->pos.y * 1.7f * 8 }, { _iter.second->pos.x * 1.7f * 8, _iter.second->pos.y * 1.7f * 8 });
+	//	}
+	//}
 }

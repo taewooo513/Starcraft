@@ -80,7 +80,9 @@ public:
 	void UIMapRender();
 	void DrawCircle(Vector2 vec, float scaleX, float scaleY);
 	void DrawRect(Vector2 startPos, Vector2 endPos);
+	void DrawLine(Vector2 startPos, Vector2 endPos);
 
+	void DrawRegion();
 	void LoadMap();
 
 	void CameraSetPosition(Vector2 vec)

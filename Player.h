@@ -24,7 +24,7 @@ private:
 	float m_clickEndY;
 
 public:
-
+	void Astar();
 	void Init();
 	void Update();
 	void Render();

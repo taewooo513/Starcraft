@@ -38,4 +38,6 @@ void MainGameScene::Release()
 void MainGameScene::UIRender()
 {
 	player1->UIRender();
+
+	IMAGEMANAGER->DrawRegion();
 }
