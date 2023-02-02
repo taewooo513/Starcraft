@@ -20,11 +20,16 @@ typedef struct
 
 struct MapRegions
 {
+	~MapRegions()
+	{
+		nearRegions.clear();
+	}
 	Vector2 pos;
 	int regionId;
 	RECT self = { 0,0,0,0 };
 	vector<pair<float, MapRegions*>> nearRegions;
 	bool openNode = false;
+	int whereRegionId;
 	void AddRegion(int x, int y)
 	{
 		if (x < self.left)
@@ -77,5 +82,6 @@ public:
 	void UIMapRender();
 	void MapRegionSetting();
 	void RenderLine();
+	void Release();
 };
 

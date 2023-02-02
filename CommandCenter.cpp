@@ -7,10 +7,27 @@ CommandCenter::CommandCenter()
 
 CommandCenter::~CommandCenter()
 {
+	if (player != nullptr)
+	{
+		if (player->m_selectBuild == this)
+		{
+			player->m_selectBuild = nullptr;
+		}
+		for (auto iter = player->m_builds.begin(); iter != player->m_builds.end(); iter++)
+		{
+			if (*iter == this)
+			{
+				player->m_builds.erase(iter);
+				break;
+			}
+		}
+	}
 }
 
 void CommandCenter::Init()
 {
+	player->AddBuild(this);
+
 	m_maxCompleteTime = 75.8f;
 	m_completeTime = 0;
 	m_costM = 400;
@@ -29,18 +46,31 @@ void CommandCenter::Init()
 
 void CommandCenter::Update()
 {
+	clickRect = { int(position.x - 50) , int(position.y) , int(position.x + 140) , int(position.y + 140) };
+	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x;
+	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x;
+	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y;
+	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y;
 }
 
 void CommandCenter::Render()
 {
 	if (m_buildIndex < 4)
 	{
-		IMAGEMANAGER->CenterRenderBlendBlack(buildImage[m_buildIndex], { position.x,position.y }, 1.5, 0, false);
+		if (m_buildIndex < 3)
+		{
+			IMAGEMANAGER->RenderBlendBlack(buildImage[m_buildIndex], { position.x - 85 ,position.y - 10 }, 1.5, 0);
+		}
+		else
+		{
+			IMAGEMANAGER->RenderBlendBlack(buildImage[m_buildIndex], { position.x - 50,position.y - 50 }, 1.5, 0);
+		}
 	}
 	else
 	{
-		IMAGEMANAGER->CenterRenderBlendBlack(idle, { position.x,position.y }, 1.5, 0, false);
+		IMAGEMANAGER->RenderBlendBlack(idle, { position.x - 50,position.y - 50 }, 1.5, 0);
 	}
+	IMAGEMANAGER->DrawRect({ (float)clickRect.left, (float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
 }
 
 void CommandCenter::Release()

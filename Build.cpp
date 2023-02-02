@@ -15,6 +15,7 @@ void Build::Init()
 
 void Build::Update()
 {
+
 }
 
 void Build::Render()
@@ -53,14 +54,18 @@ void Build::SelectBuild()
 {
 	if (m_completeTime >= m_maxCompleteTime)
 	{
-		
+		SelectBuildCommand();
 	}
 	else
 	{
 		if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
 		{
 			ObjectDestroyed();
-			EFFECTMANAGER->AddEffect("f2", { position.x - 120,position.y - 90 }, 1.5, 0.1f);
+			EFFECTMANAGER->AddEffect("f2", { position.x - 120,position.y - 90 }, 1, 0.1f);
 		}
 	}
+}
+
+void Build::SelectBuildCommand()
+{
 }

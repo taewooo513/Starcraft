@@ -2,6 +2,7 @@
 #include "WalkUnit.h"
 #include "Build.h"
 #include "Effect.h"
+#include "Player.h"
 class SpaceConstructionVehicle : public WalkUnit
 {
 private:

@@ -47,9 +47,11 @@ void Main::Render()
 
 void Main::Release()
 {
-	SceneManager::ReleaseInstance();
-	ImageManager::ReleaseInstance();
 	ObjectManager::ReleaseInstance();
+	SceneManager::ReleaseInstance();
+	ObjectManager::ReleaseInstance();
+
+	ImageManager::ReleaseInstance();
 	TIMERMANAGER->Release();
 	EffectManager::ReleaseInstance();
 	TimerManager::ReleaseInstance();

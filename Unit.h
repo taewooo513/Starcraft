@@ -29,6 +29,9 @@ public:
 	virtual void Release() override;
 	virtual void UIRender() override;
 
+	Player* player;
+	void SetPlayer(Player* player) { this->player = player; }
+
 	virtual void Move() = 0;
 	virtual void Attack() = 0;
 

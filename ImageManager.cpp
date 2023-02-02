@@ -7,6 +7,9 @@ ImageManager::ImageManager()
 
 ImageManager::~ImageManager()
 {
+	mapReader->Release();
+	SAFE_DELETE(mapReader);
+
 	for (auto iter : m_vImageList)
 	{
 		for (auto _iter : iter.second->GetImages())
@@ -195,7 +198,7 @@ void ImageManager::DrawLine(Vector2 startPos, Vector2 endPos)
 
 	ComPtr<ID2D1SolidColorBrush> brush;
 	m_d2dContext->CreateSolidColorBrush({ 0,255,0,255 }, &brush);
-	
+
 	HDC dc;
 
 	m_d2dContext->DrawLine({ startPos.x,startPos.y }, { endPos.x,endPos.y }, brush.Get());

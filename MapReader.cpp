@@ -13,6 +13,7 @@ void MapReader::Init(ID2D1DeviceContext* context)
 	FILE* wpeFile;
 	FILE* cv5File;
 
+	cout << sizeof(void*);
 	fopen_s(&file, "./Resources/map/MTXM2", "rb");
 	fopen_s(&wpeFile, "./Resources/map/jungle.wpe", "rb");
 	fopen_s(&cv5File, "./Resources/map/jungle.cv5", "rb");
@@ -44,6 +45,11 @@ void MapReader::Init(ID2D1DeviceContext* context)
 	fread(tileSetData->vr4, 1, sizeof(TileSetData::VR4), vr4File);
 	fread(tileSetData->wpe, 1, sizeof(TileSetData::WPE), wpeFile);
 
+	fclose(cv5File);
+	fclose(vx4File);
+	fclose(vf4File);
+	fclose(vr4File);
+	fclose(wpeFile);
 	unsigned short* mtxmdata = new unsigned short[128 * 128];
 	fread(mtxmdata, 2, 128 * 128, file);
 
@@ -274,7 +280,7 @@ void MapReader::MapRegionSetting()
 				}
 			}
 		}
-		if (tileX < 4095)
+		if (tileX < 512)
 		{
 			if (miniTiles[tileY][tileX + 1] == 1)
 			{
@@ -309,7 +315,7 @@ void MapReader::MapRegionSetting()
 				}
 			}
 		}
-		if (tileY != 0)
+		if (tileY > 0)
 		{
 			if (miniTiles[tileY - 1][tileX] == 1)
 			{
@@ -378,6 +384,153 @@ void MapReader::MapRegionSetting()
 				}
 			}
 		}
+
+		if (tileY > 0 && tileX > 0)
+		{
+			if (miniTiles[tileY - 1][tileX - 1] == 1)
+			{
+				int regionId = region->regionsIds[tileY - 1][tileX - 1];
+				if (regionId == -1)
+				{
+					region->regionsIds[tileY - 1][tileX - 1] = nowRegionIds;
+					vectorList.push(new MapRegions{ Vector2{ (float)tileX - 1,(float)tileY - 1},0 });
+				}
+				else if (regionId != region->regionsIds[tileY - 1][tileX - 1])
+				{
+					bool isAble = false;
+					for (auto _iter : mapRegions[region->regionsIds[tileY - 1][tileX - 1]]->nearRegions)
+					{
+						if (_iter.second->regionId == regionId)
+						{
+							isAble = true;
+							break;
+						}
+					}
+					if (isAble == false)
+					{
+						float dx = abs(mapRegions[nowRegionIds]->pos.x - mapRegions[regionId]->pos.x);
+						float dy = abs(mapRegions[nowRegionIds]->pos.y - mapRegions[regionId]->pos.y);
+						float e1 = abs(dx - dy);
+						float e2 = min(dx, dy);
+						float dest = e1 * 10 + e2 * 14;
+
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
+						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+					}
+				}
+			}
+		}
+
+		if (tileY > 512 && tileX > 0)
+		{
+			if (miniTiles[tileY + 1][tileX - 1] == 1)
+			{
+				int regionId = region->regionsIds[tileY + 1][tileX - 1];
+				if (regionId == -1)
+				{
+					region->regionsIds[tileY + 1][tileX - 1] = nowRegionIds;
+					vectorList.push(new MapRegions{ Vector2{ (float)tileX - 1,(float)tileY + 1},0 });
+				}
+				else if (regionId != region->regionsIds[tileY + 1][tileX - 1])
+				{
+					bool isAble = false;
+					for (auto _iter : mapRegions[region->regionsIds[tileY + 1][tileX - 1]]->nearRegions)
+					{
+						if (_iter.second->regionId == regionId)
+						{
+							isAble = true;
+							break;
+						}
+					}
+					if (isAble == false)
+					{
+						float dx = abs(mapRegions[nowRegionIds]->pos.x - mapRegions[regionId]->pos.x);
+						float dy = abs(mapRegions[nowRegionIds]->pos.y - mapRegions[regionId]->pos.y);
+						float e1 = abs(dx - dy);
+						float e2 = min(dx, dy);
+						float dest = e1 * 10 + e2 * 14;
+
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
+						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+					}
+				}
+			}
+		}
+
+
+		if (tileY > 0 && tileX < 512)
+		{
+			if (miniTiles[tileY - 1][tileX + 1] == 1)
+			{
+				int regionId = region->regionsIds[tileY - 1][tileX + 1];
+				if (regionId == -1)
+				{
+					region->regionsIds[tileY - 1][tileX + 1] = nowRegionIds;
+					vectorList.push(new MapRegions{ Vector2{ (float)tileX + 1,(float)tileY - 1},0 });
+				}
+				else if (regionId != region->regionsIds[tileY - 1][tileX + 1])
+				{
+					bool isAble = false;
+					for (auto _iter : mapRegions[region->regionsIds[tileY - 1][tileX + 1]]->nearRegions)
+					{
+						if (_iter.second->regionId == regionId)
+						{
+							isAble = true;
+							break;
+						}
+					}
+					if (isAble == false)
+					{
+						float dx = abs(mapRegions[nowRegionIds]->pos.x - mapRegions[regionId]->pos.x);
+						float dy = abs(mapRegions[nowRegionIds]->pos.y - mapRegions[regionId]->pos.y);
+						float e1 = abs(dx - dy);
+						float e2 = min(dx, dy);
+						float dest = e1 * 10 + e2 * 14;
+
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
+						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+					}
+				}
+			}
+		}
+
+		if (tileY < 512 && tileX < 512)
+		{
+			if (miniTiles[tileY + 1][tileX + 1] == 1)
+			{
+				int regionId = region->regionsIds[tileY + 1][tileX + 1];
+				if (regionId == -1)
+				{
+					region->regionsIds[tileY + 1][tileX + 1] = nowRegionIds;
+					vectorList.push(new MapRegions{ Vector2{ (float)tileX + 1,(float)tileY + 1},0 });
+				}
+				else if (regionId != region->regionsIds[tileY + 1][tileX + 1])
+				{
+					bool isAble = false;
+					for (auto _iter : mapRegions[region->regionsIds[tileY + 1][tileX + 1]]->nearRegions)
+					{
+						if (_iter.second->regionId == regionId)
+						{
+							isAble = true;
+							break;
+						}
+					}
+					if (isAble == false)
+					{
+						float dx = abs(mapRegions[nowRegionIds]->pos.x - mapRegions[regionId]->pos.x);
+						float dy = abs(mapRegions[nowRegionIds]->pos.y - mapRegions[regionId]->pos.y);
+						float e1 = abs(dx - dy);
+						float e2 = min(dx, dy);
+						float dest = e1 * 10 + e2 * 14;
+
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
+						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+					}
+				}
+			}
+		}
+
+
 		SAFE_DELETE(vectorList.front());
 		vectorList.pop();
 	}
@@ -444,4 +597,28 @@ void MapReader::RenderLine()
 	//		IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
 	//	}
 	//}
+}
+
+void MapReader::Release()
+{
+	for (auto iter : mapRegions)
+	{
+		SAFE_DELETE(iter);
+	}
+	mapRegions.clear();
+
+	SAFE_DELETE(region);
+
+	for (int i = 0; i < 4096; i++)
+	{
+
+	}
+	tileSetData->bitmap->Release();
+	SAFE_DELETE(tileSetData->cv5);
+	SAFE_DELETE(tileSetData->vx4);
+	SAFE_DELETE(tileSetData->vf4);
+	SAFE_DELETE(tileSetData->vr4);
+	SAFE_DELETE(tileSetData->wpe);
+
+	SAFE_DELETE(tileSetData);
 }

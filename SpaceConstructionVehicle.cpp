@@ -15,6 +15,7 @@ void SpaceConstructionVehicle::Init()
 	m_isClick = false;
 	m_spark = nullptr;
 	m_nowBuild = nullptr;
+	player->AddUnit(this);
 	m_actionImage_1[0] = IMAGEMANAGER->FindImage("scv_action_1_1");
 	m_actionImage_1[1] = IMAGEMANAGER->FindImage("scv_action_1_2");
 	m_actionImage_1[2] = IMAGEMANAGER->FindImage("scv_action_1_3");
@@ -56,7 +57,6 @@ void SpaceConstructionVehicle::Update()
 {
 	if (m_dest.x != 0 && m_dest.y != 0)
 	{
-		
 		rot = atan2(position.x - m_dest.x, position.y - m_dest.y) * -1;
 		if (m_speed < 300)
 		{
@@ -73,23 +73,26 @@ void SpaceConstructionVehicle::Update()
 	}
 	if (m_nowBuild != nullptr)
 	{
-		m_nowBuild->AddBuild();
-		if (m_spark == nullptr)
-		{
-			m_spark = EFFECTMANAGER->AddEffect("SCVEffect", { position.x - 35 ,position.y - 40 }, 1.7, 0.1);
-		}
-		else if (m_spark->m_isEnd == true)
-		{
-			m_spark->m_isDestroy = true;
-			m_spark = nullptr;
-		}
-		if (m_nowBuild->isComplete == true)
+		if (m_nowBuild->GetIsObjectDestroyed() == true)
 		{
 			m_nowBuild = nullptr;
 		}
-		if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
+		else
 		{
-			m_nowBuild = nullptr;
+			m_nowBuild->AddBuild();
+			if (m_spark == nullptr)
+			{
+				m_spark = EFFECTMANAGER->AddEffect("SCVEffect", { position.x - 35 ,position.y - 40 }, 1.7, 0.1);
+			}
+			else if (m_spark->m_isEnd == true)
+			{
+				m_spark->m_isDestroy = true;
+				m_spark = nullptr;
+			}
+			if (m_nowBuild->isComplete == true)
+			{
+				m_nowBuild = nullptr;
+			}
 		}
 	}
 	else
@@ -116,6 +119,7 @@ void SpaceConstructionVehicle::Update()
 			{
 			case eCommandCenter:
 				m_nowBuild = new CommandCenter;
+				m_nowBuild->SetPlayer(player);
 				m_isBuild = false;
 				buildIndex = 0;
 				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x / (int)(32.f * 1.7f) * (32.f * 1.7), position.y / (int)(32.f * 1.7f) * (32.f * 1.7), 0);
@@ -123,6 +127,7 @@ void SpaceConstructionVehicle::Update()
 			case eBarrack:
 				m_nowBuild = new Barrack;
 				m_isBuild = false;
+				m_nowBuild->SetPlayer(player);
 				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x / (int)(32.f * 1.7f) * (32.f * 1.7), position.y / (int)(32.f * 1.7f) * (32.f * 1.7), 0);
 				buildIndex = 0;
 				break;
@@ -206,6 +211,13 @@ void SpaceConstructionVehicle::UIRender()
 	AddImage("cmdicons0124", L"./Resources/Icon/cmdicons0124.bmp"); // ÅÍ·¿
 	*/
 	m_isClick = true;
+	if (m_nowBuild != nullptr)
+	{
+		if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
+		{
+			m_nowBuild = nullptr;
+		}
+	}
 	if (page == 1)
 	{
 		if (buildIndex == 0)
@@ -242,9 +254,9 @@ void SpaceConstructionVehicle::UIRender()
 	switch (buildIndex)
 	{
 	case eCommandCenter:
-		IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)), (float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) },{
+		IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)), (float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) }, {
 				(float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f,
-				(float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight() 
+				(float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight()
 			});
 		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { (float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)), (float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) - 50 }, 1.5, 0);
 		break;

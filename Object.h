@@ -16,11 +16,14 @@ public:
 		{993, 734},
 	};
 private:
+
 	string name;
 	float m_hp;
 	bool m_isObjectDestroyed = false;
 
 public:
+	Object() {}
+	virtual ~Object() {}
 	virtual void Init() = 0;
 	virtual void Update() = 0;
 	virtual void Render() = 0;

@@ -1,8 +1,10 @@
 #pragma once
 #include "Build.h"
+#include "Player.h"
 #include "Unit.h"
 #include "MapReader.h"
 
+class Build;
 class Player
 {
 private:
@@ -13,12 +15,7 @@ private:
 	int m_maxPopulation;
 	bool m_isClick;
 	bool m_isCameraClick;
-	Build* m_selectBuild;
-	Unit* m_selectUnit;
-	vector<Unit*> m_selectUnits;
 	float sizeClick = 0;
-	vector<Build*> m_builds;
-	vector<Unit*> m_units;
 	Vector2 m_rClickPos = { 0,0 };
 	float m_clickStartX;
 	float m_clickStartY;
@@ -26,23 +23,36 @@ private:
 	float m_clickEndY;
 
 public:
+	Build* m_selectBuild;
+	vector<Unit*> m_selectUnits;
+	Unit* m_selectUnit;
+	vector<Build*> m_builds;
+	vector<Unit*> m_units;
 	void Astar(Vector2 startPos, Vector2 endPos);
 	void Init();
 	void Update();
 	void Render();
-	vector<Vector2 > testDraw;
+	vector<pair<Vector2, Vector2>> testDraw;
 	void UIRender();
 	void Release();
 
 	struct comp {
-		bool operator()(pair<float, MapRegions*>A, pair<float, MapRegions*>B)
+		bool operator()(pair<pair<float, float>, MapRegions*>A, pair<pair<float, float>, MapRegions*>B)
 		{
-			if (A.first > B.first)
+			if (A.first.second > B.first.second)
 				return true;
-			else if (A.first == B.first)
+			else if (A.first.second == B.first.second)
 				return A > B;
 			return false;
 		}
 	};
+	void AddBuild(Build* build)
+	{
+		m_builds.push_back(build);
+	}
+	void AddUnit(Unit* unit)
+	{
+		m_units.push_back(unit);
+	}
 };
 
