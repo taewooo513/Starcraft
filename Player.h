@@ -1,6 +1,8 @@
 #pragma once
 #include "Build.h"
+#include "Player.h"
 #include "Unit.h"
+class Build;
 class Player
 {
 private:
@@ -11,12 +13,7 @@ private:
 	int m_maxPopulation;
 	bool m_isClick;
 	bool m_isCameraClick;
-	Build* m_selectBuild;
-	Unit* m_selectUnit;
-	vector<Unit*> m_selectUnits;
 	float sizeClick = 0;
-	vector<Build*> m_builds;
-	vector<Unit*> m_units;
 	Vector2 m_rClickPos = { 0,0 };
 	float m_clickStartX;
 	float m_clickStartY;
@@ -24,11 +21,24 @@ private:
 	float m_clickEndY;
 
 public:
+	Build* m_selectBuild;
+	vector<Unit*> m_selectUnits;
+	Unit* m_selectUnit;
+	vector<Build*> m_builds;
+	vector<Unit*> m_units;
 	void Astar();
 	void Init();
 	void Update();
 	void Render();
 	void UIRender();
 	void Release();
+	void AddBuild(Build* build)
+	{
+		m_builds.push_back(build);
+	}
+	void AddUnit(Unit* unit)
+	{
+		m_units.push_back(unit);
+	}
 };
 

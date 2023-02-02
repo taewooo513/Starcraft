@@ -13,6 +13,7 @@ void MapReader::Init(ID2D1DeviceContext* context)
 	FILE* wpeFile;
 	FILE* cv5File;
 
+	cout << sizeof(void*);
 	fopen_s(&file, "./Resources/map/MTXM2", "rb");
 	fopen_s(&wpeFile, "./Resources/map/jungle.wpe", "rb");
 	fopen_s(&cv5File, "./Resources/map/jungle.cv5", "rb");
@@ -268,7 +269,7 @@ void MapReader::MapRegionSetting()
 				}
 			}
 		}
-		if (tileX < 4095)
+		if (tileX < 512)
 		{
 			if (miniTiles[tileY][tileX + 1] == 1)
 			{
@@ -292,12 +293,12 @@ void MapReader::MapRegionSetting()
 					if (isAble == false)
 					{
 						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(0, mapRegions[regionId]));
-						mapRegions[regionId]->nearRegions.push_back(make_pair(0, mapRegions[region->regionsIds[tileY][tileX]]));
+						mapRegions[regionId]->nearRegions.push_back(make_pair(0, mapRegions[nowRegionIds]));
 					}
 				}
 			}
 		}
-		if (tileY != 0)
+		if (tileY > 0)
 		{
 			if (miniTiles[tileY - 1][tileX] == 1)
 			{
@@ -414,11 +415,12 @@ void MapReader::MapRegionSetting()
 
 void MapReader::RenderLine()
 {
-	//for (auto iter : mapRegions)
-	//{
-	//	for (auto _iter : iter->nearRegions)
-	//	{
-	//		IMAGEMANAGER->DrawLine({ iter->pos.x * 1.7f * 8, iter->pos.y * 1.7f * 8 }, { _iter.second->pos.x * 1.7f * 8, _iter.second->pos.y * 1.7f * 8 });
-	//	}
-	//}
+	for (auto iter : mapRegions)
+	{
+		for (auto _iter : iter->nearRegions)
+		{
+			if ((iter->pos == _iter.second->pos) == false)
+				IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
+		}
+	}
 }

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "SpaceConstructionVehicle.h"
+#include "CommandCenter.h"
 
 void Player::Astar()
 {
@@ -16,9 +17,17 @@ void Player::Init()
 	for (int i = 0; i < 5; i++)
 	{
 		Unit* scv = new SpaceConstructionVehicle;
+		scv->SetPlayer(this);
 		OBJECTMANAGER->AddObject(scv, "Unit", WINSIZE_X / 2, WINSIZE_Y / 2, 1);
-		m_units.push_back(scv);
+		//m_units.push_back(scv);
 	}
+	Build* commandCenter = new CommandCenter;
+	commandCenter->SetPlayer(this);
+	OBJECTMANAGER->AddObject(commandCenter, "Build", WINSIZE_X / 2, WINSIZE_Y / 2, 0);
+	commandCenter->AddComplete();
+	//m_builds.push_back(commandCenter);
+
+	m_selectBuild = nullptr;
 	m_selectUnit = nullptr;
 
 	mapRect = {
@@ -31,6 +40,11 @@ void Player::Init()
 
 void Player::Update()
 {
+	if (m_selectBuild != nullptr)
+	{
+		m_selectBuild->SelectBuild();
+	}
+
 	if (KEYMANAGER->GetOnceKeyDown(VK_RBUTTON))
 	{
 		m_clickRad = 0;
@@ -114,24 +128,42 @@ void Player::Update()
 	}
 	if (m_isClick == true && KEYMANAGER->GetOnceKeyUp(VK_LBUTTON))
 	{
+		RECT pRt;
+		if (m_clickStartX > m_clickEndX)
+		{
+			float swap = m_clickEndX;
+			m_clickEndX = m_clickStartX;
+			m_clickStartX = swap;
+		}
+		if (m_clickStartY > m_clickEndY)
+		{
+			float swap = m_clickEndY;
+			m_clickEndY = m_clickStartY;
+			m_clickStartY = swap;
+		}
+
+		for (auto iter : m_builds)
+		{
+
+			RECT rtMouse = { m_clickStartX  ,
+			m_clickStartY ,
+				m_clickEndX ,
+				m_clickEndY
+			};
+			if (IntersectRect(&pRt, &rtMouse, &iter->GetClickRect()))
+			{
+				m_selectBuild = iter;
+				m_selectUnit = nullptr;
+				m_selectUnits.clear();
+				break;
+			}
+		}
+
 		m_isClick = false;
 		m_isCameraClick = false;
 		int count = 0;
 		for (auto iter : m_units)
 		{
-			if (m_clickStartX > m_clickEndX)
-			{
-				float swap = m_clickEndX;
-				m_clickEndX = m_clickStartX;
-				m_clickStartX = swap;
-			}
-			if (m_clickStartY > m_clickEndY)
-			{
-				float swap = m_clickEndY;
-				m_clickEndY = m_clickStartY;
-				m_clickStartY = swap;
-			}
-
 			RECT rtMouse = { m_clickStartX  ,
 			m_clickStartY ,
 				m_clickEndX ,
@@ -148,6 +180,7 @@ void Player::Update()
 					{
 						m_selectUnits.clear();
 						m_selectUnit = nullptr;
+						m_selectBuild = nullptr;
 					}
 					m_selectUnits.push_back(iter);
 					count++;
@@ -160,6 +193,7 @@ void Player::Update()
 					if (m_selectUnits.size() != 0)
 						m_selectUnits.clear();
 					m_selectUnit = iter;
+					m_selectBuild = nullptr;
 					break;
 				}
 			}
@@ -259,6 +293,10 @@ void Player::UIRender()
 	if (m_selectUnit != nullptr)
 	{
 		m_selectUnit->UIRender();
+	}
+	if (m_selectBuild != nullptr)
+	{
+		m_selectBuild->UIRender();
 	}
 }
 

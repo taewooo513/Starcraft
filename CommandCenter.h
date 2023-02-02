@@ -7,7 +7,7 @@ private:
 	CImage* buildImage[4];
 public:
 	CommandCenter();
-	~CommandCenter();
+	virtual ~CommandCenter();
 	virtual void Init() override;
 	virtual void Update() override;
 	virtual void Render() override;

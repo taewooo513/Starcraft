@@ -150,6 +150,11 @@ struct Vector2
 	{
 		return { x + lvec.x,y + lvec.y };
 	}
+
+	bool operator == (Vector2 lvec)
+	{
+		return { x == lvec.x && y == lvec.y };
+	}
 };
 #define DELTA_TIME g_TimeScale *  TimerManager::GetInstance()->GetElapsedTime()
 
