@@ -122,13 +122,13 @@ void SpaceConstructionVehicle::Update()
 				m_nowBuild->SetPlayer(player);
 				m_isBuild = false;
 				buildIndex = 0;
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x / (int)(32.f * 1.7f) * (32.f * 1.7), position.y / (int)(32.f * 1.7f) * (32.f * 1.7), 0);
+				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)), (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
 				break;
 			case eBarrack:
 				m_nowBuild = new Barrack;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x / (int)(32.f * 1.7f) * (32.f * 1.7), position.y / (int)(32.f * 1.7f) * (32.f * 1.7), 0);
+				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)), (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
 				buildIndex = 0;
 				break;
 			}
@@ -254,19 +254,19 @@ void SpaceConstructionVehicle::UIRender()
 	switch (buildIndex)
 	{
 	case eCommandCenter:
-		IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)), (float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) }, {
-				(float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f,
-				(float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight()
+		IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)), (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
+				(float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f,
+				(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight()
 			});
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { (float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)), (float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) - 50 }, 1.5, 0);
+		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)), (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
 		break;
 	case eBarrack:
-		IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)),(float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) },
+		IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)),(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) },
 			{
-				(float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetWidth() ,
-				(float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetHeight()
+				(float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetWidth() ,
+				(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetHeight()
 			});
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { (float)(_ptMouse.x / (int)(32.f * 1.7f) * (32.f * 1.7)) - 50,(float)(_ptMouse.y / (int)(32.f * 1.7f) * (32.f * 1.7)) - 50 }, 1.5, 0);
+		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50,(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
 		break;
 	}
 

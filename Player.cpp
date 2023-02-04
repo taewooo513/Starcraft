@@ -3,13 +3,16 @@
 #include "SpaceConstructionVehicle.h"
 #include "CommandCenter.h"
 
-void Player::Astar(Vector2 startPos, Vector2 endPos)
+void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 {
 	Vector2 tileStartPos, tileEndPos;
 	tileStartPos = startPos / 1.5 / 8;
 	tileEndPos = endPos / 1.5 / 8;
-	int nowTileRegionId = IMAGEMANAGER->GetMapReader()->region->regionsIds[(int)tileStartPos.y][(int)tileStartPos.x];
-
+	int nowTileRegionId = IMAGEMANAGER->GetMapReader()->region->regionsIds[(int)tileStartPos.y][(int)tileStartPos.x].regionsIds;
+	while (!unit->moveNodeStack.empty())
+	{
+		unit->moveNodeStack.pop();
+	}
 	vector<pair<pair<float, float>, MapRegions*>> openNode;
 	// cost or node
 	//priority_queue <> regionQueue;
@@ -19,6 +22,12 @@ void Player::Astar(Vector2 startPos, Vector2 endPos)
 	int startRegionId = openNode[0].second->regionId;
 	int c = 0;
 	bool isFind = false;
+	for (auto iter : IMAGEMANAGER->GetMapReader()->mapRegions)
+	{
+		testDraw.clear();
+		iter->openNode = false;
+	}
+
 	while (regionQueue.empty() != true)
 	{
 		auto iter = regionQueue.top();
@@ -43,7 +52,7 @@ void Player::Astar(Vector2 startPos, Vector2 endPos)
 				regionQueue.push(make_pair(make_pair(nextRegion.first + iter.first.first, dest), nextRegion.second));
 				c++;
 			}
-			if (nextRegion.second->regionId == IMAGEMANAGER->GetMapReader()->region->regionsIds[(int)tileEndPos.y][(int)tileEndPos.x])
+			if (nextRegion.second->regionId == IMAGEMANAGER->GetMapReader()->region->regionsIds[(int)tileEndPos.y][(int)tileEndPos.x].regionsIds)
 			{
 				bool isOut = false;
 				auto __iter = nextRegion;
@@ -54,6 +63,9 @@ void Player::Astar(Vector2 startPos, Vector2 endPos)
 						if (___iter.second->regionId == __iter.second->whereRegionId)
 						{
 							__iter = ___iter;
+							unit->moveNodeStack.push(new MoveNode{ ___iter.second->pos,___iter.second->regionId });
+
+							cout << ___iter.second->regionId;
 							testDraw.push_back(make_pair(__iter.second->pos, ___iter.second->pos));
 							if (__iter.second->regionId == startRegionId)
 							{
@@ -92,7 +104,7 @@ void Player::Init()
 	}
 	Unit* scv = new SpaceConstructionVehicle;
 	scv->SetPlayer(this);
-	OBJECTMANAGER->AddObject(scv, "Unit", 2000 + WINSIZE_X / 2, WINSIZE_Y / 2, 1);
+	OBJECTMANAGER->AddObject(scv, "Unit", WINSIZE_X / 2, WINSIZE_Y / 2, 1);
 	Build* commandCenter = new CommandCenter;
 	commandCenter->SetPlayer(this);
 	OBJECTMANAGER->AddObject(commandCenter, "Build", WINSIZE_X / 2, WINSIZE_Y / 2, 0);
@@ -124,8 +136,7 @@ void Player::Update()
 		m_rClickPos.y = _ptMouse.y + IMAGEMANAGER->GetCameraPosition().y;
 		if (m_selectUnit != nullptr)
 		{
-			//m_selectUnit->SetDestPosition(m_rClickPos);
-			Astar(m_selectUnit->GetPosition(), { m_rClickPos });
+			Astar(m_selectUnit->GetPosition(), { m_rClickPos }, m_selectUnit);
 		}
 		/*for (auto iter : m_selectUnits)
 		{
@@ -156,7 +167,7 @@ void Player::Update()
 				SpaceConstructionVehicle* scv = dynamic_cast<SpaceConstructionVehicle*>(m_selectUnit);
 				if (scv->buildIndex != 0)
 				{
-					m_selectUnit->SetDestPosition({ (float)_ptMouse.x,(float)_ptMouse.y });
+					m_selectUnit->SetDestPosition({ (float)((_ptMouse.x - IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)), (float)((_ptMouse.y-IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) });
 					m_selectUnit->rot2 = atan2(m_rClickPos.y - m_selectUnit->GetPosition().y, m_rClickPos.x - m_selectUnit->GetPosition().x);
 					scv->m_isBuild = true;
 				}

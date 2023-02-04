@@ -33,11 +33,10 @@ void Main::Render()
 	m_d2dContext->BeginDraw();
 	SCENEMANAGER->Render();
 	OBJECTMANAGER->Render();
-	//TIMERMANAGER->Render();
 	EFFECTMANAGER->Render();
 	OBJECTMANAGER->UIRender();
 	SCENEMANAGER->UIRender();
-	TIMERMANAGER->Render();
+	//TIMERMANAGER->Render();
 
 	m_d2dContext->EndDraw();
 

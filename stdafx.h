@@ -165,6 +165,12 @@ struct Vector2
 		return { x == lvec.x && y == lvec.y };
 	}
 };
+struct MoveNode
+{
+	Vector2 pos;
+	int regionId;
+};
+
 #define DELTA_TIME g_TimeScale *  TimerManager::GetInstance()->GetElapsedTime()
 
 #include "ObjectManager.h"

@@ -28,13 +28,14 @@ void TimerManager::Update(float lock)
 void TimerManager::Render()
 {
 	wstring wstr;
+	cout << "ElapsedTime: " + to_string(_timer->getFrameRate()) << endl;
 //#ifdef _DEBUG 
 //	if (_timer != nullptr)
 //	{
-//		wstr = L"FramePerSec: " + to_wstring(_timer->getFrameRate());
+//		wstr = L"FramePerSec: " + to_wstring();
 //		IMAGEMANAGER->D2dTextOut(wstr, 0, 0, { 255,255,255,1 });
 //
-//		wstr = L"ElapsedTime: " + to_wstring(DELTA_TIME);
+//		
 //		IMAGEMANAGER->D2dTextOut(wstr, 0, 20, { 255,255,255,1 });
 //
 //		wstr = L"WorldTime: " + to_wstring(_timer->getWorldTime());

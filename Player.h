@@ -28,7 +28,7 @@ public:
 	Unit* m_selectUnit;
 	vector<Build*> m_builds;
 	vector<Unit*> m_units;
-	void Astar(Vector2 startPos, Vector2 endPos);
+	void Astar(Vector2 startPos, Vector2 endPos,Unit * unit);
 	void Init();
 	void Update();
 	void Render();

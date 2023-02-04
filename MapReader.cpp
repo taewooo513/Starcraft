@@ -125,18 +125,18 @@ void MapReader::Init(ID2D1DeviceContext* context)
 	}
 	MapRegionSetting();
 
-	//for (int i = 0; i < 4096; i++)
-	//{
-	//	for (int j = 0; j < 4096; j++)
-	//	{
-	//		//int ids = miniTiles[j/8][i/8]
-	//		int ids = region->regionsIds[i / 8][j / 8];
-	//		if (ids != -1)
-	//		{
-	//			colr[i * 4096 + j] = { (unsigned char)(ids * 20) ,(unsigned char)(ids * 20),0,255 };
-	//		}
-	//	}
-	//}
+	for (int i = 0; i < 4096; i++)
+	{
+		for (int j = 0; j < 4096; j++)
+		{
+			//int ids = miniTiles[j/8][i/8]
+			int ids = region->regionsIds[i / 8][j / 8].regionsIds;
+			if (ids != -1)
+			{
+				colr[i * 4096 + j] = { (unsigned char)(ids * 20) ,(unsigned char)(ids * 20),0,255 };
+			}
+		}
+	}
 
 
 	D2D1_RECT_U rect = { 0 , 0 ,w , h };
@@ -182,7 +182,7 @@ void MapReader::MapRegionSetting()
 		//regionsIds[i] = new int[4096] {-1, };
 		for (int j = 0; j < 512; j++)
 		{
-			region->regionsIds[i][j] = -1;
+			region->regionsIds[i][j].regionsIds = -1;
 		}
 	}
 	bool found = false;
@@ -229,7 +229,7 @@ void MapReader::MapRegionSetting()
 			if (cy != 4096)
 			{
 				vectorList.push(new MapRegions{ Vector2{ (float)(int)(cx / 8),(float)(int)(cy / 8) } ,regionId });
-				region->regionsIds[cy / 8][cx / 8] = regionId;
+				region->regionsIds[cy / 8][cx / 8].regionsIds = regionId;
 				mapRegions.push_back(new MapRegions{ Vector2{ (float)(int)(cx / 8),(float)(int)(cy / 8) } ,regionId,{(int)(cx / 8),(int)(cy / 8),(int)(cx / 8),(int)(cy / 8)} });
 				regionId++;
 			}
@@ -242,17 +242,17 @@ void MapReader::MapRegionSetting()
 		auto iter = vectorList.front();
 		int tileX = iter->pos.x;
 		int tileY = iter->pos.y;
-		int nowRegionIds = region->regionsIds[tileY][tileX];
+		int nowRegionIds = region->regionsIds[tileY][tileX].regionsIds;
 		c++;
 
 		if (tileX > 0)
 		{
-			int regionId = region->regionsIds[tileY][tileX - 1];
+			int regionId = region->regionsIds[tileY][tileX - 1].regionsIds;
 			if (miniTiles[tileY][tileX - 1] == 1)
 			{
 				if (regionId == -1)
 				{
-					region->regionsIds[tileY][tileX - 1] = nowRegionIds;
+					region->regionsIds[tileY][tileX - 1].regionsIds = nowRegionIds;
 					vectorList.push(new MapRegions{ Vector2{ (float)tileX - 1,(float)tileY },nowRegionIds });
 				}
 				else if (regionId != nowRegionIds)
@@ -280,14 +280,14 @@ void MapReader::MapRegionSetting()
 				}
 			}
 		}
-		if (tileX < 512)
+		if (tileX < 511)
 		{
 			if (miniTiles[tileY][tileX + 1] == 1)
 			{
-				int regionId = region->regionsIds[tileY][tileX + 1];
+				int regionId = region->regionsIds[tileY][tileX + 1].regionsIds;
 				if (regionId == -1)
 				{
-					region->regionsIds[tileY][tileX + 1] = nowRegionIds;
+					region->regionsIds[tileY][tileX + 1].regionsIds = nowRegionIds;
 					vectorList.push(new MapRegions{ Vector2{ (float)tileX + 1,(float)tileY },0 });
 				}
 				else if (regionId != nowRegionIds)
@@ -319,16 +319,16 @@ void MapReader::MapRegionSetting()
 		{
 			if (miniTiles[tileY - 1][tileX] == 1)
 			{
-				int regionId = region->regionsIds[tileY - 1][tileX];
+				int regionId = region->regionsIds[tileY - 1][tileX].regionsIds;
 				if (regionId == -1)
 				{
 					region->regionsIds[tileY - 1][tileX] = region->regionsIds[tileY][tileX];
 					vectorList.push(new MapRegions{ Vector2{ (float)tileX,(float)tileY - 1},0 });
 				}
-				else if (regionId != region->regionsIds[tileY][tileX])
+				else if (regionId != region->regionsIds[tileY][tileX].regionsIds)
 				{
 					bool isAble = false;
-					for (auto _iter : mapRegions[region->regionsIds[tileY][tileX]]->nearRegions)
+					for (auto _iter : mapRegions[region->regionsIds[tileY][tileX].regionsIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -350,11 +350,11 @@ void MapReader::MapRegionSetting()
 				}
 			}
 		}
-		if (tileY < 512)
+		if (tileY < 511)
 		{
 			if (miniTiles[tileY + 1][tileX] == 1)
 			{
-				int regionId = region->regionsIds[tileY + 1][tileX];
+				int regionId = region->regionsIds[tileY + 1][tileX].regionsIds;
 				if (regionId == -1)
 				{
 					region->regionsIds[tileY + 1][tileX] = region->regionsIds[tileY][tileX];
@@ -362,6 +362,8 @@ void MapReader::MapRegionSetting()
 				}
 				else if (regionId != nowRegionIds)
 				{
+					region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+
 					bool isAble = false;
 					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
@@ -389,16 +391,16 @@ void MapReader::MapRegionSetting()
 		{
 			if (miniTiles[tileY - 1][tileX - 1] == 1)
 			{
-				int regionId = region->regionsIds[tileY - 1][tileX - 1];
+				int regionId = region->regionsIds[tileY - 1][tileX - 1].regionsIds;
 				if (regionId == -1)
 				{
-					region->regionsIds[tileY - 1][tileX - 1] = nowRegionIds;
-					vectorList.push(new MapRegions{ Vector2{ (float)tileX - 1,(float)tileY - 1},0 });
 				}
-				else if (regionId != region->regionsIds[tileY - 1][tileX - 1])
+				else if (regionId != nowRegionIds)
 				{
+					region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+
 					bool isAble = false;
-					for (auto _iter : mapRegions[region->regionsIds[tileY - 1][tileX - 1]]->nearRegions)
+					for (auto _iter : mapRegions[region->regionsIds[tileY - 1][tileX - 1].regionsIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -421,20 +423,20 @@ void MapReader::MapRegionSetting()
 			}
 		}
 
-		if (tileY > 512 && tileX > 0)
+		if (tileY > 511 && tileX > 0)
 		{
 			if (miniTiles[tileY + 1][tileX - 1] == 1)
 			{
-				int regionId = region->regionsIds[tileY + 1][tileX - 1];
+				int regionId = region->regionsIds[tileY + 1][tileX - 1].regionsIds;
 				if (regionId == -1)
 				{
-					region->regionsIds[tileY + 1][tileX - 1] = nowRegionIds;
-					vectorList.push(new MapRegions{ Vector2{ (float)tileX - 1,(float)tileY + 1},0 });
 				}
-				else if (regionId != region->regionsIds[tileY + 1][tileX - 1])
+				else if (regionId != nowRegionIds)
 				{
+					region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+
 					bool isAble = false;
-					for (auto _iter : mapRegions[region->regionsIds[tileY + 1][tileX - 1]]->nearRegions)
+					for (auto _iter : mapRegions[region->regionsIds[tileY + 1][tileX - 1].regionsIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -457,21 +459,19 @@ void MapReader::MapRegionSetting()
 			}
 		}
 
-
-		if (tileY > 0 && tileX < 512)
+		if (tileY > 0 && tileX < 511)
 		{
 			if (miniTiles[tileY - 1][tileX + 1] == 1)
 			{
-				int regionId = region->regionsIds[tileY - 1][tileX + 1];
+				int regionId = region->regionsIds[tileY - 1][tileX + 1].regionsIds;
 				if (regionId == -1)
 				{
-					region->regionsIds[tileY - 1][tileX + 1] = nowRegionIds;
-					vectorList.push(new MapRegions{ Vector2{ (float)tileX + 1,(float)tileY - 1},0 });
 				}
-				else if (regionId != region->regionsIds[tileY - 1][tileX + 1])
+				else if (regionId != nowRegionIds)
 				{
 					bool isAble = false;
-					for (auto _iter : mapRegions[region->regionsIds[tileY - 1][tileX + 1]]->nearRegions)
+					region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+					for (auto _iter : mapRegions[region->regionsIds[tileY - 1][tileX + 1].regionsIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -494,20 +494,19 @@ void MapReader::MapRegionSetting()
 			}
 		}
 
-		if (tileY < 512 && tileX < 512)
+		if (tileY < 511 && tileX < 511)
 		{
 			if (miniTiles[tileY + 1][tileX + 1] == 1)
 			{
-				int regionId = region->regionsIds[tileY + 1][tileX + 1];
+				int regionId = region->regionsIds[tileY + 1][tileX + 1].regionsIds;
 				if (regionId == -1)
 				{
-					region->regionsIds[tileY + 1][tileX + 1] = nowRegionIds;
-					vectorList.push(new MapRegions{ Vector2{ (float)tileX + 1,(float)tileY + 1},0 });
 				}
-				else if (regionId != region->regionsIds[tileY + 1][tileX + 1])
+				else if (regionId != nowRegionIds)
 				{
+					region->regionsIds;
 					bool isAble = false;
-					for (auto _iter : mapRegions[region->regionsIds[tileY + 1][tileX + 1]]->nearRegions)
+					for (auto _iter : mapRegions[region->regionsIds[tileY + 1][tileX + 1].regionsIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -539,7 +538,7 @@ void MapReader::MapRegionSetting()
 	{
 		for (int x = 0; x < 512; x++)
 		{
-			int t = region->regionsIds[y][x];
+			int t = region->regionsIds[y][x].regionsIds;
 			if (t == -1)
 			{
 				continue;
@@ -597,6 +596,16 @@ void MapReader::RenderLine()
 	//		IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
 	//	}
 	//}
+	for (int i = 0; i < 512; i++)
+	{
+		for (int j = 0; j < 512; j++)
+		{
+			for (auto iter : region->regionsIds[j][i].nearRegionIds)
+			{
+
+			}
+		}
+	}
 }
 
 void MapReader::Release()

@@ -46,7 +46,8 @@ void CommandCenter::Init()
 
 void CommandCenter::Update()
 {
-	clickRect = { int(position.x - 50) , int(position.y) , int(position.x + 140) , int(position.y + 140) };
+	clickRect = { int(position.x) , int(position.y) , int((position.x + 32 * 4 * 1.5f)) , int((position.y + 32 * 3 * 1.5f)) };
+
 	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x;
 	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x;
 	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y;
@@ -59,11 +60,11 @@ void CommandCenter::Render()
 	{
 		if (m_buildIndex < 3)
 		{
-			IMAGEMANAGER->RenderBlendBlack(buildImage[m_buildIndex], { position.x - 85 ,position.y - 10 }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(buildImage[m_buildIndex], { position.x - 20 ,position.y - 20 }, 1.5, 0);
 		}
 		else
 		{
-			IMAGEMANAGER->RenderBlendBlack(buildImage[m_buildIndex], { position.x - 50,position.y - 50 }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(buildImage[m_buildIndex], { position.x ,position.y - 50 }, 1.5, 0);
 		}
 	}
 	else

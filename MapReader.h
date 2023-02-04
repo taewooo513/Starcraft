@@ -51,9 +51,15 @@ struct MapRegions
 	}
 };
 
+struct tileNum
+{
+	int regionsIds;
+	vector<int> nearRegionIds;
+};
+
 struct Regions
 {
-	int regionsIds[512][512];
+	tileNum regionsIds[512][512];
 };
 
 class MapReader
