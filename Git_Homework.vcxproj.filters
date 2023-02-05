@@ -105,6 +105,8 @@
     <ClCompile Include="CommandCenter.cpp">
       <Filter>Game\Object\Build\Terran\CommandCenter</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectGrid.cpp" />
+    <ClCompile Include="GridManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -202,6 +204,8 @@
     <ClInclude Include="CommandCenter.h">
       <Filter>Game\Object\Build\Terran\CommandCenter</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectGrid.h" />
+    <ClInclude Include="GridManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">

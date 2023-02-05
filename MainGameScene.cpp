@@ -14,11 +14,14 @@ MainGameScene::~MainGameScene()
 void MainGameScene::Init()
 {
 	player1 = new Player;
+	GRIDMANAGER->Init();
 	player1->Init();
+
 }
 
 void MainGameScene::Update()
 {
+	GRIDMANAGER->Update();
 	player1->Update();
 }
 

@@ -244,10 +244,10 @@ void MapReader::MapRegionSetting()
 		int tileY = iter->pos.y;
 		int nowRegionIds = region->regionsIds[tileY][tileX].regionsIds;
 		c++;
-
 		if (tileX > 0)
 		{
 			int regionId = region->regionsIds[tileY][tileX - 1].regionsIds;
+
 			if (miniTiles[tileY][tileX - 1] == 1)
 			{
 				if (regionId == -1)
@@ -258,6 +258,21 @@ void MapReader::MapRegionSetting()
 				else if (regionId != nowRegionIds)
 				{
 					bool isAble = false;
+					bool isFind = false;
+
+					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					{
+						if (iter == regionId)
+						{
+							isFind = true;
+							break;
+						}
+					}
+					if (isFind == false)
+					{
+						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+					}
+
 					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
@@ -293,6 +308,19 @@ void MapReader::MapRegionSetting()
 				else if (regionId != nowRegionIds)
 				{
 					bool isAble = false;
+					bool isFind = false;
+					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					{
+						if (iter == regionId)
+						{
+							isFind = true;
+							break;
+						}
+					}
+					if (isFind == false)
+					{
+						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+					}
 					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId || _iter.second->regionId == nowRegionIds)
@@ -328,6 +356,19 @@ void MapReader::MapRegionSetting()
 				else if (regionId != region->regionsIds[tileY][tileX].regionsIds)
 				{
 					bool isAble = false;
+					bool isFind = false;
+					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					{
+						if (iter == regionId)
+						{
+							isFind = true;
+							break;
+						}
+					}
+					if (isFind == false)
+					{
+						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+					}
 					for (auto _iter : mapRegions[region->regionsIds[tileY][tileX].regionsIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
@@ -362,8 +403,19 @@ void MapReader::MapRegionSetting()
 				}
 				else if (regionId != nowRegionIds)
 				{
-					region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
-
+					bool isFind = false;
+					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					{
+						if (iter == regionId)
+						{
+							isFind = true;
+							break;
+						}
+					}
+					if (isFind == false)
+					{
+						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+					}
 					bool isAble = false;
 					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
@@ -397,8 +449,19 @@ void MapReader::MapRegionSetting()
 				}
 				else if (regionId != nowRegionIds)
 				{
-					region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
-
+					bool isFind = false;
+					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					{
+						if (iter == regionId)
+						{
+							isFind = true;
+							break;
+						}
+					}
+					if (isFind == false)
+					{
+						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+					}
 					bool isAble = false;
 					for (auto _iter : mapRegions[region->regionsIds[tileY - 1][tileX - 1].regionsIds]->nearRegions)
 					{
@@ -433,8 +496,19 @@ void MapReader::MapRegionSetting()
 				}
 				else if (regionId != nowRegionIds)
 				{
-					region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
-
+					bool isFind = false;
+					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					{
+						if (iter == regionId)
+						{
+							isFind = true;
+							break;
+						}
+					}
+					if (isFind == false)
+					{
+						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+					}
 					bool isAble = false;
 					for (auto _iter : mapRegions[region->regionsIds[tileY + 1][tileX - 1].regionsIds]->nearRegions)
 					{
@@ -470,7 +544,20 @@ void MapReader::MapRegionSetting()
 				else if (regionId != nowRegionIds)
 				{
 					bool isAble = false;
-					region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+					bool isFind = false;
+					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					{
+						if (iter == regionId)
+						{
+							isFind = true;
+							break;
+						}
+					}
+					if (isFind == false)
+					{
+						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+					}
+
 					for (auto _iter : mapRegions[region->regionsIds[tileY - 1][tileX + 1].regionsIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
@@ -504,7 +591,20 @@ void MapReader::MapRegionSetting()
 				}
 				else if (regionId != nowRegionIds)
 				{
-					region->regionsIds;
+					bool isFind = false;
+					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					{
+						if (iter == regionId)
+						{
+							isFind = true;
+							break;
+						}
+					}
+					if (isFind == false)
+					{
+						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+					}
+
 					bool isAble = false;
 					for (auto _iter : mapRegions[region->regionsIds[tileY + 1][tileX + 1].regionsIds]->nearRegions)
 					{
@@ -528,7 +628,6 @@ void MapReader::MapRegionSetting()
 				}
 			}
 		}
-
 
 		SAFE_DELETE(vectorList.front());
 		vectorList.pop();
@@ -596,16 +695,16 @@ void MapReader::RenderLine()
 	//		IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
 	//	}
 	//}
-	for (int i = 0; i < 512; i++)
-	{
-		for (int j = 0; j < 512; j++)
-		{
-			for (auto iter : region->regionsIds[j][i].nearRegionIds)
-			{
-
-			}
-		}
-	}
+	//for (int i = 0; i < 512; i++)
+	//{
+	//	for (int j = 0; j < 512; j++)
+	//	{
+	//		for (auto iter = region->regionsIds[j][i].nearRegionIdstileNum.begin(); iter + 1 != region->regionsIds[j][i].nearRegionIdstileNum.end(); iter++)
+	//		{
+	//			IMAGEMANAGER->DrawLine({ (float)(*iter).x,(float)(*iter).y }, { (float)(*(iter + 1)).x,(float)(*(iter + 1)).y });
+	//		}
+	//	}
+	//}
 }
 
 void MapReader::Release()
@@ -616,12 +715,9 @@ void MapReader::Release()
 	}
 	mapRegions.clear();
 
-	SAFE_DELETE(region);
+	
 
-	for (int i = 0; i < 4096; i++)
-	{
 
-	}
 	tileSetData->bitmap->Release();
 	SAFE_DELETE(tileSetData->cv5);
 	SAFE_DELETE(tileSetData->vx4);

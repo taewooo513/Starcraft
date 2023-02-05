@@ -26,6 +26,8 @@ CommandCenter::~CommandCenter()
 
 void CommandCenter::Init()
 {
+	GRIDMANAGER->AddGrid(this, 4, 3, 3, 2,0,0);
+
 	player->AddBuild(this);
 
 	m_maxCompleteTime = 75.8f;
@@ -69,7 +71,7 @@ void CommandCenter::Render()
 	}
 	else
 	{
-		IMAGEMANAGER->RenderBlendBlack(idle, { position.x - 50,position.y - 50 }, 1.5, 0);
+		IMAGEMANAGER->RenderBlendBlack(idle, { position.x + 8 ,position.y - 50 }, 1.5, 0);
 	}
 	IMAGEMANAGER->DrawRect({ (float)clickRect.left, (float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
 }

@@ -187,6 +187,20 @@ void ImageManager::DrawRect(Vector2 startPos, Vector2 endPos)
 	m_d2dContext->DrawRectangle({ startPos.x,startPos.y ,endPos.x ,endPos.y }, brush.Get(), 1.5);
 }
 
+void ImageManager::DrawRectRed(Vector2 startPos, Vector2 endPos)
+{
+	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
+
+	matP = D2D1::Matrix3x2F::Translation(0, 0);
+	matW = matP;
+
+	m_d2dContext->SetTransform(matW);
+
+	ComPtr<ID2D1SolidColorBrush> brush;
+	m_d2dContext->CreateSolidColorBrush({ 255,0,0,255 }, &brush);
+	m_d2dContext->DrawRectangle({ startPos.x,startPos.y ,endPos.x ,endPos.y }, brush.Get(), 1.5);
+}
+
 void ImageManager::DrawLine(Vector2 startPos, Vector2 endPos)
 {
 	D2D1_MATRIX_3X2_F matW, matR, matS, matP;

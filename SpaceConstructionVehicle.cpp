@@ -12,6 +12,8 @@ SpaceConstructionVehicle::~SpaceConstructionVehicle()
 
 void SpaceConstructionVehicle::Init()
 {
+	grid = GRIDMANAGER->AddGrid(this, 0, 0, 30, 30, -1, -2);
+
 	m_isClick = false;
 	m_spark = nullptr;
 	m_nowBuild = nullptr;
@@ -47,6 +49,7 @@ void SpaceConstructionVehicle::Init()
 	m_idleImage[8] = IMAGEMANAGER->FindImage("scv_idle_9");
 
 	m_buttom = IMAGEMANAGER->FindImage("tcmdbtns0000");
+	d = { 0,0 };
 }
 
 void SpaceConstructionVehicle::Move()
@@ -55,21 +58,45 @@ void SpaceConstructionVehicle::Move()
 
 void SpaceConstructionVehicle::Update()
 {
-	if (m_dest.x != 0 && m_dest.y != 0)
+	if (d.x != 0 && d.y != 0)
 	{
-		rot = atan2(position.x - m_dest.x, position.y - m_dest.y) * -1;
+		rot = atan2(d.x - position.x, d.y - position.y);
 		if (m_speed < 300)
 		{
 			m_speed += 5;
 		}
-		if (abs(position.x - m_dest.x) < 2.2f && abs(position.y - m_dest.y) < 2.2f)
+		float moveDestX = sin(rot) * DELTA_TIME * m_speed;
+
+		float moveDestY = cos(rot) * DELTA_TIME * m_speed;
+		float length = sqrt((d.x - position.x) * (d.x - position.x) + (d.y - position.y) * (d.y - position.y));
+		if (length < DELTA_TIME * m_speed)
 		{
-			m_speed = 0;
-			m_dest.x = 0;
-			m_dest.y = 0;
+			if (grid->moveStack2.empty() == false)
+				grid->moveStack2.pop();
 		}
-		position.x += cos(rot2) * DELTA_TIME * m_speed;
-		position.y += sin(rot2) * DELTA_TIME * m_speed;
+		else
+		{
+			position.x += moveDestX;
+			position.y += moveDestY;
+		}
+	}
+
+	if (moveNodeStack.empty() == false)
+	{
+		if (grid->moveStack2.empty() == true)
+		{
+			grid->Astar();
+			moveNodeStack.pop();
+		}
+		else
+		{
+			d = Vector2{ (float)(grid->moveStack2.top().x * 8 * 1.5),(float)(grid->moveStack2.top().y * 8 * 1.5) };
+
+		}
+	}
+	else
+	{
+		m_speed = 0;
 	}
 	if (m_nowBuild != nullptr)
 	{
@@ -113,7 +140,7 @@ void SpaceConstructionVehicle::Update()
 	{
 		page = 0;
 
-		if (m_speed == 0)
+		if (moveNodeStack.empty() == true)
 		{
 			switch (buildIndex)
 			{
@@ -149,42 +176,7 @@ void SpaceConstructionVehicle::Render()
 		isR = true;
 	}
 
-	if (abs(rot) >= 0 && abs(rot) < 3.141592 / 9.f * 0.5f)
-	{
-		m_dir = 0;
-	}
-	else if (abs(rot) >= 3.141592 / 9.f * 0.5f && abs(rot) < 3.141592 / 9.f * 0.5f + 3.141592 / 9.f)
-	{
-		m_dir = 1;
-	}
-	else if (abs(rot) >= 3.141592 / 9.f * 0.5f + 3.141592 / 9.f && abs(rot) < 3.141592 / 9.f * 0.5f + 3.141592 / 9.f * 2.f)
-	{
-		m_dir = 2;
-	}
-	else if (abs(rot) >= 3.141592 / 9.f * 0.5f + 3.141592 / 9.f * 2.f && abs(rot) < 3.141592 / 9.f * 0.5f + 3.141592 / 9.f * 3.f)
-	{
-		m_dir = 3;
-	}
-	else if (abs(rot) >= 3.141592 / 9.f * 0.5f + 3.141592 / 9.f * 3.f && abs(rot) < 3.141592 / 9.f * 0.5f + 3.141592 / 9.f * 4.f)
-	{
-		m_dir = 4;
-	}
-	else if (abs(rot) >= 3.141592 / 9.f * 0.5f + 3.141592 / 9.f * 4.f && abs(rot) < 3.141592 / 9.f * 0.5f + 3.141592 / 9.f * 5.f)
-	{
-		m_dir = 5;
-	}
-	else if (abs(rot) >= 3.141592 / 9.f * 0.5f + 3.141592 / 9.f * 5.f && abs(rot) < 3.141592 / 9.f * 0.5f + 3.141592 / 9.f * 6.f)
-	{
-		m_dir = 6;
-	}
-	else if (abs(rot) >= 3.141592 / 9.f * 0.5f + 3.141592 / 9.f * 6.f && abs(rot) < 3.141592 / 9.f * 0.5f + 3.141592 / 9.f * 7.f)
-	{
-		m_dir = 7;
-	}
-	else if (abs(rot) >= 3.141592 / 9.f * 0.5f + 3.141592 / 9.f * 7.f && abs(rot) < 3.141592 / 9.f * 0.5f + 3.141592 / 9.f * 8.f)
-	{
-		m_dir = 8;
-	}
+
 
 	if (m_nowBuild == nullptr)
 	{

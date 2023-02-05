@@ -36,7 +36,7 @@ void Main::Render()
 	EFFECTMANAGER->Render();
 	OBJECTMANAGER->UIRender();
 	SCENEMANAGER->UIRender();
-	//TIMERMANAGER->Render();
+	TIMERMANAGER->Render();
 
 	m_d2dContext->EndDraw();
 
@@ -50,6 +50,7 @@ void Main::Release()
 	SceneManager::ReleaseInstance();
 	ObjectManager::ReleaseInstance();
 
+	GridManager::ReleaseInstance();
 	ImageManager::ReleaseInstance();
 	TIMERMANAGER->Release();
 	EffectManager::ReleaseInstance();

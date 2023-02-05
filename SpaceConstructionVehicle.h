@@ -11,6 +11,8 @@ private:
 	CImage* m_actionImage_1[9];
 	CImage* m_actionImage_2[9];
 	CImage* m_buttom;
+	Vector2 d;
+
 	Effect* m_spark;
 	enum eBuildClass
 	{

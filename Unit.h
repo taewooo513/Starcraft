@@ -30,9 +30,8 @@ public:
 	virtual void Release() override;
 	virtual void UIRender() override;
 
-
-
 	stack<MoveNode*> moveNodeStack;
+
 	Player* player;
 	void SetPlayer(Player* player) { this->player = player; }
 

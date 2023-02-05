@@ -174,6 +174,7 @@ struct MoveNode
 #define DELTA_TIME g_TimeScale *  TimerManager::GetInstance()->GetElapsedTime()
 
 #include "ObjectManager.h"
+#include "GridManager.h"
 #include "KeyManager.h"
 #include "ImageManager.h"
 #include "SceneManager.h"

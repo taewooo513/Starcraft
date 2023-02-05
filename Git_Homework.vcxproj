@@ -156,6 +156,7 @@
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="FireBat.cpp" />
     <ClCompile Include="FlyUnit.cpp" />
+    <ClCompile Include="GridManager.cpp" />
     <ClCompile Include="ImageManager.cpp" />
     <ClCompile Include="IOFillManager.cpp" />
     <ClCompile Include="KeyManager.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="MapReader.cpp" />
     <ClCompile Include="Marine.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ObjectGrid.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -194,6 +196,7 @@
     <ClInclude Include="EffectManager.h" />
     <ClInclude Include="FireBat.h" />
     <ClInclude Include="FlyUnit.h" />
+    <ClInclude Include="GridManager.h" />
     <ClInclude Include="ImageManager.h" />
     <ClInclude Include="IOFillManager.h" />
     <ClInclude Include="KeyManager.h" />
@@ -202,6 +205,7 @@
     <ClInclude Include="MapReader.h" />
     <ClInclude Include="Marine.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="ObjectGrid.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />

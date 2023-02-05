@@ -1,8 +1,10 @@
 #pragma once
+#include "ObjectGrid.h"
 class Object
 {
 public:
 	Vector2 position;
+	ObjectGrid* grid;
 
 	Vector2 UIPosition[9] = {
 		{847,606},
