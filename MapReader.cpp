@@ -131,10 +131,9 @@ void MapReader::Init(ID2D1DeviceContext* context)
 		{
 			//int ids = miniTiles[j/8][i/8]
 			int ids = region->regionsIds[i / 8][j / 8].regionsIds;
-			if (ids != -1)
-			{
+		
 				colr[i * 4096 + j] = { (unsigned char)(ids * 20) ,(unsigned char)(ids * 20),0,255 };
-			}
+			
 		}
 	}
 
@@ -171,9 +170,9 @@ void MapReader::UIMapRender()
 
 void MapReader::MapRegionSetting()
 {
-	int width = 128;
-	int height = 128;
-	int res = 32; //region scale
+	int width = 16;
+	int height = 16;
+	int res = 256; //region scale
 
 	queue <MapRegions*> vectorList;
 	region = new Regions;
@@ -272,7 +271,6 @@ void MapReader::MapRegionSetting()
 					{
 						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
 					}
-
 					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
@@ -288,9 +286,8 @@ void MapReader::MapRegionSetting()
 						float e1 = abs(dx - dy);
 						float e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14;
-
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 					}
 				}
 			}
@@ -323,7 +320,7 @@ void MapReader::MapRegionSetting()
 					}
 					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
-						if (_iter.second->regionId == regionId || _iter.second->regionId == nowRegionIds)
+						if (_iter.second->regionId == regionId)
 						{
 							isAble = true;
 							break;
@@ -336,9 +333,8 @@ void MapReader::MapRegionSetting()
 						float e1 = abs(dx - dy);
 						float e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14;
-
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 					}
 				}
 			}
@@ -369,7 +365,7 @@ void MapReader::MapRegionSetting()
 					{
 						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
 					}
-					for (auto _iter : mapRegions[region->regionsIds[tileY][tileX].regionsIds]->nearRegions)
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -384,9 +380,8 @@ void MapReader::MapRegionSetting()
 						float e1 = abs(dx - dy);
 						float e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14;
-
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 					}
 				}
 			}
@@ -432,8 +427,8 @@ void MapReader::MapRegionSetting()
 						float e1 = abs(dx - dy);
 						float e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14;
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 					}
 				}
 			}
@@ -463,7 +458,7 @@ void MapReader::MapRegionSetting()
 						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
 					}
 					bool isAble = false;
-					for (auto _iter : mapRegions[region->regionsIds[tileY - 1][tileX - 1].regionsIds]->nearRegions)
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -478,9 +473,8 @@ void MapReader::MapRegionSetting()
 						float e1 = abs(dx - dy);
 						float e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14;
-
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 					}
 				}
 			}
@@ -510,7 +504,7 @@ void MapReader::MapRegionSetting()
 						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
 					}
 					bool isAble = false;
-					for (auto _iter : mapRegions[region->regionsIds[tileY + 1][tileX - 1].regionsIds]->nearRegions)
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -528,6 +522,7 @@ void MapReader::MapRegionSetting()
 
 						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+
 					}
 				}
 			}
@@ -558,7 +553,7 @@ void MapReader::MapRegionSetting()
 						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
 					}
 
-					for (auto _iter : mapRegions[region->regionsIds[tileY - 1][tileX + 1].regionsIds]->nearRegions)
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -573,9 +568,8 @@ void MapReader::MapRegionSetting()
 						float e1 = abs(dx - dy);
 						float e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14;
-
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 					}
 				}
 			}
@@ -606,7 +600,7 @@ void MapReader::MapRegionSetting()
 					}
 
 					bool isAble = false;
-					for (auto _iter : mapRegions[region->regionsIds[tileY + 1][tileX + 1].regionsIds]->nearRegions)
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -621,9 +615,8 @@ void MapReader::MapRegionSetting()
 						float e1 = abs(dx - dy);
 						float e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14;
-
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 					}
 				}
 			}
@@ -688,13 +681,14 @@ void MapReader::MapRegionSetting()
 
 void MapReader::RenderLine()
 {
-	//for (auto iter : mapRegions)
-	//{
-	//	for (auto _iter : iter->nearRegions)
-	//	{
-	//		IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
-	//	}
-	//}
+	for (auto iter : mapRegions)
+	{
+		for (auto _iter : iter->nearRegions)
+		{
+			if (iter->regionId == 32)
+				IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
+		}
+	}
 	//for (int i = 0; i < 512; i++)
 	//{
 	//	for (int j = 0; j < 512; j++)
@@ -715,7 +709,7 @@ void MapReader::Release()
 	}
 	mapRegions.clear();
 
-	
+
 
 
 	tileSetData->bitmap->Release();

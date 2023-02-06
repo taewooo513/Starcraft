@@ -7,10 +7,15 @@ void ObjectGrid::Astar()
 	Vector2 tileStartPos;
 	tileStartPos = obj->position / 1.5 / 8;
 
-	int nowTileRegionId = GRIDMANAGER->regionsTile[(int)tileStartPos.x][(int)tileStartPos.y].regionsIds;
+	int nowTileRegionId = GRIDMANAGER->regionsTile[(int)tileStartPos.y][(int)tileStartPos.x].regionsIds;
 	auto unit = dynamic_cast<Unit*>(obj);
 
 	int searchNodeId = 0;
+
+	while (moveStack2.empty() == false)
+	{
+		moveStack2.pop();
+	}
 
 	if (unit->moveNodeStack.empty() == true)
 	{
@@ -27,7 +32,7 @@ void ObjectGrid::Astar()
 	regionQueue.push(make_pair(make_pair(0, 0), openNode[0].second));
 	float startX = regionQueue.top().second.x;
 	float startY = regionQueue.top().second.y;
-	openNodeCheck.insert(make_pair(make_pair(regionQueue.top().second.x, regionQueue.top().second.y), Vector2{ (float)0,(float)0 }));
+	openNodeCheck.insert(make_pair(make_pair(startX, startY), Vector2{ (float)startX,(float)startY }));
 
 	int c = 0;
 	bool isFind = false;
@@ -217,9 +222,15 @@ void ObjectGrid::Astar()
 		{
 			map<pair<int, int>, Vector2>::iterator find = openNodeCheck.find(pair(iter.second.x, iter.second.y));
 			find = openNodeCheck.find(pair(find->second.x, find->second.y));
+			moveStack2.push(Vector2{ (float)find->first.first ,(float)find->first.second });
 
+			if (find->second.x == startX && find->second.y == startY)
+			{
+				break;
+			}
 			if (find != openNodeCheck.end())
 			{
+		
 				while (true)
 				{
 					find = openNodeCheck.find(pair(find->second.x, find->second.y));
