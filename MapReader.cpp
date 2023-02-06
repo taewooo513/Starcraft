@@ -136,7 +136,6 @@ void MapReader::Init(ID2D1DeviceContext* context)
 		}
 	}
 
-
 	D2D1_RECT_U rect = { 0 , 0 ,w , h };
 	tileSetData->bitmap->CopyFromMemory(&rect, colr, 4 * w);
 	SAFE_DELETE(colr);
@@ -169,9 +168,9 @@ void MapReader::UIMapRender()
 
 void MapReader::MapRegionSetting()
 {
-	int width = 64;
-	int height = 64;
-	int res = 64; //region scale
+	int width = 16;
+	int height = 16;
+	int res = 256; //region scale
 
 	queue <MapRegions*> vectorList;
 	region = new Regions;
@@ -684,14 +683,14 @@ void MapReader::RenderLine()
 	{
 		index++;
 	}
-	for (auto iter : mapRegions)
-	{
-		for (auto _iter : iter->nearRegions)
-		{
-			if (iter->regionId == index)
-				IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
-		}
-	}
+	//for (auto iter : mapRegions)
+	//{
+	//	for (auto _iter : iter->nearRegions)
+	//	{
+	//		if (iter->regionId == index)
+	//			IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
+	//	}
+	//}
 	//for (int i = 0; i < 512; i++)
 	//{
 	//	for (int j = 0; j < 512; j++)

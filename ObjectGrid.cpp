@@ -463,6 +463,8 @@ void ObjectGrid::Render()
 {
 	for (auto iter : openNodeCheck)
 	{
+		IMAGEMANAGER->DrawRectRed({ float(iter.second.x) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(iter.second.y) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, { float(iter.second.x) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(iter.second.y) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y });
+
 	}
 	for(auto iter : vectors)
 		IMAGEMANAGER->DrawLine({ iter.first.x * 1.5f * 8, iter.first.y * 1.5f * 8 }, { iter.second.x * 1.5f * 8, iter.second.y * 1.5f * 8 });
