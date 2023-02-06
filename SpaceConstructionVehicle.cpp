@@ -58,44 +58,56 @@ void SpaceConstructionVehicle::Move()
 
 void SpaceConstructionVehicle::Update()
 {
-
-	if (moveNodeStack.empty() == false)
+	if (grid->moveStack2.empty() == false)
 	{
-		if (d.x != 0 && d.y != 0)
-		{
-			rot = atan2(d.x - position.x, d.y - position.y);
-			if (m_speed < 300)
-			{
-				m_speed += 5;
-			}
-			float moveDestX = sin(rot) * DELTA_TIME * m_speed;
-
-			float moveDestY = cos(rot) * DELTA_TIME * m_speed;
-			float length = sqrt((d.x - position.x) * (d.x - position.x) + (d.y - position.y) * (d.y - position.y));
-			if (length < DELTA_TIME * m_speed)
-			{
-				if (grid->moveStack2.empty() == false)
-					grid->moveStack2.pop();
-			}
-			else
-			{
-				position.x += moveDestX;
-				position.y += moveDestY;
-			}
-		}
-		if (grid->moveStack2.empty() == true)
-		{
-			grid->Astar();
-			moveNodeStack.pop();
-		}
-		else
-		{
-			d = Vector2{ (float)(grid->moveStack2.top().x * 8 * 1.5),(float)(grid->moveStack2.top().y * 8 * 1.5) };
-		}
+		d = Vector2{ (float)(grid->moveStack2.top().x * 8 * 1.5),(float)(grid->moveStack2.top().y * 8 * 1.5) };
 	}
 	else
 	{
-		if (m_dest.x != 0 && m_dest.y != 0)
+		if (moveNodeStack.empty() == false)
+		{
+			grid->Astar();
+			if (moveNodeStack.empty() == false)
+				if (grid->nowTileRegionId == GRIDMANAGER->regionsTile[(int)this->moveNodeStack.top()->pos.x][(int)this->moveNodeStack.top()->pos.y].regionsIds)
+				{
+					this->moveNodeStack.pop();
+				}
+		}
+	}
+	if (d.x != 0 && d.y != 0)
+	{
+		rot = atan2(d.x - position.x, d.y - position.y);
+		if (m_speed < 300)
+		{
+			m_speed += 5;
+		}
+		float moveDestX = sin(rot) * DELTA_TIME * m_speed;
+
+		float moveDestY = cos(rot) * DELTA_TIME * m_speed;
+		float length = sqrt((d.x - position.x) * (d.x - position.x) + (d.y - position.y) * (d.y - position.y));
+
+		if (length < DELTA_TIME * m_speed)
+		{
+			position.x = d.x;
+			position.y = d.y;
+
+			if (grid->moveStack2.empty() == false)
+			{
+				grid->moveStack2.pop();
+			}
+			d = { 0,0 };
+		}
+		else
+		{
+			position.x += moveDestX;
+			position.y += moveDestY;
+		}
+	}
+
+	//else
+	//{
+	//	m_speed = 0;
+		/*if (m_dest.x != 0 && m_dest.y != 0)
 		{
 			rot = atan2(m_dest.x - position.x, m_dest.y - position.y);
 			if (m_speed < 300)
@@ -115,8 +127,8 @@ void SpaceConstructionVehicle::Update()
 			{
 				m_speed = 0;
 			}
-		}
-	}
+		}*/
+		//}
 	if (m_nowBuild != nullptr)
 	{
 		if (m_nowBuild->GetIsObjectDestroyed() == true)

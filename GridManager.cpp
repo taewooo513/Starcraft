@@ -66,4 +66,9 @@ void GridManager::Render()
 			}
 		}
 	}
+
+	for (auto iter : objectGrid)
+	{
+		iter->Render();
+	}
 }

@@ -69,7 +69,7 @@ private:
 	float yoff = 0;
 
 	float xoff = 0;
-
+	int index = 0;
 	TileSetData* tileSetData;
 	TileSetData::CV5* cv5;
 	TileSetData::VF4* vf4;

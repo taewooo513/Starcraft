@@ -90,7 +90,6 @@ void MapReader::Init(ID2D1DeviceContext* context)
 					const TileSetData::VF4::VF4Data& _vf4 = tileSetData->vf4->pVX4Data[megaTile];
 					const TileSetData::VR4::VR4Data& _vr4 = tileSetData->vr4->pVR4Data[miniTileIndex];
 
-
 					int offsetX = x * 32 + subX * 8;
 					int offsetY = y * 32 + subY * 8;
 
@@ -131,9 +130,9 @@ void MapReader::Init(ID2D1DeviceContext* context)
 		{
 			//int ids = miniTiles[j/8][i/8]
 			int ids = region->regionsIds[i / 8][j / 8].regionsIds;
-		
-				colr[i * 4096 + j] = { (unsigned char)(ids * 20) ,(unsigned char)(ids * 20),0,255 };
-			
+
+			colr[i * 4096 + j] = { (unsigned char)(ids * 20) ,(unsigned char)(ids * 20),0,255 };
+
 		}
 	}
 
@@ -170,9 +169,9 @@ void MapReader::UIMapRender()
 
 void MapReader::MapRegionSetting()
 {
-	int width = 16;
-	int height = 16;
-	int res = 256; //region scale
+	int width = 64;
+	int height = 64;
+	int res = 64; //region scale
 
 	queue <MapRegions*> vectorList;
 	region = new Regions;
@@ -681,11 +680,15 @@ void MapReader::MapRegionSetting()
 
 void MapReader::RenderLine()
 {
+	if (KEYMANAGER->GetOnceKeyDown(VK_SPACE))
+	{
+		index++;
+	}
 	for (auto iter : mapRegions)
 	{
 		for (auto _iter : iter->nearRegions)
 		{
-			if (iter->regionId == 32)
+			if (iter->regionId == index)
 				IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
 		}
 	}

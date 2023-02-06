@@ -66,7 +66,12 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 				{
 					for (auto ___iter : __iter.second->nearRegions)
 					{
-						if (___iter.second->regionId == __iter.second->whereRegionId)
+						if (__iter.second->regionId == startRegionId)
+						{
+							isOut = true;
+							break;
+						}
+ 						if (___iter.second->regionId == __iter.second->whereRegionId)
 						{
 							if (__iter.second->regionId == startRegionId)
 							{
