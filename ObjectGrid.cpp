@@ -513,8 +513,7 @@ void ObjectGrid::Render()
 
 	//}
 
-	}
-	for(auto iter : vectors)
+	for (auto iter : vectors)
 		IMAGEMANAGER->DrawLine({ iter.first.x * 1.5f * 8, iter.first.y * 1.5f * 8 }, { iter.second.x * 1.5f * 8, iter.second.y * 1.5f * 8 });
 }
 
