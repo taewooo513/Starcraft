@@ -60,6 +60,12 @@ void ImageManager::Init(ID2D1DeviceContext* context, IDXGISwapChain1* swapChain)
 		D2D1_COLORMANAGEMENT_PROP_DESTINATION_COLOR_CONTEXT,
 		displayColorContext.Get()
 	);
+	blendEffect->SetValue(D2D1_CHROMAKEY_PROP_COLOR, D2D1::ColorF{ D2D1::ColorF::Black });
+	blendEffect->SetValue(D2D1_CHROMAKEY_PROP_TOLERANCE, 0.01f);
+	blendEffect->SetValue(D2D1_CHROMAKEY_PROP_INVERT_ALPHA, false);
+	blendEffect->SetValue(D2D1_CHROMAKEY_PROP_FEATHER, false);
+	blendEffect->SetValue(D2D1_BLEND_PROP_MODE, D2D1_BLEND_MODE_EXCLUSION);
+
 	ImageLoad();
 	LoadMap();
 	elipse = new D2D1_ELLIPSE;
@@ -99,13 +105,9 @@ void ImageManager::UIRenderBlendBlack(CImage* img, Vector2 vec, float scale, flo
 
 	//Color_;CLSID_D2D1AlphaMask
 	blendEffect->SetInput(0, img->GetBitMap());
-	blendEffect->SetValue(D2D1_CHROMAKEY_PROP_COLOR, D2D1::ColorF{ D2D1::ColorF::Black });
-	blendEffect->SetValue(D2D1_CHROMAKEY_PROP_TOLERANCE, 0.01f);
-	blendEffect->SetValue(D2D1_CHROMAKEY_PROP_INVERT_ALPHA, false);
-	blendEffect->SetValue(D2D1_CHROMAKEY_PROP_FEATHER, false);
+
 
 	m_d2dContext->SetTransform(matW);
-	blendEffect->SetValue(D2D1_BLEND_PROP_MODE, D2D1_BLEND_MODE_EXCLUSION);
 	m_d2dContext->DrawImage(blendEffect);
 }
 
@@ -134,13 +136,8 @@ void ImageManager::UICenterRenderBlendBlack(CImage* img, Vector2 vec, float scal
 
 	//Color_;CLSID_D2D1AlphaMask
 	blendEffect->SetInput(0, img->GetBitMap());
-	blendEffect->SetValue(D2D1_CHROMAKEY_PROP_COLOR, D2D1::ColorF{ D2D1::ColorF::Black });
-	blendEffect->SetValue(D2D1_CHROMAKEY_PROP_TOLERANCE, 0.01f);
-	blendEffect->SetValue(D2D1_CHROMAKEY_PROP_INVERT_ALPHA, false);
-	blendEffect->SetValue(D2D1_CHROMAKEY_PROP_FEATHER, false);
 
 	m_d2dContext->SetTransform(matW);
-	blendEffect->SetValue(D2D1_BLEND_PROP_MODE, D2D1_BLEND_MODE_EXCLUSION);
 	m_d2dContext->DrawImage(blendEffect);
 }
 

@@ -23,8 +23,6 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 	int c = 0;
 	bool isFind = false;
 
-	testDraw.clear();
-
 	for (auto iter : IMAGEMANAGER->GetMapReader()->mapRegions)
 	{
 		iter->openNode = false;
@@ -48,7 +46,7 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 				float dy = abs(nextRegion.second->pos.y - (int)tileEndPos.y);
 				float e1 = abs(dx - dy);
 				float e2 = min(dx, dy);
-				float dest = e1  + e2  + nextRegion.first + iter.first.first;
+				float dest = e1 + e2 + nextRegion.first + iter.first.first;
 
 				nextRegion.second->whereRegionId = iter.second->regionId;
 				regionQueue.push(make_pair(make_pair(dest, dest), nextRegion.second));
@@ -57,24 +55,31 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 			{
 				bool isOut = false;
 				nextRegion.second->whereRegionId = iter.second->regionId;
-				unit->moveNodeStack.push(new MoveNode{ nextRegion.second->pos,iter.second->regionId });
-				testDraw.push_back(make_pair(iter.second->pos, nextRegion.second->pos));
 
 				auto __iter = nextRegion;
+				unit->moveNodeStack.push(new MoveNode{ __iter.second->pos, iter.second->regionId });
+				testDraw.push_back(make_pair(__iter.second->pos, nextRegion.second->pos));
 
 				while (true)
 				{
 					for (auto ___iter : __iter.second->nearRegions)
 					{
+						if (__iter.second->regionId == startRegionId)
+						{
+							isOut = true;
+							break;
+						}
 						if (___iter.second->regionId == __iter.second->whereRegionId)
 						{
-							__iter = ___iter;
-							unit->moveNodeStack.push(new MoveNode{ ___iter.second->pos,___iter.second->regionId });
-
-							testDraw.push_back(make_pair(__iter.second->pos, ___iter.second->pos));
 							if (__iter.second->regionId == startRegionId)
 							{
 								isOut = true;
+								break;
+							}
+							else
+							{
+								unit->moveNodeStack.push(new MoveNode{ ___iter.second->pos,__iter.second->regionId });
+								__iter = ___iter;
 								break;
 							}
 						}
@@ -107,13 +112,13 @@ void Player::Init()
 	m_isCameraClick = true;
 	m_cursorImage = IMAGEMANAGER->AddImageVectorCopy("arrow0000");
 	m_cursorImage->Setting(0.15, true);
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 10; i++)
 	{
-		//m_units.push_back(scv);
+		Unit* scv = new SpaceConstructionVehicle;
+		scv->SetPlayer(this);
+		OBJECTMANAGER->AddObject(scv, "Unit", 2300 + WINSIZE_X / 3, WINSIZE_Y / 2, 1);
 	}
-	Unit* scv = new SpaceConstructionVehicle;
-	scv->SetPlayer(this);
-	OBJECTMANAGER->AddObject(scv, "Unit", 2300 + WINSIZE_X / 3, WINSIZE_Y / 2, 1);
+	//m_units.push_back(scv);
 	Build* commandCenter = new CommandCenter;
 	commandCenter->SetPlayer(this);
 	OBJECTMANAGER->AddObject(commandCenter, "Build", WINSIZE_X / 2, WINSIZE_Y / 2, 0);
@@ -145,11 +150,15 @@ void Player::Update()
 		m_rClickPos.y = _ptMouse.y + IMAGEMANAGER->GetCameraPosition().y;
 		if (m_selectUnit != nullptr)
 		{
+			m_selectUnit->SetDestPosition(m_rClickPos);
 			Astar(m_selectUnit->GetPosition(), { m_rClickPos }, m_selectUnit);
 		}
-		/*for (auto iter : m_selectUnits)
+		for (auto iter : m_selectUnits)
 		{
-		}*/
+			iter->SetDestPosition(m_rClickPos);
+
+			Astar(iter->GetPosition(), { m_rClickPos }, iter);
+		}
 	}
 
 	if (KEYMANAGER->GetOnceKeyDown(VK_LBUTTON))
@@ -383,11 +392,6 @@ void Player::UIRender()
 		m_selectUnit->UIRender();
 	}
 
-	for (auto iter = testDraw.begin(); iter != testDraw.end(); iter++)
-	{
-		if (iter + 1 != testDraw.end())
-			IMAGEMANAGER->DrawLine((*iter).first * 1.5f * 8, (*(iter + 1)).second * 1.5f * 8);
-	}
 	if (m_selectBuild != nullptr)
 	{
 		m_selectBuild->UIRender();

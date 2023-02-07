@@ -27,6 +27,7 @@ struct MapRegions
 	Vector2 pos;
 	int regionId;
 	RECT self = { 0,0,0,0 };
+	map<int, vector<Vector2>> nearRegionPosition;
 	vector<pair<float, MapRegions*>> nearRegions;
 	bool openNode = false;
 	int whereRegionId;
@@ -55,6 +56,8 @@ struct tileNum
 {
 	int regionsIds;
 	vector<int> nearRegionIds;
+	vector<Vector2> nearRegionPosition;
+
 };
 
 struct Regions
@@ -69,7 +72,7 @@ private:
 	float yoff = 0;
 
 	float xoff = 0;
-
+	int index = 0;
 	TileSetData* tileSetData;
 	TileSetData::CV5* cv5;
 	TileSetData::VF4* vf4;

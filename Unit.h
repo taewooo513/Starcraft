@@ -8,7 +8,6 @@ protected:
 	float m_speed;
 	float m_defense;
 	float m_attack;
-	Vector2 m_dest;
 	float m_attackSpeed;
 	int m_tribe;
 	int m_state;//중형 대형 소형 
@@ -17,6 +16,7 @@ protected:
 	Vector2 m_destination = { 0,0 };
 	RECT clickRect;
 public:
+	Vector2 m_dest;
 	bool m_isClick;
 	float rot = 0; // 이미지 각도
 	float rot2 = 0; // 움직임 각도

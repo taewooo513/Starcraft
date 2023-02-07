@@ -40,7 +40,6 @@
 
 #include<CoreWindow.h>
 
-#include <winrt/Windows.UI.Core.h>
 #pragma region D2d1FactoryHeader
 #pragma comment (lib, "msimg32.lib") 
 

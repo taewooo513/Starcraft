@@ -142,9 +142,6 @@ void Main::CreateDeviceD3D()
 
 void Main::CreateSwapChain()
 {
-
-	winrt::Windows::UI::Core::CoreWindow* window = &winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread();
-
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = { 0 };
 	swapChainDesc.Width = 0;                           // use automatic sizing
 	swapChainDesc.Height = 0;

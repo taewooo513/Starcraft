@@ -90,7 +90,6 @@ void MapReader::Init(ID2D1DeviceContext* context)
 					const TileSetData::VF4::VF4Data& _vf4 = tileSetData->vf4->pVX4Data[megaTile];
 					const TileSetData::VR4::VR4Data& _vr4 = tileSetData->vr4->pVR4Data[miniTileIndex];
 
-
 					int offsetX = x * 32 + subX * 8;
 					int offsetY = y * 32 + subY * 8;
 
@@ -131,13 +130,11 @@ void MapReader::Init(ID2D1DeviceContext* context)
 		{
 			//int ids = miniTiles[j/8][i/8]
 			int ids = region->regionsIds[i / 8][j / 8].regionsIds;
-			if (ids != -1)
-			{
-				colr[i * 4096 + j] = { (unsigned char)(ids * 20) ,(unsigned char)(ids * 20),0,255 };
-			}
+
+			colr[i * 4096 + j] = { (unsigned char)(ids * 20) ,(unsigned char)(ids * 20),0,255 };
+
 		}
 	}
-
 
 	D2D1_RECT_U rect = { 0 , 0 ,w , h };
 	tileSetData->bitmap->CopyFromMemory(&rect, colr, 4 * w);
@@ -171,9 +168,9 @@ void MapReader::UIMapRender()
 
 void MapReader::MapRegionSetting()
 {
-	int width = 128;
-	int height = 128;
-	int res = 32; //region scale
+	int width = 16;
+	int height = 16;
+	int res = 256; //region scale
 
 	queue <MapRegions*> vectorList;
 	region = new Regions;
@@ -246,23 +243,21 @@ void MapReader::MapRegionSetting()
 		c++;
 		if (tileX > 0)
 		{
-			int regionId = region->regionsIds[tileY][tileX - 1].regionsIds;
-
 			if (miniTiles[tileY][tileX - 1] == 1)
 			{
+				int regionId = region->regionsIds[tileY][tileX - 1].regionsIds;
 				if (regionId == -1)
 				{
-					region->regionsIds[tileY][tileX - 1].regionsIds = nowRegionIds;
-					vectorList.push(new MapRegions{ Vector2{ (float)tileX - 1,(float)tileY },nowRegionIds });
+					region->regionsIds[tileY][tileX - 1] = region->regionsIds[tileY][tileX];
+					vectorList.push(new MapRegions{ Vector2{ (float)tileX - 1,(float)tileY },0 });
 				}
-				else if (regionId != nowRegionIds)
+				else if (regionId != region->regionsIds[tileY][tileX].regionsIds)
 				{
 					bool isAble = false;
 					bool isFind = false;
-
-					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					for (auto _iter : region->regionsIds[tileY][tileX].nearRegionIds)
 					{
-						if (iter == regionId)
+						if (_iter == regionId)
 						{
 							isFind = true;
 							break;
@@ -272,7 +267,6 @@ void MapReader::MapRegionSetting()
 					{
 						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
 					}
-
 					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
@@ -288,61 +282,13 @@ void MapReader::MapRegionSetting()
 						float e1 = abs(dx - dy);
 						float e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14;
-
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 					}
 				}
 			}
 		}
-		if (tileX < 511)
-		{
-			if (miniTiles[tileY][tileX + 1] == 1)
-			{
-				int regionId = region->regionsIds[tileY][tileX + 1].regionsIds;
-				if (regionId == -1)
-				{
-					region->regionsIds[tileY][tileX + 1].regionsIds = nowRegionIds;
-					vectorList.push(new MapRegions{ Vector2{ (float)tileX + 1,(float)tileY },0 });
-				}
-				else if (regionId != nowRegionIds)
-				{
-					bool isAble = false;
-					bool isFind = false;
-					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
-					{
-						if (iter == regionId)
-						{
-							isFind = true;
-							break;
-						}
-					}
-					if (isFind == false)
-					{
-						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
-					}
-					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
-					{
-						if (_iter.second->regionId == regionId || _iter.second->regionId == nowRegionIds)
-						{
-							isAble = true;
-							break;
-						}
-					}
-					if (isAble == false)
-					{
-						float dx = abs(mapRegions[nowRegionIds]->pos.x - mapRegions[regionId]->pos.x);
-						float dy = abs(mapRegions[nowRegionIds]->pos.y - mapRegions[regionId]->pos.y);
-						float e1 = abs(dx - dy);
-						float e2 = min(dx, dy);
-						float dest = e1 * 10 + e2 * 14;
 
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
-						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
-					}
-				}
-			}
-		}
 		if (tileY > 0)
 		{
 			if (miniTiles[tileY - 1][tileX] == 1)
@@ -357,9 +303,9 @@ void MapReader::MapRegionSetting()
 				{
 					bool isAble = false;
 					bool isFind = false;
-					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					for (auto _iter : region->regionsIds[tileY][tileX].nearRegionIds)
 					{
-						if (iter == regionId)
+						if (_iter == regionId)
 						{
 							isFind = true;
 							break;
@@ -369,7 +315,7 @@ void MapReader::MapRegionSetting()
 					{
 						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
 					}
-					for (auto _iter : mapRegions[region->regionsIds[tileY][tileX].regionsIds]->nearRegions)
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -384,13 +330,61 @@ void MapReader::MapRegionSetting()
 						float e1 = abs(dx - dy);
 						float e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14;
-
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 					}
 				}
 			}
 		}
+
+		if (tileX < 511)
+		{
+			if (miniTiles[tileY][tileX + 1] == 1)
+			{
+				int regionId = region->regionsIds[tileY][tileX + 1].regionsIds;
+				if (regionId == -1)
+				{
+					region->regionsIds[tileY][tileX + 1].regionsIds = nowRegionIds;
+					vectorList.push(new MapRegions{ Vector2{ (float)tileX + 1,(float)tileY },0 });
+				}
+				else if (regionId != nowRegionIds)
+				{
+					bool isAble = false;
+					bool isFind = false;
+					for (auto _iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					{
+						if (_iter == regionId)
+						{
+							isFind = true;
+							break;
+						}
+					}
+					if (isFind == false)
+					{
+						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+					}
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
+					{
+						if (_iter.second->regionId == regionId)
+						{
+							isAble = true;
+							break;
+						}
+					}
+					if (isAble == false)
+					{
+						float dx = abs(mapRegions[nowRegionIds]->pos.x - mapRegions[regionId]->pos.x);
+						float dy = abs(mapRegions[nowRegionIds]->pos.y - mapRegions[regionId]->pos.y);
+						float e1 = abs(dx - dy);
+						float e2 = min(dx, dy);
+						float dest = e1 * 10 + e2 * 14;
+						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
+					}
+				}
+			}
+		}
+
 		if (tileY < 511)
 		{
 			if (miniTiles[tileY + 1][tileX] == 1)
@@ -404,9 +398,9 @@ void MapReader::MapRegionSetting()
 				else if (regionId != nowRegionIds)
 				{
 					bool isFind = false;
-					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					for (auto _iter : region->regionsIds[tileY][tileX].nearRegionIds)
 					{
-						if (iter == regionId)
+						if (_iter == regionId)
 						{
 							isFind = true;
 							break;
@@ -432,61 +426,14 @@ void MapReader::MapRegionSetting()
 						float e1 = abs(dx - dy);
 						float e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14;
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 					}
 				}
 			}
 		}
 
-		if (tileY > 0 && tileX > 0)
-		{
-			if (miniTiles[tileY - 1][tileX - 1] == 1)
-			{
-				int regionId = region->regionsIds[tileY - 1][tileX - 1].regionsIds;
-				if (regionId == -1)
-				{
-				}
-				else if (regionId != nowRegionIds)
-				{
-					bool isFind = false;
-					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
-					{
-						if (iter == regionId)
-						{
-							isFind = true;
-							break;
-						}
-					}
-					if (isFind == false)
-					{
-						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
-					}
-					bool isAble = false;
-					for (auto _iter : mapRegions[region->regionsIds[tileY - 1][tileX - 1].regionsIds]->nearRegions)
-					{
-						if (_iter.second->regionId == regionId)
-						{
-							isAble = true;
-							break;
-						}
-					}
-					if (isAble == false)
-					{
-						float dx = abs(mapRegions[nowRegionIds]->pos.x - mapRegions[regionId]->pos.x);
-						float dy = abs(mapRegions[nowRegionIds]->pos.y - mapRegions[regionId]->pos.y);
-						float e1 = abs(dx - dy);
-						float e2 = min(dx, dy);
-						float dest = e1 * 10 + e2 * 14;
-
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
-						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
-					}
-				}
-			}
-		}
-
-		if (tileY > 511 && tileX > 0)
+		if (tileY < 511 && tileX > 0)
 		{
 			if (miniTiles[tileY + 1][tileX - 1] == 1)
 			{
@@ -497,9 +444,9 @@ void MapReader::MapRegionSetting()
 				else if (regionId != nowRegionIds)
 				{
 					bool isFind = false;
-					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					for (auto _iter : region->regionsIds[tileY][tileX].nearRegionIds)
 					{
-						if (iter == regionId)
+						if (_iter == regionId)
 						{
 							isFind = true;
 							break;
@@ -510,7 +457,7 @@ void MapReader::MapRegionSetting()
 						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
 					}
 					bool isAble = false;
-					for (auto _iter : mapRegions[region->regionsIds[tileY + 1][tileX - 1].regionsIds]->nearRegions)
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -528,6 +475,7 @@ void MapReader::MapRegionSetting()
 
 						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+
 					}
 				}
 			}
@@ -545,9 +493,9 @@ void MapReader::MapRegionSetting()
 				{
 					bool isAble = false;
 					bool isFind = false;
-					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					for (auto _iter : region->regionsIds[tileY][tileX].nearRegionIds)
 					{
-						if (iter == regionId)
+						if (_iter == regionId)
 						{
 							isFind = true;
 							break;
@@ -558,7 +506,51 @@ void MapReader::MapRegionSetting()
 						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
 					}
 
-					for (auto _iter : mapRegions[region->regionsIds[tileY - 1][tileX + 1].regionsIds]->nearRegions)
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
+					{
+						if (_iter.second->regionId == regionId)
+						{
+							isAble = true;
+							break;
+						}
+					}
+					if (isAble == false)
+					{
+						float dx = abs(mapRegions[nowRegionIds]->pos.x - mapRegions[regionId]->pos.x);
+						float dy = abs(mapRegions[nowRegionIds]->pos.y - mapRegions[regionId]->pos.y);
+						float e1 = abs(dx - dy);
+						float e2 = min(dx, dy);
+						float dest = e1 * 10 + e2 * 14;
+						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
+					}
+				}
+			}
+		}
+
+		if (tileY > 0 && tileX > 0)
+		{
+			if (miniTiles[tileY - 1][tileX - 1] == 1)
+			{
+				int regionId = region->regionsIds[tileY - 1][tileX - 1].regionsIds;
+
+				if (regionId == -1)
+				{
+				}
+				else if (regionId != nowRegionIds)
+				{
+					bool isFind = false;
+					for (auto _iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					{
+						if (_iter == regionId)
+						{
+							isFind = true;
+							break;
+						}
+					}
+
+					bool isAble = false;
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -576,6 +568,7 @@ void MapReader::MapRegionSetting()
 
 						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+
 					}
 				}
 			}
@@ -592,9 +585,9 @@ void MapReader::MapRegionSetting()
 				else if (regionId != nowRegionIds)
 				{
 					bool isFind = false;
-					for (auto iter : region->regionsIds[tileY][tileX].nearRegionIds)
+					for (auto _iter : region->regionsIds[tileY][tileX].nearRegionIds)
 					{
-						if (iter == regionId)
+						if (_iter == regionId)
 						{
 							isFind = true;
 							break;
@@ -603,10 +596,16 @@ void MapReader::MapRegionSetting()
 					if (isFind == false)
 					{
 						region->regionsIds[tileY][tileX].nearRegionIds.push_back(regionId);
+						if (tileY > 0 && tileX > 0)
+						{
+							region->regionsIds[tileY + 1][tileX + 1].nearRegionIds.push_back(nowRegionIds);
+
+						}
+
 					}
 
 					bool isAble = false;
-					for (auto _iter : mapRegions[region->regionsIds[tileY + 1][tileX + 1].regionsIds]->nearRegions)
+					for (auto _iter : mapRegions[nowRegionIds]->nearRegions)
 					{
 						if (_iter.second->regionId == regionId)
 						{
@@ -621,9 +620,8 @@ void MapReader::MapRegionSetting()
 						float e1 = abs(dx - dy);
 						float e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14;
-
-						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
+						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 					}
 				}
 			}
@@ -688,11 +686,16 @@ void MapReader::MapRegionSetting()
 
 void MapReader::RenderLine()
 {
+	if (KEYMANAGER->GetOnceKeyDown(VK_SPACE))
+	{
+		index++;
+	}
 	//for (auto iter : mapRegions)
 	//{
 	//	for (auto _iter : iter->nearRegions)
 	//	{
-	//		IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
+	//		if (iter->regionId == index)
+	//			IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
 	//	}
 	//}
 	//for (int i = 0; i < 512; i++)
@@ -715,7 +718,7 @@ void MapReader::Release()
 	}
 	mapRegions.clear();
 
-	
+
 
 
 	tileSetData->bitmap->Release();
