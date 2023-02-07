@@ -64,14 +64,16 @@ void SpaceConstructionVehicle::Update()
 	}
 	else
 	{
-		if (moveNodeStack.empty() == false)
+		if (m_dest.x != 0 && m_dest.y != 0)
 		{
 			grid->Astar();
 			if (moveNodeStack.empty() == false)
+			{
 				if (grid->nowTileRegionId == GRIDMANAGER->regionsTile[(int)this->moveNodeStack.top()->pos.x][(int)this->moveNodeStack.top()->pos.y].regionsIds)
 				{
 					this->moveNodeStack.pop();
 				}
+			}
 		}
 	}
 	if (d.x != 0 && d.y != 0)

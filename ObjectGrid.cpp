@@ -17,43 +17,48 @@ void ObjectGrid::Astar()
 	{
 		moveStack2.pop();
 	}
-	Vector2 lastEndPos;
-	searchNodeId = GRIDMANAGER->regionsTile[(int)unit->moveNodeStack.top()->pos.x][(int)unit->moveNodeStack.top()->pos.y].regionsIds;
-	auto endRegion = GRIDMANAGER->regionsTile[(int)unit->moveNodeStack.top()->pos.x][(int)unit->moveNodeStack.top()->pos.y];
+	Vector2 lastEndPos = unit->m_dest / 1.5 / 8;
 	openNodeCheck.clear();
-
-	auto find = IMAGEMANAGER->GetMapReader()->mapRegions[searchNodeId]->nearRegionPosition.find(nowTileRegionId);
-
-	if (find == IMAGEMANAGER->GetMapReader()->mapRegions[searchNodeId]->nearRegionPosition.end())
+	GridManager::tileNum endRegion;
+	map<int, vector<Vector2>>::iterator find;
+	if (unit->moveNodeStack.empty() == false)
 	{
-		for (auto iter : IMAGEMANAGER->GetMapReader()->mapRegions[searchNodeId]->nearRegionPosition)
+		endRegion = GRIDMANAGER->regionsTile[(int)unit->moveNodeStack.top()->pos.x][(int)unit->moveNodeStack.top()->pos.y];
+		searchNodeId = GRIDMANAGER->regionsTile[(int)unit->moveNodeStack.top()->pos.x][(int)unit->moveNodeStack.top()->pos.y].regionsIds;
+		find = IMAGEMANAGER->GetMapReader()->mapRegions[searchNodeId]->nearRegionPosition.find(nowTileRegionId);
+		if (find == IMAGEMANAGER->GetMapReader()->mapRegions[searchNodeId]->nearRegionPosition.end())
 		{
-			cout << iter.first << endl;
-		}
-		return;
-	}
-	else
-	{
-		float dest2 = 20000;
-
-		for (auto iter : find->second)
-		{
-			float dx = abs(tileStartPos.x - iter.x);
-			float dy = abs(tileStartPos.y - iter.y);
-			float	e1 = abs(dx - dy);
-			float	e2 = min(dx, dy);
-			float dest = e1 * 10 + e2 * 14;
-			if (dest < dest2)
+			for (auto iter : IMAGEMANAGER->GetMapReader()->mapRegions[searchNodeId]->nearRegionPosition)
 			{
-				tileEndPos = { iter.x,iter.y };
-				dest2 = dest;
+				cout << iter.first << endl;
+			}
+			return;
+		}
+		else
+		{
+			float dest2 = 20000;
+
+			for (auto iter : find->second)
+			{
+				float dx = abs(tileStartPos.x - iter.x);
+				float dy = abs(tileStartPos.y - iter.y);
+				float	e1 = abs(dx - dy);
+				float	e2 = min(dx, dy);
+				float dest = e1 * 10 + e2 * 14;
+				if (dest < dest2)
+				{
+					tileEndPos = { iter.x,iter.y };
+					dest2 = dest;
+				}
 			}
 		}
 	}
+	else
+	{
+		endRegion = GRIDMANAGER->regionsTile[(int)lastEndPos.x][(int)lastEndPos.y];
+	}
 
-	searchNodeId = GRIDMANAGER->regionsTile[(int)unit->moveNodeStack.top()->pos.x][(int)unit->moveNodeStack.top()->pos.y].regionsIds;
 
-	openNodeCheck.clear();
 
 	vector<pair<pair<float, float>, GridManager::tileNum>> openNode;
 	// cost or node
@@ -82,8 +87,8 @@ void ObjectGrid::Astar()
 				{
 					if (startY + m_size.y / 2 >= aNode.y)
 					{
-						float dx = abs(aNode.x - unit->moveNodeStack.top()->pos.x);
-						float dy = abs(aNode.y - unit->moveNodeStack.top()->pos.y);
+						float dx = abs(aNode.x - endRegion.x);
+						float dy = abs(aNode.y - endRegion.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -118,8 +123,8 @@ void ObjectGrid::Astar()
 				{
 					if (startY - m_size.y / 2 <= bNode.y)
 					{
-						float dx = abs(bNode.x - unit->moveNodeStack.top()->pos.x);
-						float dy = abs(bNode.y - unit->moveNodeStack.top()->pos.y);
+						float dx = abs(bNode.x - endRegion.x);
+						float dy = abs(bNode.y - endRegion.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -154,8 +159,8 @@ void ObjectGrid::Astar()
 				{
 					if (startX - m_size.x / 2 <= dNode.x)
 					{
-						float dx = abs(dNode.x - unit->moveNodeStack.top()->pos.x);
-						float dy = abs(dNode.y - unit->moveNodeStack.top()->pos.y);
+						float dx = abs(dNode.x - endRegion.x);
+						float dy = abs(dNode.y - endRegion.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -190,8 +195,8 @@ void ObjectGrid::Astar()
 				{
 					if (startX + m_size.x / 2 >= cNode.x)
 					{
-						float dx = abs(cNode.x - unit->moveNodeStack.top()->pos.x);
-						float dy = abs(cNode.y - unit->moveNodeStack.top()->pos.y);
+						float dx = abs(cNode.x - endRegion.x);
+						float dy = abs(cNode.y - endRegion.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -226,8 +231,8 @@ void ObjectGrid::Astar()
 				{
 					if (startX - m_size.x / 2 <= eNode.x && startY + m_size.y / 2 >= eNode.y)
 					{
-						float dx = abs(eNode.x - unit->moveNodeStack.top()->pos.x);
-						float dy = abs(eNode.y - unit->moveNodeStack.top()->pos.y);
+						float dx = abs(eNode.x - endRegion.x);
+						float dy = abs(eNode.y - endRegion.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -262,8 +267,8 @@ void ObjectGrid::Astar()
 				{
 					if (startX + m_size.x / 2 >= fNode.x && startY - m_size.y / 2 <= fNode.y)
 					{
-						float dx = abs(fNode.x - unit->moveNodeStack.top()->pos.x);
-						float dy = abs(fNode.y - unit->moveNodeStack.top()->pos.y);
+						float dx = abs(fNode.x - endRegion.x);
+						float dy = abs(fNode.y - endRegion.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -298,8 +303,8 @@ void ObjectGrid::Astar()
 				{
 					if (startX + m_size.x / 2 >= gNode.x && startY + m_size.y / 2 >= gNode.y)
 					{
-						float dx = abs(gNode.x - unit->moveNodeStack.top()->pos.x);
-						float dy = abs(gNode.y - unit->moveNodeStack.top()->pos.y);
+						float dx = abs(gNode.x - endRegion.x);
+						float dy = abs(gNode.y - endRegion.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -334,8 +339,8 @@ void ObjectGrid::Astar()
 				{
 					if (startX - m_size.x / 2 <= hNode.x && startY - m_size.y / 2 <= hNode.y)
 					{
-						float dx = abs(hNode.x - unit->moveNodeStack.top()->pos.x);
-						float dy = abs(hNode.y - unit->moveNodeStack.top()->pos.y);
+						float dx = abs(hNode.x - endRegion.x);
+						float dy = abs(hNode.y - endRegion.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 + e2 + iter.first.first + 14;
@@ -456,7 +461,65 @@ void ObjectGrid::Astar()
 			}
 		}
 	}
+	else
+	{
+		if (tiles.size() != 0)
+		{
+			GridManager::tileNum destTile = tiles[0];
 
+			float dx = abs(destTile.x - tileEndPos.x);
+			float dy = abs(destTile.y - tileEndPos.y);
+			float e1 = abs(dx - dy);
+			float e2 = min(dx, dy);
+			float dest = e1 * 10 + e2 * 14;
+
+			for (auto iter : tiles)
+			{
+				float dx2 = abs(iter.x - tileEndPos.x);
+				float dy2 = abs(iter.y - tileEndPos.y);
+				float	e12 = abs(dx2 - dy2);
+				float	e22 = min(dx2, dy2);
+				float dest2 = e12 * 10 + e22 * 14;
+				if (dest > dest2)
+				{
+					destTile = iter;
+					dest = dest2;
+				}
+			}
+			map<pair<int, int>, Vector2>::iterator find = openNodeCheck.find(pair(destTile.x, destTile.y));
+			moveStack2.push(Vector2{ (float)find->first.first ,(float)find->first.second });
+			vectors.push_back(make_pair(Vector2{ (float)find->first.first ,(float)find->first.second }, Vector2{ find->second.x ,find->second.y }));
+
+			if (find->second.x == startX && find->second.y == startY)
+			{
+				return;
+			}
+			if (find != openNodeCheck.end())
+			{
+				while (true)
+				{
+					find = openNodeCheck.find(pair(find->second.x, find->second.y));
+
+					if (find != openNodeCheck.end())
+					{
+						if (find->first.first == startX && find->first.second == startY)
+						{
+							break;
+						}
+						else
+						{
+							moveStack2.push(Vector2{ (float)find->first.first ,(float)find->first.second });
+							vectors.push_back(make_pair(Vector2{ (float)find->first.first ,(float)find->first.second }, Vector2{ find->second.x ,find->second.y }));
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+		}
+	}
 }
 
 void ObjectGrid::Init(Object* obj, Vector2 collisionGridSize, Vector2 gridSize, float x, float y)
