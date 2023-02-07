@@ -63,7 +63,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-			TIMERMANAGER->Update(60.f);
+			TIMERMANAGER->Update(20.f);
 			mg.Update();
 			mg.Render();
 		}

@@ -51,6 +51,10 @@ void ObjectGrid::Astar()
 		}
 	}
 
+	searchNodeId = GRIDMANAGER->regionsTile[(int)unit->moveNodeStack.top()->pos.x][(int)unit->moveNodeStack.top()->pos.y].regionsIds;
+
+	openNodeCheck.clear();
+
 	vector<pair<pair<float, float>, GridManager::tileNum>> openNode;
 	// cost or node
 	//priority_queue <> regionQueue;
@@ -509,6 +513,9 @@ void ObjectGrid::Render()
 
 	//}
 
+	}
+	for(auto iter : vectors)
+		IMAGEMANAGER->DrawLine({ iter.first.x * 1.5f * 8, iter.first.y * 1.5f * 8 }, { iter.second.x * 1.5f * 8, iter.second.y * 1.5f * 8 });
 }
 
 void ObjectGrid::Release()

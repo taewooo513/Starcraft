@@ -472,7 +472,7 @@ void MapReader::MapRegionSetting()
 						float e1 = abs(dx - dy);
 						float e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14;
-
+						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
 						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
 
@@ -565,7 +565,7 @@ void MapReader::MapRegionSetting()
 						float e1 = abs(dx - dy);
 						float e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14;
-
+						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
 						mapRegions[nowRegionIds]->nearRegions.push_back(make_pair(dest, mapRegions[regionId]));
 						mapRegions[regionId]->nearRegions.push_back(make_pair(dest, mapRegions[nowRegionIds]));
 
