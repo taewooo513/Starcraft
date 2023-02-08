@@ -9,8 +9,11 @@ void ObjectGrid::Astar()
 	tileStartPos = obj->position / 1.5 / 8;
 
 	nowTileRegionId = GRIDMANAGER->regionsTile[(int)tileStartPos.x][(int)tileStartPos.y].regionsIds;
+	if (nowTileRegionId == -1)
+	{
+		return;
+	}
 	auto unit = dynamic_cast<Unit*>(obj);
-
 	int searchNodeId = 0;
 	Vector2 tileEndPos;
 	while (moveStack2.empty() == false)
@@ -18,6 +21,8 @@ void ObjectGrid::Astar()
 		moveStack2.pop();
 	}
 	Vector2 lastEndPos = unit->m_dest / 1.5 / 8;
+
+
 	openNodeCheck.clear();
 	GridManager::tileNum endRegion;
 	map<int, vector<Vector2>>::iterator find;
@@ -28,10 +33,6 @@ void ObjectGrid::Astar()
 		find = IMAGEMANAGER->GetMapReader()->mapRegions[searchNodeId]->nearRegionPosition.find(nowTileRegionId);
 		if (find == IMAGEMANAGER->GetMapReader()->mapRegions[searchNodeId]->nearRegionPosition.end())
 		{
-			for (auto iter : IMAGEMANAGER->GetMapReader()->mapRegions[searchNodeId]->nearRegionPosition)
-			{
-				cout << iter.first << endl;
-			}
 			return;
 		}
 		else
@@ -47,8 +48,11 @@ void ObjectGrid::Astar()
 				float dest = e1 * 10 + e2 * 14;
 				if (dest < dest2)
 				{
-					tileEndPos = { iter.x,iter.y };
-					dest2 = dest;
+					if (GRIDMANAGER->regionsTile[(int)iter.x][(int)iter.y].isBuildAble == true)
+					{
+						tileEndPos = { iter.x,iter.y };
+						dest2 = dest;
+					}
 				}
 			}
 		}
@@ -56,8 +60,8 @@ void ObjectGrid::Astar()
 	else
 	{
 		endRegion = GRIDMANAGER->regionsTile[(int)lastEndPos.x][(int)lastEndPos.y];
+		tileEndPos = { endRegion.x, endRegion.y };
 	}
-
 
 
 	vector<pair<pair<float, float>, GridManager::tileNum>> openNode;
@@ -87,8 +91,8 @@ void ObjectGrid::Astar()
 				{
 					if (startY + m_size.y / 2 >= aNode.y)
 					{
-						float dx = abs(aNode.x - endRegion.x);
-						float dy = abs(aNode.y - endRegion.y);
+						float dx = abs(aNode.x - tileEndPos.x);
+						float dy = abs(aNode.y - tileEndPos.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -123,8 +127,8 @@ void ObjectGrid::Astar()
 				{
 					if (startY - m_size.y / 2 <= bNode.y)
 					{
-						float dx = abs(bNode.x - endRegion.x);
-						float dy = abs(bNode.y - endRegion.y);
+						float dx = abs(bNode.x - tileEndPos.x);
+						float dy = abs(bNode.y - tileEndPos.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -159,8 +163,8 @@ void ObjectGrid::Astar()
 				{
 					if (startX - m_size.x / 2 <= dNode.x)
 					{
-						float dx = abs(dNode.x - endRegion.x);
-						float dy = abs(dNode.y - endRegion.y);
+						float dx = abs(dNode.x - tileEndPos.x);
+						float dy = abs(dNode.y - tileEndPos.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -195,8 +199,8 @@ void ObjectGrid::Astar()
 				{
 					if (startX + m_size.x / 2 >= cNode.x)
 					{
-						float dx = abs(cNode.x - endRegion.x);
-						float dy = abs(cNode.y - endRegion.y);
+						float dx = abs(cNode.x - tileEndPos.x);
+						float dy = abs(cNode.y - tileEndPos.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -231,8 +235,8 @@ void ObjectGrid::Astar()
 				{
 					if (startX - m_size.x / 2 <= eNode.x && startY + m_size.y / 2 >= eNode.y)
 					{
-						float dx = abs(eNode.x - endRegion.x);
-						float dy = abs(eNode.y - endRegion.y);
+						float dx = abs(eNode.x - tileEndPos.x);
+						float dy = abs(eNode.y - tileEndPos.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -267,8 +271,8 @@ void ObjectGrid::Astar()
 				{
 					if (startX + m_size.x / 2 >= fNode.x && startY - m_size.y / 2 <= fNode.y)
 					{
-						float dx = abs(fNode.x - endRegion.x);
-						float dy = abs(fNode.y - endRegion.y);
+						float dx = abs(fNode.x - tileEndPos.x);
+						float dy = abs(fNode.y - tileEndPos.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -303,8 +307,8 @@ void ObjectGrid::Astar()
 				{
 					if (startX + m_size.x / 2 >= gNode.x && startY + m_size.y / 2 >= gNode.y)
 					{
-						float dx = abs(gNode.x - endRegion.x);
-						float dy = abs(gNode.y - endRegion.y);
+						float dx = abs(gNode.x - tileEndPos.x);
+						float dy = abs(gNode.y - tileEndPos.y);
 						float	e1 = abs(dx - dy);
 						float	e2 = min(dx, dy);
 						float dest = e1 * 10 + e2 * 14 + iter.first.second;
@@ -366,9 +370,9 @@ void ObjectGrid::Astar()
 			}
 		}
 
-		if (iter.second.regionsIds == searchNodeId)
+		if (iter.second.regionsIds == searchNodeId || ((int)iter.second.x == (int)lastEndPos.x && iter.second.y == (int)lastEndPos.y))
 		{
-			unit->moveNodeStack.pop();
+
 			map<pair<int, int>, Vector2>::iterator find = openNodeCheck.find(pair(iter.second.x, iter.second.y));
 			moveStack2.push(Vector2{ (float)find->first.first ,(float)find->first.second });
 

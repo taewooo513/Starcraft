@@ -39,6 +39,12 @@
 #include <d2d1effects_2.h>
 
 #include<CoreWindow.h>
+#include <Vfw.h>
+#pragma comment (lib, "Vfw32.lib")
+
+#include <opencv2/opencv.hpp>
+#pragma comment (lib,"opencv_world470.lib")
+
 
 #pragma region D2d1FactoryHeader
 #pragma comment (lib, "msimg32.lib") 
@@ -181,6 +187,7 @@ struct MoveNode
 #include "Utility.h"
 #include "EffectManager.h"
 #include "CSoundMgr.h"
+#include "VideoManager.h"
 using namespace Microsoft::WRL;
 //inline static float GetDeltaTime()
 //{

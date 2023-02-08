@@ -6,6 +6,7 @@
 class SpaceConstructionVehicle : public WalkUnit
 {
 private:
+	float timer = 0;
 	float m_dir = 0;
 	CImage* m_idleImage[9];
 	CImage* m_actionImage_1[9];
@@ -20,7 +21,8 @@ private:
 		eCommandCenter,
 		eBarrack,
 	};
-
+	float randomMoveRot;
+	float randomMoveTime;
 	int page = 0;
 	int index = 0;
 public:

@@ -18,7 +18,9 @@ void Main::Init()
 	SOUNDMANAGER->init(_hWnd);
 	TIMERMANAGER->Init();
 	srand(GetTickCount64());
-	SCENEMANAGER->ChangeScene("MainGameScene");
+	SCENEMANAGER->ChangeScene("TitleScene");
+
+	VIDEOMANAGER->CreateVideo("test", "./Resources/video/single.avi");
 }
 
 void Main::Update()
@@ -39,7 +41,7 @@ void Main::Render()
 	TIMERMANAGER->Render();
 
 	m_d2dContext->EndDraw();
-
+	VIDEOMANAGER->Play("test");
 	DXGI_PRESENT_PARAMETERS param = { 0 };
 	m_swapChain->Present1(1, 0, &param);
 }

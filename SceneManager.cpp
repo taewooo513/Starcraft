@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "TestScene.h"
 #include "MainGameScene.h"
+#include "TitleScene.h"
 SceneManager::SceneManager()
 {
 }
@@ -19,8 +20,9 @@ void SceneManager::Init()
 
 	flag = 0;
 
-	AddScene("MainGameScene",new MainGameScene);
-	AddScene("TestScene",new TestScene);
+	AddScene("MainGameScene", new MainGameScene);
+	AddScene("TitleScene", new TitleScene);
+	AddScene("TestScene", new TestScene);
 	// 페이드인아웃 할때 다른플레그이면 알파값을 초기화해줌
 	// 초기화를해줘야하는데 어떻게 해야할지 몰라서 해둠
 
@@ -104,7 +106,7 @@ bool SceneManager::FadeIn(float t, function<void()> func, int flag)
 {
 	if (this->flag != flag)
 	{
-	//	fadeImage->SetAlpha(1.f);
+		//	fadeImage->SetAlpha(1.f);
 		this->flag = flag;
 	}
 
@@ -124,7 +126,7 @@ bool SceneManager::FadeInColor(float t, function<void()> func, int flag)
 {
 	if (this->flag != flag)
 	{
-	//	fadeImage->SetAlpha(1.f);
+		//	fadeImage->SetAlpha(1.f);
 		this->flag = flag;
 	}
 
@@ -144,7 +146,7 @@ bool SceneManager::FadeOut(float t, function<void()> func, int flag)
 {
 	if (this->flag != flag)
 	{
-	//	fadeImage->SetAlpha(0.f);
+		//	fadeImage->SetAlpha(0.f);
 		this->flag = flag;
 	}
 
@@ -163,17 +165,17 @@ bool SceneManager::FadeOutColor(float t, function<void()> func, int flag)
 {
 	if (this->flag != flag)
 	{
-	//	fadeImage->SetAlpha(0.f);
+		//	fadeImage->SetAlpha(0.f);
 		this->flag = flag;
 	}
 
-//	fadeImage->SetAlpha(fadeImage->GetAlpha() + t);
+	//	fadeImage->SetAlpha(fadeImage->GetAlpha() + t);
 
-	//if (fadeImage->GetAlpha() >= 1)
-	//{
-	//	func();
-	//}
-//	IMAGEMANAGER->CenterRender(fadeImage, WINSIZE_X / 2 + IMAGEMANAGER->GetCameraPosition().x, WINSIZE_Y / 2 + IMAGEMANAGER->GetCameraPosition().y, { 255,255,255,fadeImage->GetAlpha() }, 2, 2, 0);
+		//if (fadeImage->GetAlpha() >= 1)
+		//{
+		//	func();
+		//}
+	//	IMAGEMANAGER->CenterRender(fadeImage, WINSIZE_X / 2 + IMAGEMANAGER->GetCameraPosition().x, WINSIZE_Y / 2 + IMAGEMANAGER->GetCameraPosition().y, { 255,255,255,fadeImage->GetAlpha() }, 2, 2, 0);
 
 	return false;
 }

@@ -107,6 +107,8 @@
     </ClCompile>
     <ClCompile Include="ObjectGrid.cpp" />
     <ClCompile Include="GridManager.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="VideoManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -206,6 +208,8 @@
     </ClInclude>
     <ClInclude Include="ObjectGrid.h" />
     <ClInclude Include="GridManager.h" />
+    <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="VideoManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -306,6 +310,9 @@
     </Filter>
     <Filter Include="Game\Object\Build\Terran\CommandCenter">
       <UniqueIdentifier>{ece936ce-114a-4e37-8b46-0506fe8725dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\TitleScene">
+      <UniqueIdentifier>{5de72095-5d5f-4429-a7b8-52002d0ecda5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

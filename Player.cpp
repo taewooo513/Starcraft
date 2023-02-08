@@ -8,10 +8,15 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 	Vector2 tileStartPos, tileEndPos;
 	tileStartPos = startPos / 1.5 / 8;
 	tileEndPos = endPos / 1.5 / 8;
+	cout << " f" << endl;
 	int nowTileRegionId = IMAGEMANAGER->GetMapReader()->region->regionsIds[(int)tileStartPos.y][(int)tileStartPos.x].regionsIds;
 	while (!unit->moveNodeStack.empty())
 	{
 		unit->moveNodeStack.pop();
+	}
+	if (nowTileRegionId == IMAGEMANAGER->GetMapReader()->region->regionsIds[(int)tileEndPos.y][(int)tileEndPos.x].regionsIds)
+	{
+		return;
 	}
 	vector<pair<pair<float, float>, MapRegions*>> openNode;
 	// cost or node
@@ -27,7 +32,6 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 	{
 		iter->openNode = false;
 	}
-
 	while (regionQueue.empty() != true)
 	{
 		auto iter = regionQueue.top();
@@ -93,7 +97,7 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 				break;
 			}
 		}
-		if (isFind == true)
+		if (isFind == true || (iter.second->pos == tileEndPos))
 		{
 			break;
 		}
@@ -182,10 +186,20 @@ void Player::Update()
 			{
 				m_rClickPos.x = _ptMouse.x + IMAGEMANAGER->GetCameraPosition().x;
 				m_rClickPos.y = _ptMouse.y + IMAGEMANAGER->GetCameraPosition().y;
+
+				m_rClickPos.x = _ptMouse.x + IMAGEMANAGER->GetCameraPosition().x;
+				m_rClickPos.y = _ptMouse.y + IMAGEMANAGER->GetCameraPosition().y;
+
+				if (m_selectUnit != nullptr)
+				{
+				}
+
 				SpaceConstructionVehicle* scv = dynamic_cast<SpaceConstructionVehicle*>(m_selectUnit);
 				if (scv->buildIndex != 0)
 				{
-					Astar(m_selectUnit->GetPosition(), { m_rClickPos }, m_selectUnit);
+					m_selectUnit->SetDestPosition({ (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5))  + IMAGEMANAGER->GetCameraPosition().y });
+					Astar(m_selectUnit->GetPosition(), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5))  + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5))  + IMAGEMANAGER->GetCameraPosition().y }, m_selectUnit);
+					//m_selectUnit->SetDestPosition(m_rClickPos);
 					scv->m_isBuild = true;
 
 				}

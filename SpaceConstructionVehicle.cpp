@@ -12,7 +12,7 @@ SpaceConstructionVehicle::~SpaceConstructionVehicle()
 
 void SpaceConstructionVehicle::Init()
 {
-	grid = GRIDMANAGER->AddGrid(this, 0, 0, 10, 10, -1, -2);
+	grid = GRIDMANAGER->AddGrid(this, 0, 0, 20, 20, -1, -2);
 
 	m_isClick = false;
 	m_spark = nullptr;
@@ -50,6 +50,7 @@ void SpaceConstructionVehicle::Init()
 
 	m_buttom = IMAGEMANAGER->FindImage("tcmdbtns0000");
 	d = { 0,0 };
+	randomMoveTime = 0;
 }
 
 void SpaceConstructionVehicle::Move()
@@ -58,6 +59,20 @@ void SpaceConstructionVehicle::Move()
 
 void SpaceConstructionVehicle::Update()
 {
+	if (m_dest.x != 0 && m_dest.y != 0)
+	{
+		if (timer > 0.001f)
+		{
+			grid->Astar();
+			timer = 0;
+		}
+	}
+	if (m_dest.x == position.x && m_dest.y == position.y)
+	{
+		m_dest.x = 0;
+		position.x = 0;
+	}
+	timer += DELTA_TIME;
 	if (grid->moveStack2.empty() == false)
 	{
 		d = Vector2{ (float)(grid->moveStack2.top().x * 8 * 1.5),(float)(grid->moveStack2.top().y * 8 * 1.5) };
@@ -66,7 +81,6 @@ void SpaceConstructionVehicle::Update()
 	{
 		if (m_dest.x != 0 && m_dest.y != 0)
 		{
-			grid->Astar();
 			if (moveNodeStack.empty() == false)
 			{
 				if (grid->nowTileRegionId == GRIDMANAGER->regionsTile[(int)this->moveNodeStack.top()->pos.x][(int)this->moveNodeStack.top()->pos.y].regionsIds)
@@ -173,7 +187,7 @@ void SpaceConstructionVehicle::Update()
 	{
 		page = 0;
 
-		if (moveNodeStack.empty() == true)
+		if (moveNodeStack.empty() == true && grid->moveStack2.empty())
 		{
 			switch (buildIndex)
 			{
@@ -182,16 +196,41 @@ void SpaceConstructionVehicle::Update()
 				m_nowBuild->SetPlayer(player);
 				m_isBuild = false;
 				buildIndex = 0;
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)), (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
+				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
 				break;
 			case eBarrack:
 				m_nowBuild = new Barrack;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)), (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
+				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
 				buildIndex = 0;
 				break;
 			}
+		}
+	}
+
+	if (m_nowBuild == nullptr)
+	{
+		if (GRIDMANAGER->regionsTile[(int)(position.x / 1.5 / 8)][(int)(position.y / 1.5 / 8)].isBuildAble == false)
+		{
+
+			if (m_speed < 300)
+			{
+				m_speed += 5;
+			}
+
+
+			if (randomMoveTime <= 0)
+			{
+				randomMoveRot = float(rand() % 628) / 100;
+
+				m_speed = 0;
+				randomMoveTime = 0.5;
+			}
+			randomMoveTime -= DELTA_TIME;
+			position.x += cos(randomMoveRot) * m_speed;
+			position.y += sin(randomMoveRot) * m_speed;
+
 		}
 	}
 }
@@ -274,15 +313,20 @@ void SpaceConstructionVehicle::UIRender()
 			}
 		}
 	}
+	//m_selectUnit->SetDestPosition({});
+	/*
+	 (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().y
 
+	*/
 	switch (buildIndex)
 	{
 	case eCommandCenter:
-		IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)), (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
-				(float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f,
-				(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight()
-			});
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)), (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
+		IMAGEMANAGER->DrawRect({
+			(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
+			(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
+			(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f ,
+			(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight() });
+		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
 		break;
 	case eBarrack:
 		IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)),(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) },
@@ -293,7 +337,6 @@ void SpaceConstructionVehicle::UIRender()
 		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50,(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
 		break;
 	}
-
 	if (m_nowBuild == nullptr)
 	{
 		if (page == 0)
