@@ -109,6 +109,7 @@
     <ClCompile Include="GridManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="VideoManager.cpp" />
+    <ClCompile Include="Mineral.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -210,6 +211,7 @@
     <ClInclude Include="GridManager.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="VideoManager.h" />
+    <ClInclude Include="Mineral.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">

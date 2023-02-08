@@ -7,7 +7,7 @@ public:
 	VideoManager() {}
 	~VideoManager() {}
 public:
-	map<string, HWND > videoHwnds;
+	//map<string, HWND > videoHwnds;
 	void CreateVideo(string key, string path);
 	void Play(string key);
 };

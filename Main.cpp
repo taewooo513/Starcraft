@@ -17,8 +17,9 @@ void Main::Init()
 	TIMERMANAGER->Init();
 	srand(GetTickCount64());
 	SCENEMANAGER->ChangeScene("TitleScene");
+	char* lpszReturnString = new char[2555];
+	AVIFileInit();
 
-	VIDEOMANAGER->CreateVideo("test", "./Resources/video/single.avi");
 }
 
 void Main::Update()
@@ -46,6 +47,8 @@ void Main::Render()
 
 void Main::Release()
 {
+	AVIFileExit();
+
 	ObjectManager::ReleaseInstance();
 	SceneManager::ReleaseInstance();
 	ObjectManager::ReleaseInstance();
