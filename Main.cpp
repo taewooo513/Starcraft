@@ -4,8 +4,6 @@
 void Main::Init()
 {
 	srand(time(NULL));
-
-
 	SetTimer(_hWnd, 1, 1, NULL);
 
 	CreateDeviceD3D();
@@ -38,7 +36,7 @@ void Main::Render()
 	EFFECTMANAGER->Render();
 	OBJECTMANAGER->UIRender();
 	SCENEMANAGER->UIRender();
-	TIMERMANAGER->Render();
+	//TIMERMANAGER->Render();
 
 	m_d2dContext->EndDraw();
 	VIDEOMANAGER->Play("test");

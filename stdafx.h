@@ -43,7 +43,7 @@
 #pragma comment (lib, "Vfw32.lib")
 
 #include <opencv2/opencv.hpp>
-#pragma comment (lib,"opencv_world470.lib")
+#pragma comment (lib,"opencv_world460.lib")
 
 
 #pragma region D2d1FactoryHeader
