@@ -44,12 +44,14 @@ private:
 	ID2D1DeviceContext* m_d2dContext;
 	IDXGISwapChain1* m_swapChain;
 	ID2D1Effect* blendEffect;
-
+	IDWriteFactory3* m_pDWriteFactory;
+	IDWriteTextFormat* m_pTextFormat;
+	ID2D1SolidColorBrush* brush;
 	Vector2 m_cameraPosition = { 0,0 };
-
+	IDWriteFontFile* pFontFile;
 	map <string, CImage*>m_imageList;
 	map <string, vImage*> m_vImageList;
-
+	IDWriteTextLayout* pTextLayout_;
 public:
 	ImageManager();
 	~ImageManager();
@@ -68,7 +70,7 @@ public:
 	vImage* AddImageVectorCopy(const std::string key);
 
 	void ImageLoad();
-
+	void DirectDrawText(wstring str, Vector2 pos, Vector2 size, D2D1_COLOR_F color = D2D1::ColorF(255, 255, 255, 1));
 	void Render(CImage* img, Vector2 vec, float scale, float rot);
 	void RenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot);
 	void UIRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot);
@@ -78,10 +80,11 @@ public:
 
 	void MapRender();
 	void UIMapRender();
-	void DrawCircle(Vector2 vec, float scaleX, float scaleY);
-	void DrawRect(Vector2 startPos, Vector2 endPos);
+	void DrawCircle(Vector2 vec, float scaleX, float scaleY, D2D1_COLOR_F color = D2D1::ColorF(255, 255, 255, 1));
+	void DrawRect(Vector2 startPos, Vector2 endPos, D2D1_COLOR_F color = D2D1::ColorF(0, 255, 0, 1));
 	void DrawRectRed(Vector2 startPos, Vector2 endPos);
 	void DrawLine(Vector2 startPos, Vector2 endPos);
+
 
 	void DrawRegion();
 	void LoadMap();

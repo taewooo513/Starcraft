@@ -49,7 +49,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	ShowWindow(_hWnd, nCmdShow);
 	UpdateWindow(_hWnd);
 
-	VIDEOMANAGER->CreateVideo("test", "./Resources/video/singleon.avi");
 
 	while (true)
 	{

@@ -23,9 +23,9 @@ private:
 	};
 	float randomMoveRot;
 	float randomMoveTime;
-	int page = 0;
 	int index = 0;
 public:
+	int page = 0;
 	int buildIndex = 0;
 	bool m_isBuild = false;
 	Build* m_nowBuild;

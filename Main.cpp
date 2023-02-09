@@ -16,9 +16,10 @@ void Main::Init()
 	SOUNDMANAGER->init(_hWnd);
 	TIMERMANAGER->Init();
 	srand(GetTickCount64());
-	SCENEMANAGER->ChangeScene("TitleScene");
-	char* lpszReturnString = new char[2555];
-	AVIFileInit();
+	SCENEMANAGER->ChangeScene("MainGameScene");
+	VIDEOMANAGER->CreateVideo("test", "./Resources/video/single.wmv");
+
+	VIDEOMANAGER->Play("test");
 
 }
 
@@ -40,9 +41,9 @@ void Main::Render()
 	//TIMERMANAGER->Render();
 
 	m_d2dContext->EndDraw();
-	VIDEOMANAGER->Play("test");
 	DXGI_PRESENT_PARAMETERS param = { 0 };
 	m_swapChain->Present1(1, 0, &param);
+
 }
 
 void Main::Release()

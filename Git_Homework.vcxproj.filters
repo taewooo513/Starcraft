@@ -98,18 +98,24 @@
     <ClCompile Include="Player.cpp">
       <Filter>Game\Player</Filter>
     </ClCompile>
-    <ClCompile Include="MapReader.cpp" />
     <ClCompile Include="Barrack.cpp">
       <Filter>Game\Object\Build\Terran\Barrack</Filter>
     </ClCompile>
     <ClCompile Include="CommandCenter.cpp">
       <Filter>Game\Object\Build\Terran\CommandCenter</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectGrid.cpp" />
-    <ClCompile Include="GridManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="VideoManager.cpp" />
     <ClCompile Include="Mineral.cpp" />
+    <ClCompile Include="GridManager.cpp">
+      <Filter>Game\Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader.cpp">
+      <Filter>Game\Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectGrid.cpp">
+      <Filter>Game\Grid</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -199,7 +205,6 @@
     <ClInclude Include="Player.h">
       <Filter>Game\Player</Filter>
     </ClInclude>
-    <ClInclude Include="MapReader.h" />
     <ClInclude Include="Storm\Storm.h" />
     <ClInclude Include="Barrack.h">
       <Filter>Game\Object\Build\Terran\Barrack</Filter>
@@ -207,11 +212,18 @@
     <ClInclude Include="CommandCenter.h">
       <Filter>Game\Object\Build\Terran\CommandCenter</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectGrid.h" />
-    <ClInclude Include="GridManager.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="VideoManager.h" />
     <ClInclude Include="Mineral.h" />
+    <ClInclude Include="GridManager.h">
+      <Filter>Game\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="MapReader.h">
+      <Filter>Game\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectGrid.h">
+      <Filter>Game\Grid</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -315,6 +327,9 @@
     </Filter>
     <Filter Include="Game\Scene\TitleScene">
       <UniqueIdentifier>{5de72095-5d5f-4429-a7b8-52002d0ecda5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Grid">
+      <UniqueIdentifier>{aac8c3fe-a795-485d-958e-e89474b4855c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

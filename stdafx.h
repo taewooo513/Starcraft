@@ -42,10 +42,6 @@
 #include <Vfw.h>
 #pragma comment (lib, "Vfw32.lib")
 
-#include <opencv2/opencv.hpp>
-#pragma comment (lib,"opencv_world460.lib")
-
-
 #pragma region D2d1FactoryHeader
 #pragma comment (lib, "msimg32.lib") 
 

@@ -66,10 +66,81 @@ void ImageManager::Init(ID2D1DeviceContext* context, IDXGISwapChain1* swapChain)
 	blendEffect->SetValue(D2D1_CHROMAKEY_PROP_FEATHER, false);
 	blendEffect->SetValue(D2D1_BLEND_PROP_MODE, D2D1_BLEND_MODE_EXCLUSION);
 
+
+	DWriteCreateFactory(
+		DWRITE_FACTORY_TYPE_SHARED,
+		__uuidof(m_pDWriteFactory),
+		reinterpret_cast<IUnknown**>(&m_pDWriteFactory)
+	);
+
+	IDWriteFontFile* fontFileReference;
+
+	m_pDWriteFactory->CreateFontFileReference(L"./Resources/StarCraft.ttf", nullptr, &fontFileReference);
+
+	IDWriteFontSetBuilder1* fontSetBuilder;
+	m_pDWriteFactory->CreateFontSetBuilder(reinterpret_cast<IDWriteFontSetBuilder**>(&fontSetBuilder));
+
+	fontSetBuilder->AddFontFile(fontFileReference);
+
+	IDWriteFontSet* customFontSet;
+
+	fontSetBuilder->CreateFontSet(&customFontSet);
+	IDWriteFontCollection1* col;
+	m_pDWriteFactory->CreateFontCollectionFromFontSet(
+		customFontSet
+		, &col
+	);
+	int c = col->GetFontFamilyCount();
+
+
+	m_pDWriteFactory->CreateTextFormat(
+		L"Txt",                  // 폰트 패밀리 이름의 문자열
+		NULL,                        // 폰트 컬렉션 객체, NULL=시스템 폰트 컬렉션
+		DWRITE_FONT_WEIGHT_NORMAL,   // 폰트 굵기. LIGHT, NORMAL, BOLD 등.
+		DWRITE_FONT_STYLE_NORMAL,    // 폰트 스타일. NORMAL, OBLIQUE, ITALIC.
+		DWRITE_FONT_STRETCH_NORMAL,  // 폰트 간격. CONDENSED, NORMAL, MEDIUM, EXTEXDED 등.
+		1,                          // 폰트 크기.
+		L"Txt",                         // 로케일을 문자열로 명시.  영어-미국=L"en-us", 한국어-한국=L"ko-kr"
+		&m_pTextFormat
+	);
+
+	D2D1_COLOR_F color;
+	color.a = 1;
+	color.r = 1;
+	color.g = 1;
+	color.b = 1;
+
+	IDWriteFontFamily* fontFamily;
+	IDWriteLocalizedStrings* localizedFontName;
+	//IDWriteFontFamilyName* localizedFontName;
+
+	WCHAR* c_styleFontName = new WCHAR[70];
+	col->GetFontFamily(0, &fontFamily);
+	cout << col->GetFontFamilyCount();
+	fontFamily->GetFamilyNames(&localizedFontName);
+	localizedFontName->GetString(1, c_styleFontName, 65);
+
+	m_pDWriteFactory->Release();
+
+	RECT rect;
+	GetClientRect(_hWnd, &rect);
+
 	ImageLoad();
 	LoadMap();
 	elipse = new D2D1_ELLIPSE;
+	UINT32  length;
 
+	localizedFontName->GetStringLength(0, &length);
+	wchar_t* name = new (std::nothrow) wchar_t[length + 1];
+	if (name == NULL)
+	{
+	}
+
+	// Get the family name.
+
+	localizedFontName->GetString(0, name, length + 1);
+	cout << name;
+	context->CreateSolidColorBrush({}, &brush);
 }
 
 void ImageManager::CameraSetting()
@@ -87,6 +158,17 @@ void ImageManager::Render(CImage* img, Vector2 vec, float scale, float rot)
 
 	m_d2dContext->SetTransform(matW);
 	m_d2dContext->DrawBitmap(img->GetBitMap());
+}
+
+void ImageManager::DirectDrawText(wstring str, Vector2 pos, Vector2 Size, D2D1_COLOR_F color)
+{
+	D2D1::Matrix3x2F mat, matS;
+	mat = D2D1::Matrix3x2F::Translation(pos.x, pos.y);
+	matS = D2D1::Matrix3x2F::Scale(Size.x, Size.y);
+
+	m_d2dContext->SetTransform(matS * mat);
+	brush->SetColor(color);
+	m_d2dContext->DrawTextA(str.c_str(), str.size(), m_pTextFormat, D2D1::RectF(0, 0, WINSIZE_X, WINSIZE_Y), brush);
 }
 
 void ImageManager::RenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot)
@@ -151,7 +233,7 @@ void ImageManager::UIMapRender()
 	mapReader->UIMapRender();
 }
 
-void ImageManager::DrawCircle(Vector2 vec, float scaleX, float scaleY)
+void ImageManager::DrawCircle(Vector2 vec, float scaleX, float scaleY, D2D1_COLOR_F color)
 {
 	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
 
@@ -170,7 +252,7 @@ void ImageManager::DrawCircle(Vector2 vec, float scaleX, float scaleY)
 	m_d2dContext->DrawEllipse(elipse, brush.Get(), 0.1f);
 }
 
-void ImageManager::DrawRect(Vector2 startPos, Vector2 endPos)
+void ImageManager::DrawRect(Vector2 startPos, Vector2 endPos, D2D1_COLOR_F color)
 {
 	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
 
@@ -178,10 +260,8 @@ void ImageManager::DrawRect(Vector2 startPos, Vector2 endPos)
 	matW = matP;
 
 	m_d2dContext->SetTransform(matW);
-
-	ComPtr<ID2D1SolidColorBrush> brush;
 	m_d2dContext->CreateSolidColorBrush({ 0,255,0,255 }, &brush);
-	m_d2dContext->DrawRectangle({ startPos.x,startPos.y ,endPos.x ,endPos.y }, brush.Get(), 1.5);
+	m_d2dContext->DrawRectangle({ startPos.x,startPos.y ,endPos.x ,endPos.y }, brush, 1.5);
 }
 
 void ImageManager::DrawRectRed(Vector2 startPos, Vector2 endPos)
@@ -330,11 +410,14 @@ void ImageManager::ImageLoad()
 
 	AddImage("playerUI", L"./Resources/UI/playerUI.png");
 
-	AddImage("tcmdbtns0018", L"./Resources/UI2/tcmdbtns0018.bmp"); //SCV
+	AddImage("tcmdbtns0018", L"./Resources/UI2/tcmdbtns0018.bmp");
 
+
+	// 미네랄
 
 	// SCV
-	AddImage("grpwire0007", L"./Resources/Icon2/grpwire0007.bmp"); //SCV
+	AddImage("wirefram0106", L"./Resources/Icon2/wirefram0106.bmp"); //SCVcmdicons0007
+	AddImage("cmdicons0007", L"./Resources/Icon/cmdicons0007.bmp"); //SCVcmdicons0007
 
 	AddImage("scv_idle_1", L"./Resources/scv/scv0000.bmp");
 	AddImage("scv_idle_2", L"./Resources/scv/scv0002.bmp");
@@ -391,6 +474,7 @@ void ImageManager::ImageLoad()
 	AddImage("tbldlrg0000", L"./Resources/Bulid/Buliding/tbldlrg0000.bmp"); // move
 	AddImage("tbldlrg0001", L"./Resources/Bulid/Buliding/tbldlrg0001.bmp"); // move
 	AddImage("tbldlrg0002", L"./Resources/Bulid/Buliding/tbldlrg0002.bmp"); // move
+	AddImage("grpwire0106", L"./Resources/Icon3/grpwire0106.bmp");
 
 	//베럭 이미지 
 	AddImage("cmdicons0111", L"./Resources/Icon/cmdicons0111.bmp"); // 아이콘
@@ -405,6 +489,9 @@ void ImageManager::ImageLoad()
 	AddImage("tcmdbtns0000", L"./Resources/UI2/tcmdbtns0000.bmp");
 
 	AddImage("targg0001", L"./Resources/cursor/targg0001.bmp"); // 클릭시 위치나오는거
+
+	AddImage("wirefram0106", L"./Resources/Icon2/wirefram0106.bmp"); //SCVcmdicons0007
+	AddImage("grpwire0007", L"./Resources/Icon3/grpwire0007.bmp"); // SCV 부대지정 아이콘
 
 	AddImage("cmdicons0106", L"./Resources/Icon/cmdicons0106.bmp"); // 커멘드센터
 	AddImage("cmdicons0109", L"./Resources/Icon/cmdicons0109.bmp"); // 서플라이 디포트
@@ -444,5 +531,11 @@ void ImageManager::ImageLoad()
 	// 마우스 커서
 	AddImageVector("arrow0000", L"./Resources/cursor/arrow00", 0, 4); // 일반
 	AddImage("drag0000", L"./Resources/cursor/drag0000.bmp"); // 드래그
+
+	// 미네랄
+	AddImage("min010000", L"./Resources/min/min010000.bmp"); // 미네랄 큰거
+	AddImage("min010001", L"./Resources/min/min010001.bmp"); // 미네랄 중간
+	AddImage("min010002", L"./Resources/min/min010002.bmp"); // 미네랄 덜중간
+	AddImage("min010003", L"./Resources/min/min010003.bmp"); // 미네랄 작음
 
 }

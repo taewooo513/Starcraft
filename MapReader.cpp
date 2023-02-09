@@ -124,18 +124,6 @@ void MapReader::Init(ID2D1DeviceContext* context)
 	}
 	MapRegionSetting();
 
-	for (int i = 0; i < 4096; i++)
-	{
-		for (int j = 0; j < 4096; j++)
-		{
-			//int ids = miniTiles[j/8][i/8]
-			int ids = region->regionsIds[i / 8][j / 8].regionsIds;
-
-			colr[i * 4096 + j] = { (unsigned char)(ids * 20) ,(unsigned char)(ids * 20),0,255 };
-
-		}
-	}
-
 	D2D1_RECT_U rect = { 0 , 0 ,w , h };
 	tileSetData->bitmap->CopyFromMemory(&rect, colr, 4 * w);
 	SAFE_DELETE(colr);

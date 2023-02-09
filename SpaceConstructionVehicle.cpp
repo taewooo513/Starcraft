@@ -228,8 +228,8 @@ void SpaceConstructionVehicle::Update()
 				randomMoveTime = 0.5;
 			}
 			randomMoveTime -= DELTA_TIME;
-			position.x += cos(randomMoveRot) * m_speed;
-			position.y += sin(randomMoveRot) * m_speed;
+			position.x += cos(randomMoveRot) * m_speed * DELTA_TIME;
+			position.y += sin(randomMoveRot) * m_speed * DELTA_TIME;
 
 		}
 	}
@@ -287,25 +287,25 @@ void SpaceConstructionVehicle::UIRender()
 		{
 			if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
 			{
-				page = 0;
+				page = 2;
 			}
 			if (KEYMANAGER->GetOnceKeyDown('B'))
 			{
 				buildIndex = eBarrack;
 				//m_nowBuild = new Barrack;
 				//OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x, position.y, 0);
-				page = 0;
+				page = 2;
 			}
 			if (KEYMANAGER->GetOnceKeyDown('C'))
 			{
 				buildIndex = eCommandCenter;
 				//m_nowBuild = new CommandCenter;
 				//OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x, position.y, 0);
-				page = 0;
+				page = 2;
 			}
 
 		}
-		else
+		else if (page == 2)
 		{
 			if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
 			{
@@ -318,24 +318,28 @@ void SpaceConstructionVehicle::UIRender()
 	 (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().y
 
 	*/
-	switch (buildIndex)
+	if (page == 2)
 	{
-	case eCommandCenter:
-		IMAGEMANAGER->DrawRect({
-			(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
-			(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
-			(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f ,
-			(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight() });
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
-		break;
-	case eBarrack:
-		IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)),(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) },
+
+		switch (buildIndex)
+		{
+		case eCommandCenter:
+			IMAGEMANAGER->DrawRect({
+				(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
+				(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
+				(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f ,
+				(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight() });
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			break;
+		case eBarrack:
+			IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)),(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) },
 			{
 				(float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetWidth() ,
 				(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetHeight()
 			});
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50,(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
-		break;
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50,(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
+			break;
+		}
 	}
 	if (m_nowBuild == nullptr)
 	{
@@ -366,7 +370,7 @@ void SpaceConstructionVehicle::UIRender()
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[7].x + 25,UIPosition[7].y + 25 }, 1.7, 0, 0);
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0235"), { UIPosition[7].x + 3,UIPosition[7].y + 5 }, 1.7, 0, 0);
 		}
-		else
+		else if (page == 1)
 		{
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[0].x + 25,UIPosition[0].y + 25 }, 1.7, 0, 0);
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0106"), { UIPosition[0].x - 4 ,UIPosition[0].y - 7 }, 1.7, 0, 0);
@@ -391,6 +395,11 @@ void SpaceConstructionVehicle::UIRender()
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[7].x + 25,UIPosition[7].y + 25 }, 1.7, 0, 0);
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0125"), { UIPosition[7].x - 2 ,UIPosition[7].y }, 1.7, 0, 0);
+		}
+		else if (page == 2)
+		{
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), UIPosition[8], 1.7, 0, 0);
 		}
 	}
 	else
