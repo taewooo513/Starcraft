@@ -57,6 +57,7 @@ void ObjectGrid::Astar()
 
 	priority_queue <pair<Vector2, pair<float, float>>, vector<pair<Vector2, pair<float, float>>>, comp> regionQueue;
 	regionQueue.push(make_pair(tileStartPos, make_pair(0, 0)));
+	distmap.insert(make_pair(make_pair(tileStartPos.x, tileStartPos.y), Vector2{ 0.f,0.f }));
 
 	while (regionQueue.empty() == false)
 	{
@@ -70,7 +71,7 @@ void ObjectGrid::Astar()
 				if (find != distmap.end())
 				{
 					moveStack2.push({ find->first.first,find->first.second });
-					if (find->first.first == tileStartPos.x && find->first.second == tileStartPos.y)
+					if ((int)find->first.first == (int)tileStartPos.x && (int)find->first.second == (int)tileStartPos.y)
 					{
 						break;
 					}
@@ -82,42 +83,46 @@ void ObjectGrid::Astar()
 					break;
 				}
 			}
+			break;
 		}
-
-		for (int y = 0; y < 3; y++)
+		for (int y = -1; y < 3; y++)
 		{
-			for (int x = 0; x < 3; x++)
+			for (int x = -1; x < 3; x++)
 			{
-				int searchX = (int)iter.first.x + x - 2;
-				int searchY = (int)iter.first.y + y - 2;
+				int searchX = (int)iter.first.x + x;
+				int searchY = (int)iter.first.y + y;
 				if (y == 1 && x == 1)
 				{
-					continue;
 				}
-				if (searchX < 0 || searchX > 512 || searchY < 0 || searchY >512)
+				else
 				{
-					continue;
-				}
-
-				auto find2 = distmap.find(make_pair(searchX, searchY));
-				if (find2 == distmap.end())
-				{
-					if (GRIDMANAGER->regionsTile[(int)searchX][(int)searchY].isBuildTag == 0)
+					if (searchX < 0 || searchX > 511 || searchY < 0 || searchY >512)
 					{
-						int cost = 10 + iter.second.first;
-						if ((x + y) % 2 == 0)
+
+					}
+					else
+					{
+						auto find2 = distmap.find(make_pair(searchX, searchY));
+						if (find2 == distmap.end())
 						{
-							cost += 4;
+							if (GRIDMANAGER->regionsTile[(int)searchX][(int)searchY].isBuildTag == 0)
+							{
+								int cost = 10 + iter.second.first;
+								if ((x + y) % 2 == 0)
+								{
+									cost += 4;
+								}
+
+								float dx = abs((int)searchX - (int)tileEndPos.x);
+								float dy = abs((int)searchY - (int)tileEndPos.y);
+								float e1 = abs(dx - dy);
+								float e2 = min(dx, dy);
+								float d = e1 * 10 + e2 * 14;
+
+								regionQueue.push(make_pair(Vector2{ (float)searchX, (float)searchY }, make_pair(cost, d)));
+								distmap.insert(make_pair(make_pair((int)searchX, (int)searchY), iter.first));
+							}
 						}
-
-						float dx = abs((int)searchX - (int)tileEndPos.x);
-						float dy = abs((int)searchY - (int)tileEndPos.y);
-						float e1 = abs(dx - dy);
-						float e2 = min(dx, dy);
-						float d = e1 * 10 + e2 * 14;
-
-						regionQueue.push(make_pair(Vector2{ (float)searchX, (float)searchY }, make_pair(cost, d)));
-						distmap.insert(make_pair(make_pair((int)searchX, (int)searchY), iter.first));
 					}
 				}
 			}
