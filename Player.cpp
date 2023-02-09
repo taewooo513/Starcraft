@@ -102,10 +102,7 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 			break;
 		}
 	}
-	if (unit->moveNodeStack.empty() == false)
-	{
-		unit->moveNodeStack.pop();
-	}
+	
 	cout << c << endl;
 }
 
@@ -116,7 +113,7 @@ void Player::Init()
 	m_isCameraClick = true;
 	m_cursorImage = IMAGEMANAGER->AddImageVectorCopy("arrow0000");
 	m_cursorImage->Setting(0.15, true);
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		Unit* scv = new SpaceConstructionVehicle;
 		scv->SetPlayer(this);

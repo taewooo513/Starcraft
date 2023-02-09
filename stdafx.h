@@ -161,6 +161,12 @@ struct Vector2
 	{
 		return { x * lvec,y * lvec };
 	}
+
+	Vector2 operator * (Vector2 lvec)
+	{
+		return { x * lvec.x,y * lvec.y };
+	}
+
 	bool operator == (Vector2 lvec)
 	{
 		return { x == lvec.x && y == lvec.y };
@@ -183,7 +189,6 @@ struct MoveNode
 #include "Utility.h"
 #include "EffectManager.h"
 #include "CSoundMgr.h"
-#include "VideoManager.h"
 using namespace Microsoft::WRL;
 //inline static float GetDeltaTime()
 //{

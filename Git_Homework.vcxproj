@@ -182,7 +182,6 @@
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Utility.cpp" />
-    <ClCompile Include="VideoManager.cpp" />
     <ClCompile Include="WalkUnit.cpp" />
     <ClCompile Include="WinMain.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -224,7 +223,6 @@
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Utility.h" />
-    <ClInclude Include="VideoManager.h" />
     <ClInclude Include="WalkUnit.h" />
   </ItemGroup>
   <ItemGroup>

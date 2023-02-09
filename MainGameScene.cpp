@@ -17,6 +17,7 @@ void MainGameScene::Init()
 	GRIDMANAGER->Init();
 	player1->Init();
 
+	OBJECTMANAGER->AddObject(new Mineral, "mimeral", 500, 50, 0);
 }
 
 void MainGameScene::Update()

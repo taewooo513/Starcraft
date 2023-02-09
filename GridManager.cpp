@@ -13,7 +13,6 @@ ObjectGrid* GridManager::AddGrid(Object* _obj, float sizeX, float sizeY, float s
 	ObjectGrid* grid = new ObjectGrid;
 	grid->Init(_obj, { sizeX, sizeY }, { searchX, searchY }, x, y);
 
-
 	objectGrid.push_back(grid);
 	return grid;
 }
@@ -42,20 +41,32 @@ void GridManager::Init()
 			}
 			if (regionsTile[j][i].regionsIds != -1)
 			{
-				regionsTile[j][i].isBuildAble = true;
+				regionsTile[j][i].isBuildTag = 0;
 				regionsTile[j][i].x = j;
 				regionsTile[j][i].y = i;
 			}
+			else
+			{
+				regionsTile[j][i].isBuildTag = 1;
+			}
 		}
 	}
-	cout << "d";
 }
 
 void GridManager::Update()
 {
-	for (auto iter : objectGrid)
+	for (auto iter = objectGrid.begin(); iter != objectGrid.end();)
 	{
-		iter->Update();
+		if ((*iter)->isDestory == true)
+		{
+			SAFE_DELETE(*iter);
+			iter = objectGrid.erase(iter);
+		}
+		else
+		{
+			(*iter)->Update();
+			iter++;
+		}
 	}
 }
 
@@ -69,7 +80,7 @@ void GridManager::Render()
 	//		{
 	//			if (float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y <= WINSIZE_Y && float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y >= 0)
 	//			{
-	//				if (regionsTile[j][i].isBuildAble != false)
+	//				if (regionsTile[j][i].isBuildTag == 0)
 	//				{
 	//					//IMAGEMANAGER->DrawRect({ float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, { float(j) * 8.f * 1.5f + float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f + float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y });
 	//				}
@@ -88,11 +99,16 @@ void GridManager::Render()
 	//	{
 	//		for (auto __iter : _iter.second)
 	//		{
-	//			IMAGEMANAGER->DrawRectRed({ float(__iter.x) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(__iter.y) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, { float(__iter.x)* 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition//().x,float(__iter.y) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y });
+	//			IMAGEMANAGER->DrawRectRed(
+	//				{ float(__iter.x) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
+	//				float(__iter.y) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, 
+	//				{ float(__iter.x)* 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
+	//				float(__iter.y) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y
+	//				});
 	//		}
 	//	}
 	//}
-	//
+
 	//for (auto iter : objectGrid)
 	//{
 	//	iter->Render();

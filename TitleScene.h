@@ -3,6 +3,7 @@
 class TitleScene  : public Scene
 {
 public:
+	vImage* vimage[4];
 	TitleScene();
 	~TitleScene();
 

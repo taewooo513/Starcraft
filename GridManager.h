@@ -12,7 +12,7 @@ public:
 	{
 		int regionsIds;
 		float x, y;
-		bool isBuildAble;
+		int isBuildTag;
 		vector<int> nearRegionIds;
 	};
 

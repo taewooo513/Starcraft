@@ -13,7 +13,7 @@ private:
 	CImage* m_actionImage_2[9];
 	CImage* m_buttom;
 	Vector2 d;
-
+	float m_ImageDirection = 0;
 	Effect* m_spark;
 	enum eBuildClass
 	{
@@ -38,6 +38,12 @@ public:
 	virtual void UIRender() override;
 	virtual void Attack() override;
 
+	void ImageDirection();
+	void BuildObject();
+	void CollisionUpdate();
 	void BuildingConstruction();
+	void BuildCommandUI();
+	void BuildActive();
+	void Command();
 };
 

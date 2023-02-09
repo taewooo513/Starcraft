@@ -11,16 +11,16 @@ Mineral::~Mineral()
 
 void Mineral::MineMineral()
 {
-	resourceImage[0] = IMAGEMANAGER->FindImage("min010000");
-	resourceImage[1] = IMAGEMANAGER->FindImage("min010001");
-	resourceImage[2] = IMAGEMANAGER->FindImage("min010002");
-	resourceImage[3] = IMAGEMANAGER->FindImage("min010003");
-
 	nowCount -= 8;
 }
 
 void Mineral::Init()
 {
+	resourceImage[0] = IMAGEMANAGER->FindImage("min010000");
+	resourceImage[1] = IMAGEMANAGER->FindImage("min010001");
+	resourceImage[2] = IMAGEMANAGER->FindImage("min010002");
+	resourceImage[3] = IMAGEMANAGER->FindImage("min010003");
+
 	nowCount = maxCount;
 }
 
@@ -30,8 +30,6 @@ void Mineral::Update()
 
 void Mineral::Render()
 {
-
-
 	if (KEYMANAGER->GetOnceKeyDown(VK_F1))
 	{
 		nowCount -= 500;

@@ -12,8 +12,8 @@ SpaceConstructionVehicle::~SpaceConstructionVehicle()
 
 void SpaceConstructionVehicle::Init()
 {
-	grid = GRIDMANAGER->AddGrid(this, 0, 0, 20, 20, -1, -2);
-
+	grid = GRIDMANAGER->AddGrid(this, 1, 1, 20, 20, -1, -2);
+	grid->gridTag = rand() % 100 + 100;
 	m_isClick = false;
 	m_spark = nullptr;
 	m_nowBuild = nullptr;
@@ -55,199 +55,113 @@ void SpaceConstructionVehicle::Init()
 
 void SpaceConstructionVehicle::Move()
 {
-}
+	Vector2 nowRegionPos;
+	nowRegionPos = position / 1.5 / 8;
+	int regionId = GRIDMANAGER->regionsTile[(int)nowRegionPos.x][(int)nowRegionPos.y].regionsIds;
 
-void SpaceConstructionVehicle::Update()
-{
-	if (m_dest.x != 0 && m_dest.y != 0)
+	if (regionId != -1)
 	{
-		if (timer > 0.001f)
+		if (moveNodeStack.empty() == false)
 		{
-			grid->Astar();
-			timer = 0;
-		}
-	}
-	if (m_dest.x == position.x && m_dest.y == position.y)
-	{
-		m_dest.x = 0;
-		position.x = 0;
-	}
-	timer += DELTA_TIME;
-	if (grid->moveStack2.empty() == false)
-	{
-		d = Vector2{ (float)(grid->moveStack2.top().x * 8 * 1.5),(float)(grid->moveStack2.top().y * 8 * 1.5) };
-	}
-	else
-	{
-		if (m_dest.x != 0 && m_dest.y != 0)
-		{
+			if (moveNodeStack.top()->regionId == regionId)
+			{
+				moveNodeStack.pop();
+			}
 			if (moveNodeStack.empty() == false)
 			{
-				if (grid->nowTileRegionId == GRIDMANAGER->regionsTile[(int)this->moveNodeStack.top()->pos.x][(int)this->moveNodeStack.top()->pos.y].regionsIds)
-				{
-					this->moveNodeStack.pop();
-				}
+				grid->Astar();
 			}
-		}
-	}
-	if (d.x != 0 && d.y != 0)
-	{
-		rot = atan2(d.x - position.x, d.y - position.y);
-		if (m_speed < 300)
-		{
-			m_speed += 5;
-		}
-		float moveDestX = sin(rot) * DELTA_TIME * m_speed;
-
-		float moveDestY = cos(rot) * DELTA_TIME * m_speed;
-		float length = sqrt((d.x - position.x) * (d.x - position.x) + (d.y - position.y) * (d.y - position.y));
-
-		if (length < DELTA_TIME * m_speed)
-		{
-			position.x = d.x;
-			position.y = d.y;
-
-			if (grid->moveStack2.empty() == false)
+			else
 			{
-				grid->moveStack2.pop();
+				grid->Astar(); //여기선 다음 레기온과의 최단거리 
 			}
-			d = { 0,0 };
 		}
 		else
 		{
-			position.x += moveDestX;
-			position.y += moveDestY;
+			grid->Astar(); //여기선 다음 레기온과의 최단거리 
 		}
 	}
 
-	//else
-	//{
-	//	m_speed = 0;
-		/*if (m_dest.x != 0 && m_dest.y != 0)
+	if (grid->moveStack2.empty() == false)
+	{
+		d = Vector2{ (float)(grid->moveStack2.top().x * 8 * 1.5),(float)(grid->moveStack2.top().y * 8 * 1.5) };
+		rot = atan2(d.x - position.x, d.y - position.y);
+		if (d.x != 0 && d.y != 0)
 		{
-			rot = atan2(m_dest.x - position.x, m_dest.y - position.y);
 			if (m_speed < 300)
 			{
 				m_speed += 5;
 			}
 			float moveDestX = sin(rot) * DELTA_TIME * m_speed;
-
 			float moveDestY = cos(rot) * DELTA_TIME * m_speed;
-			float length = sqrt((m_dest.x - position.x) * (m_dest.x - position.x) + (m_dest.y - position.y) * (m_dest.y - position.y));
-			if (length > DELTA_TIME * m_speed)
+			float length = sqrt((d.x - position.x) * (d.x - position.x) + (d.y - position.y) * (d.y - position.y));
+
+			if (length < DELTA_TIME * m_speed)
 			{
-				position.x += moveDestX;
-				position.y += moveDestY;
+				position.x = d.x;
+				position.y = d.y;
+
+				if (grid->moveStack2.empty() == false)
+				{
+					grid->moveStack2.pop();
+				}
+				d = { 0,0 };
 			}
 			else
 			{
-				m_speed = 0;
+				position.x += moveDestX;
+				position.y += moveDestY;
+
 			}
-		}*/
-		//}
-	if (m_nowBuild != nullptr)
-	{
-		if (m_nowBuild->GetIsObjectDestroyed() == true)
-		{
-			m_nowBuild = nullptr;
 		}
 		else
 		{
-			m_nowBuild->AddBuild();
-			if (m_spark == nullptr)
-			{
-				m_spark = EFFECTMANAGER->AddEffect("SCVEffect", { position.x - 35 ,position.y - 40 }, 1.7, 0.1);
-			}
-			else if (m_spark->m_isEnd == true)
-			{
-				m_spark->m_isDestroy = true;
-				m_spark = nullptr;
-			}
-			if (m_nowBuild->isComplete == true)
-			{
-				m_nowBuild = nullptr;
-			}
+			m_speed = 0;
 		}
+	}
+}
+
+void SpaceConstructionVehicle::Update()
+{
+	if (m_isClick == false)
+	{
+		if (m_isBuild == false)
+		{
+			buildIndex = 0;
+		}
+		page = 0;
+	}
+
+	if (m_dest.x != 0 && m_dest.y != 0)
+	{
+		if (m_speed < 300)
+		{
+			m_speed += 300 * DELTA_TIME;
+		}
+		Move();
 	}
 	else
 	{
-		if (m_spark != nullptr)
-		{
-			m_spark->m_isDestroy = true;
-			m_spark = nullptr;
-		}
-	}
-	clickRect = { int(position.x - 20) , int(position.y - 20) , int(position.x + 20) , int(position.y + 20) };
-	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x;
-	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x;
-	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y;
-	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y;
-
-	if (m_isBuild == true)
-	{
-		page = 0;
-
-		if (moveNodeStack.empty() == true && grid->moveStack2.empty())
-		{
-			switch (buildIndex)
-			{
-			case eCommandCenter:
-				m_nowBuild = new CommandCenter;
-				m_nowBuild->SetPlayer(player);
-				m_isBuild = false;
-				buildIndex = 0;
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
-				break;
-			case eBarrack:
-				m_nowBuild = new Barrack;
-				m_isBuild = false;
-				m_nowBuild->SetPlayer(player);
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
-				buildIndex = 0;
-				break;
-			}
-		}
+		m_speed = 0;
 	}
 
-	if (m_nowBuild == nullptr)
-	{
-		if (GRIDMANAGER->regionsTile[(int)(position.x / 1.5 / 8)][(int)(position.y / 1.5 / 8)].isBuildAble == false)
-		{
-
-			if (m_speed < 300)
-			{
-				m_speed += 5;
-			}
-
-
-			if (randomMoveTime <= 0)
-			{
-				randomMoveRot = float(rand() % 628) / 100;
-
-				m_speed = 0;
-				randomMoveTime = 0.5;
-			}
-			randomMoveTime -= DELTA_TIME;
-			position.x += cos(randomMoveRot) * m_speed * DELTA_TIME;
-			position.y += sin(randomMoveRot) * m_speed * DELTA_TIME;
-
-		}
-	}
+	CollisionUpdate();
 }
 
 void SpaceConstructionVehicle::Render()
 {
 	bool isR = false;
+	ImageDirection();
+
 	if (m_isClick == true)
 	{
 		IMAGEMANAGER->DrawCircle(position, 12, 9);
 	}
 
-	if (rot <= -3.141592 / 9.f * 0.5f && -3.141592 + 3.141592 / 9.f * 0.5f)
+	if (rot <= 0)
 	{
 		isR = true;
 	}
-
 
 	if (m_nowBuild == nullptr)
 	{
@@ -257,70 +171,62 @@ void SpaceConstructionVehicle::Render()
 	{
 		IMAGEMANAGER->CenterRenderBlendBlack(m_actionImage_1[(int)m_dir], position, 1.5f, 0, isR);
 	}
+
 	m_isClick = false;
+
 }
 
 void SpaceConstructionVehicle::UIRender()
 {
-	/*
-		AddImage("cmdicons0106", L"./Resources/Icon/cmdicons0106.bmp"); // 커멘드센터
-		AddImage("cmdicons0109", L"./Resources/Icon/cmdicons0109.bmp"); // 서플라이 디포트
-		AddImage("cmdicons0110", L"./Resources/Icon/cmdicons0110.bmp"); // 가스
-		AddImage("cmdicons0112", L"./Resources/Icon/cmdicons0112.bmp"); // 아카데미
-		AddImage("cmdicons0113", L"./Resources/Icon/cmdicons0113.bmp"); // 펙토리
-		AddImage("cmdicons0114", L"./Resources/Icon/cmdicons0114.bmp"); // 스타포트
-		AddImage("cmdicons0111", L"./Resources/Icon/cmdicons0111.bmp"); // 아이콘
-			AddImage("cmdicons0122", L"./Resources/Icon/cmdicons0122.bmp"); // 엔지니어링
-	AddImage("cmdicons0124", L"./Resources/Icon/cmdicons0124.bmp"); // 터렛
-	*/
+	Command();
 	m_isClick = true;
-	if (m_nowBuild != nullptr)
+
+	if (page == 1)
 	{
 		if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
 		{
-			m_nowBuild = nullptr;
+			page = 0;
+		}
+		if (KEYMANAGER->GetOnceKeyDown('B'))
+		{
+			buildIndex = eBarrack;
+			page = 2;
+		}
+		if (KEYMANAGER->GetOnceKeyDown('C'))
+		{
+			buildIndex = eCommandCenter;
+			page = 2;
 		}
 	}
-	if (page == 1)
+	else if (page == 3)
 	{
-		if (buildIndex == 0)
+		if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
 		{
-			if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
+			buildIndex = 0;
+			if (m_nowBuild != nullptr)
 			{
-				page = 2;
+				page = 0;
+				m_nowBuild = nullptr;
 			}
-			if (KEYMANAGER->GetOnceKeyDown('B'))
+			else
 			{
-				buildIndex = eBarrack;
-				//m_nowBuild = new Barrack;
-				//OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x, position.y, 0);
-				page = 2;
-			}
-			if (KEYMANAGER->GetOnceKeyDown('C'))
-			{
-				buildIndex = eCommandCenter;
-				//m_nowBuild = new CommandCenter;
-				//OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", position.x, position.y, 0);
-				page = 2;
-			}
-
-		}
-		else if (page == 2)
-		{
-			if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
-			{
-				buildIndex = 0;
+				page = 1;
 			}
 		}
 	}
-	//m_selectUnit->SetDestPosition({});
-	/*
-	 (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().y
 
-	*/
+	BuildingConstruction();
+	BuildCommandUI();
+}
+
+void SpaceConstructionVehicle::Attack()
+{
+}
+
+void SpaceConstructionVehicle::BuildingConstruction()
+{
 	if (page == 2)
 	{
-
 		switch (buildIndex)
 		{
 		case eCommandCenter:
@@ -341,14 +247,127 @@ void SpaceConstructionVehicle::UIRender()
 			break;
 		}
 	}
+}
+
+void SpaceConstructionVehicle::CollisionUpdate()
+{
+	clickRect = { int(position.x - 20) , int(position.y - 20) , int(position.x + 20) , int(position.y + 20) };
+	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x;
+	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x;
+	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y;
+	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y;
+}
+
+void SpaceConstructionVehicle::BuildObject()
+{
+	if (m_isBuild == true)
+	{
+		page = 0;
+		if (moveNodeStack.empty() == true && grid->moveStack2.empty())
+		{
+			switch (buildIndex)
+			{
+			case eCommandCenter:
+				m_nowBuild = new CommandCenter;
+				m_nowBuild->SetPlayer(player);
+				m_isBuild = false;
+				buildIndex = 0;
+				OBJECTMANAGER->AddObject(m_nowBuild, "CommandCenter", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
+				break;
+			case eBarrack:
+				m_nowBuild = new Barrack;
+				m_isBuild = false;
+				m_nowBuild->SetPlayer(player);
+				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
+				buildIndex = 0;
+				break;
+			}
+		}
+	}
+}
+
+void SpaceConstructionVehicle::ImageDirection()
+{
+}
+
+void SpaceConstructionVehicle::Command()
+{
 	if (m_nowBuild == nullptr)
 	{
 		if (page == 0)
 		{
-			if (KEYMANAGER->GetOnceKeyDown('B'))
+			if (KEYMANAGER->GetOnceKeyDown('B')) // 일반 건물
 			{
 				page = 1;
 			}
+			if (KEYMANAGER->GetOnceKeyDown('C'))// 특수 건물
+			{
+				//page = 2; 
+			}
+		}
+		else if (page == 1)
+		{
+			if (KEYMANAGER->GetOnceKeyDown('B')) // 베럭
+			{
+				buildIndex = eBarrack;
+				page = 3;
+			}
+			if (KEYMANAGER->GetOnceKeyDown('C')) //커멘드 센터
+			{
+				buildIndex = eCommandCenter;
+				page = 3;
+			}
+		}
+	}
+	else
+	{
+
+	}
+}
+
+void SpaceConstructionVehicle::BuildActive()
+{
+	Vector2 mousePos = { _ptMouse.x,_ptMouse.y };
+	mousePos = mousePos + IMAGEMANAGER->GetCameraPosition();
+	mousePos.x = (int)mousePos.x;
+	mousePos.y = (int)mousePos.y;
+
+	switch (buildIndex)
+	{
+	case eCommandCenter:
+		IMAGEMANAGER->DrawRect({
+			(float)((int)(mousePos.x) / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().x),
+			(float)((int)(mousePos.y) / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().y) }, {
+			(float)((int)(mousePos.x) / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().x) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f ,
+			(float)((int)(mousePos.y) / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().y) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight() });
+		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"),
+			{
+				(float)((int)mousePos.x / (int)(32.f * 1.5f) * (32.f * 1.5)),
+				(float)((int)mousePos.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50
+			}, 1.5, 0);
+		break;
+	case eBarrack:
+		IMAGEMANAGER->DrawRect({
+			(float)((int)mousePos.x / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().x),
+			(float)((int)mousePos.y / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().y) }, {
+			(float)((int)mousePos.x / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().x) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetWidth() ,
+			(float)((int)mousePos.y / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().y) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetHeight()
+			});
+		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"),
+			{
+				(float)((int)mousePos.x / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50,
+				(float)((int)mousePos.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50
+			}, 1.5, 0);
+		break;
+	}
+}
+
+void SpaceConstructionVehicle::BuildCommandUI()
+{
+	if (m_nowBuild == nullptr)
+	{
+		if (page == 0)
+		{
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0230"), { UIPosition[2].x - 1 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
 
@@ -396,24 +415,16 @@ void SpaceConstructionVehicle::UIRender()
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[7].x + 25,UIPosition[7].y + 25 }, 1.7, 0, 0);
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0125"), { UIPosition[7].x - 2 ,UIPosition[7].y }, 1.7, 0, 0);
 		}
-		else if (page == 2)
+		else if (page == 3)
 		{
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), UIPosition[8], 1.7, 0, 0);
+			BuildActive();
 		}
 	}
 	else
 	{
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), UIPosition[8], 1.7, 0, 0);
 	}
-
-}
-
-void SpaceConstructionVehicle::Attack()
-{
-}
-
-void SpaceConstructionVehicle::BuildingConstruction()
-{
-
 }

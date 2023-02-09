@@ -17,10 +17,6 @@ void Main::Init()
 	TIMERMANAGER->Init();
 	srand(GetTickCount64());
 	SCENEMANAGER->ChangeScene("MainGameScene");
-	VIDEOMANAGER->CreateVideo("test", "./Resources/video/single.wmv");
-
-	VIDEOMANAGER->Play("test");
-
 }
 
 void Main::Update()
@@ -138,10 +134,11 @@ void Main::CreateDeviceD3D()
 
 	pD2DFactory->CreateDevice(dxgiDevice.Get(), &g_device);
 
-	g_device->CreateDeviceContext(
+	 g_device->CreateDeviceContext(
 		D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
 		&m_d2dContext
 	);
+	cout  << endl;
 }
 
 void Main::CreateSwapChain()

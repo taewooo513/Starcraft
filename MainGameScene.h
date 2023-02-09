@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "Player.h"
+#include "Mineral.h"
 class MainGameScene : public Scene
 {
 private:

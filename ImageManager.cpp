@@ -349,7 +349,7 @@ CImage* ImageManager::FindImage(const std::string key)
 	return nullptr;
 }
 
-vImage* ImageManager::AddImageVector(const std::string key, std::wstring path, int startIndex, int endIndex)
+vImage* ImageManager::AddImageVector(const std::string key, std::wstring path, int startIndex, int endIndex, bool isPng)
 {
 	auto find = m_vImageList.find(key);
 
@@ -362,11 +362,25 @@ vImage* ImageManager::AddImageVector(const std::string key, std::wstring path, i
 			std::wstring _path;
 			if (i < 10)
 			{
-				_path = path + L"0" + std::to_wstring(i).c_str() + L".bmp";
+				if (isPng == true)
+				{
+					_path = path + L"0" + std::to_wstring(i).c_str() + L".png";
+				}
+				else
+				{
+					_path = path + L"0" + std::to_wstring(i).c_str() + L".bmp";
+				}
 			}
 			else
 			{
-				_path = path + std::to_wstring(i).c_str() + L".bmp";
+				if (isPng == true)
+				{
+					_path = path + std::to_wstring(i).c_str() + L".png";
+				}
+				else
+				{
+					_path = path + std::to_wstring(i).c_str() + L".bmp";
+				}
 			}
 
 			CImage* cImage = new CImage(AddBitmap(_path, &_width, &_height), _width, _height);
@@ -412,7 +426,7 @@ void ImageManager::ImageLoad()
 
 	AddImage("tcmdbtns0018", L"./Resources/UI2/tcmdbtns0018.bmp");
 
-
+	AddImage("backgnd", L"./Resources/backgnd.bmp");
 	// ¹Ì³×¶ö
 
 	// SCV
@@ -537,5 +551,13 @@ void ImageManager::ImageLoad()
 	AddImage("min010001", L"./Resources/min/min010001.bmp"); // ¹Ì³×¶ö Áß°£
 	AddImage("min010002", L"./Resources/min/min010002.bmp"); // ¹Ì³×¶ö ´úÁß°£
 	AddImage("min010003", L"./Resources/min/min010003.bmp"); // ¹Ì³×¶ö ÀÛÀ½
+
+	AddImage("mul-tail", L"./Resources/lobby/Multi Player/mul-tail.png"); // ¹Ì³×¶ö ÀÛÀ½
+
+	AddImageVector("Editor", L"./Resources/lobby/Editor/editor", 0, 84, true); // ÀÏ¹Ý
+	AddImageVector("Multi Player", L"./Resources/lobby/Multi Player/multi", 0, 49, true); // ÀÏ¹Ý
+	AddImageVector("Exit", L"./Resources/lobby/Exit/exit", 0, 49, true); // ÀÏ¹Ý
+	AddImageVector("Single Player", L"./Resources/lobby/Single Player/single", 0, 34, true); // ÀÏ¹Ý
+
 
 }

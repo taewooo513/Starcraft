@@ -14,6 +14,8 @@ public:
 	ObjectGrid() {}
 	~ObjectGrid() {}
 public:
+	int gridTag = 0;
+	bool isDestory = false;
 	float lastX, lastY;
 	float x, y;
 	void Astar();
@@ -25,12 +27,10 @@ public:
 	int nowTileRegionId = 0;
 	stack<Vector2> moveStack2;
 	struct comp {
-		bool operator()(pair<pair<float, float>, GridManager::tileNum>A, pair<pair<float, float>, GridManager::tileNum>B)
+		bool operator()(pair<Vector2, pair<float, float>> A, pair<Vector2, pair<float, float>> B)
 		{
-			if (A.first.second > B.first.second)
+			if (A.second.first + A.second.second > B.second.first + B.second.second)
 				return true;
-			else if (A.first.second == B.first.second)
-				return false;
 			return false;
 		}
 	};

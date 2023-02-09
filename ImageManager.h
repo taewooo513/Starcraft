@@ -65,7 +65,7 @@ public:
 	CImage* AddImage(const std::string key, std::wstring path);
 	CImage* FindImage(const std::string key);
 
-	vImage* AddImageVector(const std::string key, std::wstring path, int startIndex, int endIndex);
+	vImage* AddImageVector(const std::string key, std::wstring path, int startIndex, int endIndex,bool isPng = false);
 	vImage* FindImageVector(const std::string key);
 	vImage* AddImageVectorCopy(const std::string key);
 

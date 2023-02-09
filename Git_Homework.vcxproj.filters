@@ -105,7 +105,6 @@
       <Filter>Game\Object\Build\Terran\CommandCenter</Filter>
     </ClCompile>
     <ClCompile Include="TitleScene.cpp" />
-    <ClCompile Include="VideoManager.cpp" />
     <ClCompile Include="Mineral.cpp" />
     <ClCompile Include="GridManager.cpp">
       <Filter>Game\Grid</Filter>
@@ -213,7 +212,6 @@
       <Filter>Game\Object\Build\Terran\CommandCenter</Filter>
     </ClInclude>
     <ClInclude Include="TitleScene.h" />
-    <ClInclude Include="VideoManager.h" />
     <ClInclude Include="Mineral.h" />
     <ClInclude Include="GridManager.h">
       <Filter>Game\Grid</Filter>
