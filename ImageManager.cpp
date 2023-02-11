@@ -223,6 +223,32 @@ void ImageManager::UICenterRenderBlendBlack(CImage* img, Vector2 vec, float scal
 	m_d2dContext->DrawImage(blendEffect);
 }
 
+void ImageManager::UICenterRenderBlendBlack2(CImage* img, Vector2 vec, Vector2 scale, float rot, bool isReverse)
+{
+	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
+
+	matR = D2D1::Matrix3x2F::Rotation(rot, { 0,0 });
+	if (isReverse == false)
+	{
+		matS = D2D1::Matrix3x2F::Scale(scale.x, scale.y);
+		matP = D2D1::Matrix3x2F::Translation(vec.x - img->GetWidth() * scale.x / 2, vec.y - img->GetHeight() * scale.y / 2);
+	}
+	else
+	{
+		matS = D2D1::Matrix3x2F::Scale(-scale.x, scale.y);
+		matP = D2D1::Matrix3x2F::Translation(vec.x + img->GetWidth() * scale.x / 2, vec.y - img->GetHeight() * scale.y / 2);
+	}
+
+	matW = matS * matP * matR;
+
+	//Color_;CLSID_D2D1AlphaMask
+	blendEffect->SetInput(0, img->GetBitMap());
+
+	m_d2dContext->SetTransform(matW);
+	m_d2dContext->DrawImage(blendEffect);
+}
+
+
 void ImageManager::MapRender()
 {
 	mapReader->MapRender(GetCameraPosition());
@@ -529,7 +555,6 @@ void ImageManager::ImageLoad()
 	// 고스트 이미지
 	AddImage("cmdicons0001", L"./Resources/Icon/cmdicons0001.bmp"); // 고스트 아이콘 
 
-
 	AddImage("cmdicons0286", L"./Resources/Icon/cmdicons0286.bmp"); // 몹생성 어디로 생성할지
 
 	AddImage("cmdicons0282", L"./Resources/Icon/cmdicons0282.bmp"); // 건물 띄우기
@@ -559,5 +584,155 @@ void ImageManager::ImageLoad()
 	AddImageVector("Exit", L"./Resources/lobby/Exit/exit", 0, 49, true); // 일반
 	AddImageVector("Single Player", L"./Resources/lobby/Single Player/single", 0, 34, true); // 일반
 
+	AddImage("marin_attack_1_1", L"./Resources/marin/Attack/marine0034.bmp"); // 마린 공격 프레임 1
+	AddImage("marin_attack_1_2", L"./Resources/marin/Attack/marine0036.bmp");
+	AddImage("marin_attack_1_3", L"./Resources/marin/Attack/marine0038.bmp");
+	AddImage("marin_attack_1_4", L"./Resources/marin/Attack/marine0040.bmp");
+	AddImage("marin_attack_1_5", L"./Resources/marin/Attack/marine0042.bmp");
+	AddImage("marin_attack_1_6", L"./Resources/marin/Attack/marine0044.bmp");
+	AddImage("marin_attack_1_7", L"./Resources/marin/Attack/marine0046.bmp");
+	AddImage("marin_attack_1_8", L"./Resources/marin/Attack/marine0048.bmp");
+	AddImage("marin_attack_1_9", L"./Resources/marin/Attack/marine0050.bmp");
 
+	AddImage("marin_attack_2_1", L"./Resources/marin/Attack/marine0051.bmp"); // 마린 공격프레임 2
+	AddImage("marin_attack_2_2", L"./Resources/marin/Attack/marine0053.bmp");
+	AddImage("marin_attack_2_3", L"./Resources/marin/Attack/marine0055.bmp");
+	AddImage("marin_attack_2_4", L"./Resources/marin/Attack/marine0057.bmp");
+	AddImage("marin_attack_2_5", L"./Resources/marin/Attack/marine0059.bmp");
+	AddImage("marin_attack_2_6", L"./Resources/marin/Attack/marine0061.bmp");
+	AddImage("marin_attack_2_7", L"./Resources/marin/Attack/marine0063.bmp");
+	AddImage("marin_attack_2_8", L"./Resources/marin/Attack/marine0065.bmp");
+	AddImage("marin_attack_2_9", L"./Resources/marin/Attack/marine0067.bmp");
+
+	AddImage("marin_idle_1_1", L"./Resources/marin/Idle/marine0068.bmp"); // 마린 기본 모션
+	AddImage("marin_idle_1_2", L"./Resources/marin/Idle/marine0070.bmp");
+	AddImage("marin_idle_1_3", L"./Resources/marin/Idle/marine0072.bmp");
+	AddImage("marin_idle_1_4", L"./Resources/marin/Idle/marine0074.bmp");
+	AddImage("marin_idle_1_5", L"./Resources/marin/Idle/marine0076.bmp");
+	AddImage("marin_idle_1_6", L"./Resources/marin/Idle/marine0078.bmp");
+	AddImage("marin_idle_1_7", L"./Resources/marin/Idle/marine0080.bmp");
+	AddImage("marin_idle_1_8", L"./Resources/marin/Idle/marine0082.bmp");
+	AddImage("marin_idle_1_9", L"./Resources/marin/Idle/marine0084.bmp");
+
+	AddImage("marin_idle_action_1_1", L"./Resources/marin/Idle2/marine0000.bmp"); // 마린 대기 모션 가만히 있을때 2
+	AddImage("marin_idle_action_1_2", L"./Resources/marin/Idle2/marine0002.bmp");
+	AddImage("marin_idle_action_1_3", L"./Resources/marin/Idle2/marine0004.bmp");
+	AddImage("marin_idle_action_1_4", L"./Resources/marin/Idle2/marine0006.bmp");
+	AddImage("marin_idle_action_1_5", L"./Resources/marin/Idle2/marine0008.bmp");
+	AddImage("marin_idle_action_1_6", L"./Resources/marin/Idle2/marine0010.bmp");
+	AddImage("marin_idle_action_1_7", L"./Resources/marin/Idle2/marine0012.bmp");
+	AddImage("marin_idle_action_1_8", L"./Resources/marin/Idle2/marine0014.bmp");
+	AddImage("marin_idle_action_1_9", L"./Resources/marin/Idle2/marine0016.bmp");
+
+	AddImage("marin_idle_action_2_1", L"./Resources/marin/Idle2/marine0018.bmp"); // 마린 대기 모션 가만히 있을때 2
+	AddImage("marin_idle_action_2_2", L"./Resources/marin/Idle2/marine0020.bmp");
+	AddImage("marin_idle_action_2_3", L"./Resources/marin/Idle2/marine0022.bmp");
+	AddImage("marin_idle_action_2_4", L"./Resources/marin/Idle2/marine0024.bmp");
+	AddImage("marin_idle_action_2_5", L"./Resources/marin/Idle2/marine0026.bmp");
+	AddImage("marin_idle_action_2_6", L"./Resources/marin/Idle2/marine0028.bmp");
+	AddImage("marin_idle_action_2_7", L"./Resources/marin/Idle2/marine0030.bmp");
+	AddImage("marin_idle_action_2_8", L"./Resources/marin/Idle2/marine0032.bmp");
+	AddImage("marin_idle_action_2_9", L"./Resources/marin/Idle2/marine0034.bmp");
+
+	AddImage("marin_run_1_1", L"./Resources/marin/Run1/marine0085.bmp"); // 마린
+	AddImage("marin_run_1_2", L"./Resources/marin/Run1/marine0087.bmp"); // 마린
+	AddImage("marin_run_1_3", L"./Resources/marin/Run1/marine0089.bmp"); // 마린
+	AddImage("marin_run_1_4", L"./Resources/marin/Run1/marine0091.bmp"); // 마린
+	AddImage("marin_run_1_5", L"./Resources/marin/Run1/marine0093.bmp"); // 마린
+	AddImage("marin_run_1_6", L"./Resources/marin/Run1/marine0095.bmp"); // 마린
+	AddImage("marin_run_1_7", L"./Resources/marin/Run1/marine0097.bmp"); // 마린
+	AddImage("marin_run_1_8", L"./Resources/marin/Run1/marine0099.bmp"); // 마린
+	AddImage("marin_run_1_9", L"./Resources/marin/Run1/marine0101.bmp"); // 마린
+
+	AddImage("marin_run_2_1", L"./Resources/marin/Run2/marine0102.bmp"); // 마린
+	AddImage("marin_run_2_2", L"./Resources/marin/Run2/marine0104.bmp"); // 마린
+	AddImage("marin_run_2_3", L"./Resources/marin/Run2/marine0106.bmp"); // 마린
+	AddImage("marin_run_2_4", L"./Resources/marin/Run2/marine0108.bmp"); // 마린
+	AddImage("marin_run_2_5", L"./Resources/marin/Run2/marine0110.bmp"); // 마린
+	AddImage("marin_run_2_6", L"./Resources/marin/Run2/marine0112.bmp"); // 마린
+	AddImage("marin_run_2_7", L"./Resources/marin/Run2/marine0114.bmp"); // 마린
+	AddImage("marin_run_2_8", L"./Resources/marin/Run2/marine0116.bmp"); // 마린
+	AddImage("marin_run_2_9", L"./Resources/marin/Run2/marine0118.bmp"); // 마린
+
+	AddImage("marin_run_3_1", L"./Resources/marin/Run3/marine0119.bmp"); // 마린
+	AddImage("marin_run_3_2", L"./Resources/marin/Run3/marine0121.bmp"); // 마린
+	AddImage("marin_run_3_3", L"./Resources/marin/Run3/marine0123.bmp"); // 마린
+	AddImage("marin_run_3_4", L"./Resources/marin/Run3/marine0125.bmp"); // 마린
+	AddImage("marin_run_3_5", L"./Resources/marin/Run3/marine0127.bmp"); // 마린
+	AddImage("marin_run_3_6", L"./Resources/marin/Run3/marine0129.bmp"); // 마린
+	AddImage("marin_run_3_7", L"./Resources/marin/Run3/marine0131.bmp"); // 마린
+	AddImage("marin_run_3_8", L"./Resources/marin/Run3/marine0133.bmp"); // 마린
+	AddImage("marin_run_3_9", L"./Resources/marin/Run3/marine0135.bmp"); // 마린
+
+	AddImage("marin_run_4_1", L"./Resources/marin/Run4/marine0136.bmp"); // 마린
+	AddImage("marin_run_4_2", L"./Resources/marin/Run4/marine0138.bmp"); // 마린
+	AddImage("marin_run_4_3", L"./Resources/marin/Run4/marine0140.bmp"); // 마린
+	AddImage("marin_run_4_4", L"./Resources/marin/Run4/marine0142.bmp"); // 마린
+	AddImage("marin_run_4_5", L"./Resources/marin/Run4/marine0144.bmp"); // 마린
+	AddImage("marin_run_4_6", L"./Resources/marin/Run4/marine0146.bmp"); // 마린
+	AddImage("marin_run_4_7", L"./Resources/marin/Run4/marine0148.bmp"); // 마린
+	AddImage("marin_run_4_8", L"./Resources/marin/Run4/marine0150.bmp"); // 마린
+	AddImage("marin_run_4_9", L"./Resources/marin/Run4/marine0152.bmp"); // 마린
+
+	AddImage("marin_run_5_1", L"./Resources/marin/Run5/marine0153.bmp"); // 마린
+	AddImage("marin_run_5_2", L"./Resources/marin/Run5/marine0155.bmp"); // 마린
+	AddImage("marin_run_5_3", L"./Resources/marin/Run5/marine0157.bmp"); // 마린
+	AddImage("marin_run_5_4", L"./Resources/marin/Run5/marine0159.bmp"); // 마린
+	AddImage("marin_run_5_5", L"./Resources/marin/Run5/marine0161.bmp"); // 마린
+	AddImage("marin_run_5_6", L"./Resources/marin/Run5/marine0163.bmp"); // 마린
+	AddImage("marin_run_5_7", L"./Resources/marin/Run5/marine0165.bmp"); // 마린
+	AddImage("marin_run_5_8", L"./Resources/marin/Run5/marine0167.bmp"); // 마린
+	AddImage("marin_run_5_9", L"./Resources/marin/Run5/marine0169.bmp"); // 마린
+
+	AddImage("marin_run_6_1", L"./Resources/marin/Run6/marine0170.bmp"); // 마린
+	AddImage("marin_run_6_2", L"./Resources/marin/Run6/marine0172.bmp"); // 마린
+	AddImage("marin_run_6_3", L"./Resources/marin/Run6/marine0174.bmp"); // 마린
+	AddImage("marin_run_6_4", L"./Resources/marin/Run6/marine0176.bmp"); // 마린
+	AddImage("marin_run_6_5", L"./Resources/marin/Run6/marine0178.bmp"); // 마린
+	AddImage("marin_run_6_6", L"./Resources/marin/Run6/marine0180.bmp"); // 마린
+	AddImage("marin_run_6_7", L"./Resources/marin/Run6/marine0182.bmp"); // 마린
+	AddImage("marin_run_6_8", L"./Resources/marin/Run6/marine0184.bmp"); // 마린
+	AddImage("marin_run_6_9", L"./Resources/marin/Run6/marine0186.bmp"); // 마린
+
+	AddImage("marin_run_7_1", L"./Resources/marin/Run7/marine0187.bmp"); // 마린
+	AddImage("marin_run_7_2", L"./Resources/marin/Run7/marine0189.bmp"); // 마린
+	AddImage("marin_run_7_3", L"./Resources/marin/Run7/marine0191.bmp"); // 마린
+	AddImage("marin_run_7_4", L"./Resources/marin/Run7/marine0193.bmp"); // 마린
+	AddImage("marin_run_7_5", L"./Resources/marin/Run7/marine0195.bmp"); // 마린
+	AddImage("marin_run_7_6", L"./Resources/marin/Run7/marine0197.bmp"); // 마린
+	AddImage("marin_run_7_7", L"./Resources/marin/Run7/marine0199.bmp"); // 마린
+	AddImage("marin_run_7_8", L"./Resources/marin/Run7/marine0201.bmp"); // 마린
+	AddImage("marin_run_7_9", L"./Resources/marin/Run7/marine0203.bmp"); // 마린
+
+	AddImage("marin_run_8_1", L"./Resources/marin/Run8/marine0204.bmp"); // 마린
+	AddImage("marin_run_8_2", L"./Resources/marin/Run8/marine0206.bmp"); // 마린
+	AddImage("marin_run_8_3", L"./Resources/marin/Run8/marine0208.bmp"); // 마린
+	AddImage("marin_run_8_4", L"./Resources/marin/Run8/marine0210.bmp"); // 마린
+	AddImage("marin_run_8_5", L"./Resources/marin/Run8/marine0212.bmp"); // 마린
+	AddImage("marin_run_8_6", L"./Resources/marin/Run8/marine0214.bmp"); // 마린
+	AddImage("marin_run_8_7", L"./Resources/marin/Run8/marine0216.bmp"); // 마린
+	AddImage("marin_run_8_8", L"./Resources/marin/Run8/marine0218.bmp"); // 마린
+	AddImage("marin_run_8_9", L"./Resources/marin/Run8/marine0220.bmp"); // 마린
+
+	AddImage("marin_death_1", L"./Resources/marin/Death/marine0221.bmp"); // 마린
+	AddImage("marin_death_2", L"./Resources/marin/Death/marine0222.bmp"); // 마린
+	AddImage("marin_death_3", L"./Resources/marin/Death/marine0223.bmp"); // 마린
+	AddImage("marin_death_4", L"./Resources/marin/Death/marine0224.bmp"); // 마린
+	AddImage("marin_death_5", L"./Resources/marin/Death/marine0225.bmp"); // 마린
+	AddImage("marin_death_6", L"./Resources/marin/Death/marine0226.bmp"); // 마린
+	AddImage("marin_death_7", L"./Resources/marin/Death/marine0227.bmp"); // 마린
+	AddImage("marin_death_8", L"./Resources/marin/Death/marine0228.bmp"); // 마린
+
+	AddImage("tcmdbtns0002", L"./Resources/UI2/tcmdbtns0002.bmp"); // 마린
+	AddImage("tcmdbtns0003", L"./Resources/UI2/tcmdbtns0003.bmp"); // 마린
+	AddImage("tcmdbtns0004", L"./Resources/UI2/tcmdbtns0004.bmp"); // 마린
+	AddImage("tcmdbtns0007", L"./Resources/UI2/tcmdbtns0007.bmp"); // 마린
+	AddImage("tcmdbtns0008", L"./Resources/UI2/tcmdbtns0008.bmp"); // 마린
+	AddImage("tcmdbtns0009", L"./Resources/UI2/tcmdbtns0009.bmp"); // 마린
+	AddImage("tcmdbtns0010", L"./Resources/UI2/tcmdbtns0010.bmp"); // 마린
+	AddImage("tcmdbtns0011", L"./Resources/UI2/tcmdbtns0011.bmp"); // 마린
+	AddImage("tcmdbtns0017", L"./Resources/UI2/tcmdbtns0017.bmp"); // 마린
+
+	AddImage("Coll", L"./Resources/UI2/Coll.bmp"); // 마린
+	AddImage("coolTimeBar", L"./Resources/UI2/coolTimeBar.bmp"); // 마린
 }

@@ -12,6 +12,7 @@ SpaceConstructionVehicle::~SpaceConstructionVehicle()
 
 void SpaceConstructionVehicle::Init()
 {
+	astarTimer = 0.1;
 	grid = GRIDMANAGER->AddGrid(this, 1, 1, 20, 20, -1, -2);
 	grid->gridTag = rand() % 100 + 100;
 	m_isClick = false;
@@ -66,19 +67,18 @@ void SpaceConstructionVehicle::Move()
 			if (moveNodeStack.top()->regionId == regionId)
 			{
 				moveNodeStack.pop();
+				grid->Astar();
 			}
 			if (moveNodeStack.empty() == false)
 			{
-				grid->Astar();
-			}
-			else
-			{
-				grid->Astar(); //여기선 다음 레기온과의 최단거리 
+				if (grid->moveStack2.empty() == true)
+					grid->Astar();
 			}
 		}
 		else
 		{
-			grid->Astar(); //여기선 다음 레기온과의 최단거리 
+			if (grid->moveStack2.empty() == true)
+				grid->Astar(); //여기선 다음 레기온과의 최단거리 
 		}
 	}
 
@@ -100,12 +100,24 @@ void SpaceConstructionVehicle::Move()
 			{
 				position.x = d.x;
 				position.y = d.y;
-
+				if (astarTimer < 0)
+				{
+					grid->Astar();
+					astarTimer = 0.1f;
+				}
+				astarTimer -= DELTA_TIME;
 				if (grid->moveStack2.empty() == false)
 				{
 					grid->moveStack2.pop();
+
+					if (grid->moveStack2.empty() && moveNodeStack.empty())
+					{
+						d = { 0,0 };
+						m_dest = { 0,0 };
+						m_speed = 0;
+						m_isBuild = true;
+					}
 				}
-				d = { 0,0 };
 			}
 			else
 			{
@@ -144,7 +156,7 @@ void SpaceConstructionVehicle::Update()
 	{
 		m_speed = 0;
 	}
-
+	BuildObject();
 	CollisionUpdate();
 }
 

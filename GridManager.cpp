@@ -82,11 +82,11 @@ void GridManager::Render()
 	//			{
 	//				if (regionsTile[j][i].isBuildTag == 0)
 	//				{
-	//					//IMAGEMANAGER->DrawRect({ float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, { float(j) * 8.f * 1.5f + float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f + float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y });
+	//					//IMAGEMANAGER->DrawRect({ float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, { float(j) * 8.f * 1.5f + //float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f + float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y });
 	//				}
 	//				else
 	//				{
-	//					IMAGEMANAGER->DrawRectRed({ float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, { float(j) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y });
+	//					IMAGEMANAGER->DrawRectRed({ float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, { float(j) * 8.f * 1.5f + //float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y });
 	//				}
 	//			}
 	//		}

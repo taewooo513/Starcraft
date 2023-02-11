@@ -5,6 +5,15 @@ class CommandCenter : public Build
 private:
 	CImage* idle;
 	CImage* buildImage[4];
+
+	struct AddUnit
+	{
+		float unit;
+		float timeNow;
+		float maxTime;
+	};
+
+	vector<AddUnit> addUnitQueue;
 public:
 	CommandCenter();
 	virtual ~CommandCenter();

@@ -15,6 +15,7 @@ private:
 	Vector2 d;
 	float m_ImageDirection = 0;
 	Effect* m_spark;
+	float astarTimer;
 	enum eBuildClass
 	{
 		eBegin,

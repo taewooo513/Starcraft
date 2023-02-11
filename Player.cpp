@@ -119,6 +119,7 @@ void Player::Init()
 		scv->SetPlayer(this);
 		OBJECTMANAGER->AddObject(scv, "Unit", 2300 + WINSIZE_X / 3, WINSIZE_Y / 2, 1);
 	}
+
 	//m_units.push_back(scv);
 	Build* commandCenter = new CommandCenter;
 	commandCenter->SetPlayer(this);
@@ -157,7 +158,6 @@ void Player::Update()
 		for (auto iter : m_selectUnits)
 		{
 			iter->SetDestPosition(m_rClickPos);
-
 			Astar(iter->GetPosition(), { m_rClickPos }, iter);
 		}
 	}
@@ -192,13 +192,11 @@ void Player::Update()
 				}
 
 				SpaceConstructionVehicle* scv = dynamic_cast<SpaceConstructionVehicle*>(m_selectUnit);
-				if (scv->page == 2 && scv->buildIndex != 0)
+				if (scv->buildIndex != 0)
 				{
 					m_selectUnit->SetDestPosition({ (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().y });
 					Astar(m_selectUnit->GetPosition(), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().y }, m_selectUnit);
-					//m_selectUnit->SetDestPosition(m_rClickPos);
 					scv->m_isBuild = true;
-
 				}
 			}
 		}

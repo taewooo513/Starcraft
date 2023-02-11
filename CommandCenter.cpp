@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CommandCenter.h"
-
+#include "SpaceConstructionVehicle.h"
 CommandCenter::CommandCenter()
 {
 }
@@ -50,6 +50,22 @@ void CommandCenter::Init()
 
 void CommandCenter::Update()
 {
+	if (addUnitQueue.empty() == false)
+	{
+		if (addUnitQueue.front().timeNow < addUnitQueue.front().maxTime)
+		{
+			addUnitQueue.front().timeNow += DELTA_TIME;
+		}
+		else
+		{
+			addUnitQueue.front().timeNow = addUnitQueue.front().maxTime;
+			SpaceConstructionVehicle* scv = new SpaceConstructionVehicle;
+			scv->SetPlayer(player);
+			OBJECTMANAGER->AddObject(scv, "scv", position.x, position.y, 1);
+			addUnitQueue.erase(addUnitQueue.begin());
+		}
+	}
+
 	clickRect = { int(position.x) , int(position.y) , int((position.x + 32 * 4 * 1.5f)) , int((position.y + 32 * 3 * 1.5f)) };
 
 	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x;
@@ -84,9 +100,18 @@ void CommandCenter::Release()
 
 void CommandCenter::UIRender()
 {
-	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[5].x + 25,UIPosition[5].y + 25 }, 1.7, 0, 0);
-	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0286"), { UIPosition[5].x - 1 ,UIPosition[5].y - 2 }, 1.7, 0, 0);
-
+	if (addUnitQueue.size() < 5)
+	{
+		if (KEYMANAGER->GetOnceKeyDown('S'))
+		{
+			addUnitQueue.push_back({ 1,0,12.6 });
+		}
+	}
+	if (addUnitQueue.size() == 0)
+	{
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[5].x + 25,UIPosition[5].y + 25 }, 1.7, 0, 0);
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0286"), { UIPosition[5].x - 1 ,UIPosition[5].y - 2 }, 1.7, 0, 0);
+	}
 	if (m_buildIndex < 4)
 	{
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
@@ -96,13 +121,61 @@ void CommandCenter::UIRender()
 	{
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[0].x + 25,UIPosition[0].y + 25 }, 1.7, 0, 0);
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0007"), { UIPosition[0].x - 1 ,UIPosition[0].y - 4 }, 1.7, 0, 0);
-
-		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
-		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0282"), { UIPosition[8].x - 1 ,UIPosition[8].y - 2 }, 1.7, 0, 0);
+		if (addUnitQueue.size() == 0)
+		{
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0282"), { UIPosition[8].x - 1 ,UIPosition[8].y - 2 }, 1.7, 0, 0);
+		}
+		else
+		{
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), { UIPosition[8].x - 1 ,UIPosition[8].y - 2 }, 1.7, 0, 0);
+			if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
+			{
+				addUnitQueue.pop_back();
+			}
+		}
 	}
 
-	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("wirefram0106"), { 315,670 }, 1.4, 0, 0);
-	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 285,710 }, { 12,12 }, { 0,255,0,1 });
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("wirefram0106"), { 319,680 }, 1.5, 0, 0);
+	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 285,730 }, { 12,12 }, { 0,255,0,1 });
+
+	if (addUnitQueue.size() != 0)
+	{
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0003"), { 445,700 }, 1.5, 0, 0);
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0007"), { 421,673 }, 1.5, 0, 0);
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0011"), { 465,755 }, 1.5, 0, 0);
+
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0004"), { 445,762 }, 1.5, 0, 0);
+		if (addUnitQueue.size() > 1)
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0007"), { 421,735 }, 1.5, 0, 0);
+
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0004"), { 505,762 }, 1.5, 0, 0);
+		if (addUnitQueue.size() > 2)
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0007"), { 481,735 }, 1.5, 0, 0);
+
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0004"), { 565,762 }, 1.5, 0, 0);
+		if (addUnitQueue.size() > 3)
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0007"), { 541,735 }, 1.5, 0, 0);
+
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0003"), { 625,762 }, 1.5, 0, 0);
+
+		if (addUnitQueue.size() > 4)
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0007"), { 601,735 }, 1.5, 0, 0);
+
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("coolTimeBar"), { 535,694 }, 0.8, 0, 0);
+
+		for (int i = 0; i < 41; i++)
+		{
+			if (addUnitQueue[0].maxTime / 41 * i < addUnitQueue[0].timeNow)
+			{
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("Coll"), { float(535 + i * 4),694 }, 0.8, 0, 0);
+			}
+		}
+
+		IMAGEMANAGER->DirectDrawText(L"Building", { 500,660 }, { 15,15 }, { 255,255,255,1 });
+
+	}
 
 	IMAGEMANAGER->DirectDrawText(L"Terran Command Center", { 400,625 }, { 15,15 });
 }

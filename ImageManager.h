@@ -77,6 +77,7 @@ public:
 
 	void CenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse);
 	void UICenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse);
+	void UICenterRenderBlendBlack2(CImage* img, Vector2 vec, Vector2 scale, float rot, bool isReverse);
 
 	void MapRender();
 	void UIMapRender();

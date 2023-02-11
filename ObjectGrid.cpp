@@ -6,53 +6,60 @@
 
 void ObjectGrid::Astar()
 {
+	if (lastX != 0 && lastY != 0) // Astar를 위해 현재 서있는 그리드를 지워준다
+	{
+		for (int i = lastX; i < lastX + m_collisionGridSize.x * 4; i++)
+		{
+			for (int j = lastY; j < lastY + m_collisionGridSize.y * 4; j++)
+			{
+				if (GRIDMANAGER->regionsTile[i][j].isBuildTag == gridTag)
+					GRIDMANAGER->regionsTile[i][j].isBuildTag = 0;
+			}
+		}
+	}
+
 	auto unit = dynamic_cast<Unit*>(obj);
 
+	while (moveStack2.empty() == false)
+	{
+		moveStack2.pop();
+	}
 	Vector2 tileStartPos;
 	tileStartPos = obj->position / 1.5 / 8;
 	Vector2 tileEndPos = unit->m_dest / 1.5 / 8;
 	if (unit->moveNodeStack.empty() == true)
 	{
-		cout << "노드스택비었음" << endl;
-		return;
 	}
-	int nextRegionId = unit->moveNodeStack.top()->regionId;
-	nowTileRegionId = GRIDMANAGER->regionsTile[(int)tileStartPos.x][(int)tileStartPos.y].regionsIds;
-	tileNum tile;
-	if (unit->moveNodeStack.empty() == false)
+	else
 	{
-		float dest = 10000;
-		auto find = IMAGEMANAGER->GetMapReader()->mapRegions[nowTileRegionId]->nearRegionPosition.find(nextRegionId);
-		if (find == IMAGEMANAGER->GetMapReader()->mapRegions[nowTileRegionId]->nearRegionPosition.end())
+		int nextRegionId = unit->moveNodeStack.top()->regionId;
+		nowTileRegionId = GRIDMANAGER->regionsTile[(int)tileStartPos.x][(int)tileStartPos.y].regionsIds;
+		if (unit->moveNodeStack.empty() == false)
 		{
-			for (auto _iter : IMAGEMANAGER->GetMapReader()->mapRegions[nowTileRegionId]->nearRegionPosition)
+			float dest = 10000;
+			auto find = IMAGEMANAGER->GetMapReader()->mapRegions[nextRegionId]->nearRegionPosition.find(nowTileRegionId);
+			if (find == IMAGEMANAGER->GetMapReader()->mapRegions[nextRegionId]->nearRegionPosition.end())
 			{
-				cout << "현재" << nowTileRegionId << "인접 :" << _iter.first << endl;
+				cout << "인접 Region을 찾지 못함" << endl;
+				return;
 			}
-			cout << "인접 Region을 찾지 못함" << endl;
-			return;
-		}
-		for (auto iter : find->second)
-		{
-			float dx = abs((int)tileStartPos.x - (int)iter.x);
-			float dy = abs((int)tileStartPos.y - (int)iter.y);
-			float e1 = abs(dx - dy);
-			float e2 = min(dx, dy);
-			if (dest > e1 * 10 + e2 * 14)
+			for (auto iter : find->second)
 			{
-				tileEndPos = iter;
-				dest = e1 * 10 + e2 * 14;
+				float dx = abs((int)tileStartPos.x - (int)iter.x);
+				float dy = abs((int)tileStartPos.y - (int)iter.y);
+				float e2 = sqrt(dx * dx + dy * dy);
+				if (dest > e2)
+				{
+					tileEndPos = iter;
+					dest = e2;
+				}
 			}
 		}
 	}
+	
+	//tileEndPos = IMAGEMANAGER->GetMapReader()->mapRegions[nextRegionId]->pos;
 
-	if (tileStartPos == tileEndPos)
-	{
-		cout << "시작점과 끝점이 같음";
-		return;
-	}
-
-	map<pair<float, float>, Vector2> distmap;// 다음,지금
+	map<pair<float, float>, Vector2> distmap; // 다음,지금
 	// priority_queue < pair<pair<float, float>, MapRegions*>, vector<pair<pair<float, float>, MapRegions*>>, comp> regionQueue;
 
 	priority_queue <pair<Vector2, pair<float, float>>, vector<pair<Vector2, pair<float, float>>>, comp> regionQueue;
@@ -63,14 +70,16 @@ void ObjectGrid::Astar()
 	{
 		auto iter = regionQueue.top();
 		regionQueue.pop();
-		if (GRIDMANAGER->regionsTile[(int)iter.first.x][(int)iter.first.y].regionsIds == nextRegionId)
+		if ((int)iter.first.x == (int)tileEndPos.x && (int)iter.first.y == (int)tileEndPos.y)
 		{
 			auto find = distmap.find(make_pair(iter.first.x, iter.first.y));
+			moveStack2.push({ iter.first });
 			while (true)
 			{
 				if (find != distmap.end())
 				{
 					moveStack2.push({ find->first.first,find->first.second });
+
 					if ((int)find->first.first == (int)tileStartPos.x && (int)find->first.second == (int)tileStartPos.y)
 					{
 						break;
@@ -85,18 +94,18 @@ void ObjectGrid::Astar()
 			}
 			break;
 		}
-		for (int y = -1; y < 3; y++)
+		for (int y = -1; y < 2; y++)
 		{
-			for (int x = -1; x < 3; x++)
+			for (int x = -1; x < 2; x++)
 			{
-				int searchX = (int)iter.first.x + x;
-				int searchY = (int)iter.first.y + y;
-				if (y == 1 && x == 1)
+				float searchX = iter.first.x + x;
+				float searchY = iter.first.y + y;
+				if (y == 0 && x == 0)
 				{
 				}
 				else
 				{
-					if (searchX < 0 || searchX > 511 || searchY < 0 || searchY >512)
+					if (searchX < 0 || searchX > 511 || searchY < 0 || searchY >511)
 					{
 
 					}
@@ -113,14 +122,14 @@ void ObjectGrid::Astar()
 									cost += 4;
 								}
 
-								float dx = abs((int)searchX - (int)tileEndPos.x);
-								float dy = abs((int)searchY - (int)tileEndPos.y);
+								float dx = abs(searchX - tileEndPos.x);
+								float dy = abs(searchY - tileEndPos.y);
 								float e1 = abs(dx - dy);
 								float e2 = min(dx, dy);
 								float d = e1 * 10 + e2 * 14;
 
-								regionQueue.push(make_pair(Vector2{ (float)searchX, (float)searchY }, make_pair(cost, d)));
-								distmap.insert(make_pair(make_pair((int)searchX, (int)searchY), iter.first));
+								regionQueue.push(make_pair(Vector2{ searchX, searchY }, make_pair(cost, d)));
+								distmap.insert(make_pair(make_pair(searchX, searchY), iter.first));
 							}
 						}
 					}
@@ -130,17 +139,7 @@ void ObjectGrid::Astar()
 	}
 
 
-	if (lastX != 0 && lastY != 0) // Astar를 위해 현재 서있는 그리드를 지워준다
-	{
-		for (int i = lastX; i < lastX + m_collisionGridSize.x * 4; i++)
-		{
-			for (int j = lastY; j < lastY + m_collisionGridSize.y * 4; j++)
-			{
-				if (GRIDMANAGER->regionsTile[i][j].isBuildTag == gridTag)
-					GRIDMANAGER->regionsTile[i][j].isBuildTag = 0;
-			}
-		}
-	}
+
 
 	int fx = (int)(obj->position.x / 8 / 1.5) + x;
 	int fy = (int)(obj->position.y / 8 / 1.5) + y;
@@ -189,7 +188,8 @@ void ObjectGrid::Update()
 	{
 		for (int j = fy; j < fy + m_collisionGridSize.y * 4; j++)
 		{
-			GRIDMANAGER->regionsTile[i][j].isBuildTag = gridTag;
+			if (GRIDMANAGER->regionsTile[i][j].isBuildTag == 0)
+				GRIDMANAGER->regionsTile[i][j].isBuildTag = gridTag;
 		}
 	}
 	lastX = fx;
