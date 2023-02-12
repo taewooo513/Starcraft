@@ -115,6 +115,7 @@
     <ClCompile Include="ObjectGrid.cpp">
       <Filter>Game\Grid</Filter>
     </ClCompile>
+    <ClCompile Include="Vulture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -222,6 +223,7 @@
     <ClInclude Include="ObjectGrid.h">
       <Filter>Game\Grid</Filter>
     </ClInclude>
+    <ClInclude Include="Vulture.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">

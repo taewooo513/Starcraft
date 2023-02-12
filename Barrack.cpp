@@ -25,6 +25,9 @@ Barrack::~Barrack()
 
 void Barrack::Init()
 {
+	grid = GRIDMANAGER->AddGrid(this, 14, 8, 3, 2, 2, 1);
+	grid->gridTag = 3;
+
 	player->AddBuild(this);
 	m_buildImage[0] = IMAGEMANAGER->FindImage("tbldlrg0000");
 	m_buildImage[1] = IMAGEMANAGER->FindImage("tbldlrg0001");

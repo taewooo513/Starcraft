@@ -16,12 +16,16 @@ void Mineral::MineMineral()
 
 void Mineral::Init()
 {
+	nowMineUnit = nullptr;
 	resourceImage[0] = IMAGEMANAGER->FindImage("min010000");
 	resourceImage[1] = IMAGEMANAGER->FindImage("min010001");
 	resourceImage[2] = IMAGEMANAGER->FindImage("min010002");
 	resourceImage[3] = IMAGEMANAGER->FindImage("min010003");
 
 	nowCount = maxCount;
+
+	grid = GRIDMANAGER->AddGrid(this, 3, 1, 20, 20, -4, -2);
+	grid->gridTag = rand() % 100000 + 100;
 }
 
 void Mineral::Update()

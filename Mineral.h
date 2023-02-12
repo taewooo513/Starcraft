@@ -1,4 +1,5 @@
 #pragma once
+#include "Unit.h"
 class Mineral : public Object
 {
 private:
@@ -8,7 +9,8 @@ public:
 	CImage* resourceImage[4];
 	Mineral();
 	~Mineral();
-
+	
+	Unit* nowMineUnit;
 	// Object을(를) 통해 상속됨
 	void MineMineral();
 

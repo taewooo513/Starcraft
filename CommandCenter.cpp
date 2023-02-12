@@ -32,7 +32,7 @@ void CommandCenter::Init()
 {
 
 	player->m_maxSuff += 10;
-	grid = GRIDMANAGER->AddGrid(this, 4, 3, 3, 2, 0, 0);
+	grid = GRIDMANAGER->AddGrid(this, 14, 11, 3, 2, 2, 1);
 	grid->gridTag = 3;
 	player->AddBuild(this);
 

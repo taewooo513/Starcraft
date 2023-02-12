@@ -7,7 +7,7 @@ void FireBat::Init()
 	astarTimer = 0.1;
 	player->m_suff += 1;
 
-	grid = GRIDMANAGER->AddGrid(this, 1, 1, 20, 20, -1, -2);
+	grid = GRIDMANAGER->AddGrid(this, 2, 2, 20, 20, 0, 0);
 	grid->gridTag = rand() % 10000 + 100;
 	player->AddUnit(this);
 	deathImageTimeDelay = 0;
@@ -133,7 +133,10 @@ void FireBat::Move()
 		d = Vector2{ (float)(grid->moveStack2.top().x * 8 * 1.5),(float)(grid->moveStack2.top().y * 8 * 1.5) };
 		if (d.x != 0 && d.y != 0)
 		{
-
+			if (!grid->moveStack2.empty())
+			{
+				rot = atan2(d.x - position.x, d.y - position.y);
+			}
 
 			if (m_speed < 300)
 			{
@@ -168,10 +171,7 @@ void FireBat::Move()
 			}
 			else
 			{
-				if (!grid->moveStack2.empty())
-				{
-					rot = atan2(d.x - position.x, d.y - position.y);
-				}
+				
 				position.x += moveDestX;
 				position.y += moveDestY;
 

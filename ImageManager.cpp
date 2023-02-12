@@ -850,4 +850,16 @@ void ImageManager::ImageLoad()
 	AddImage("min", L"./Resources/ResourceIcon/min.bmp"); // 마린
 	AddImage("suf", L"./Resources/ResourceIcon/suf.bmp"); // 마린
 
+	// 벌쳐
+	AddImage("Vulture_1", L"./Resources/Vulture/vulture0000.bmp"); // 마린
+	AddImage("Vulture_2", L"./Resources/Vulture/vulture0002.bmp"); // 마린
+	AddImage("Vulture_3", L"./Resources/Vulture/vulture0004.bmp"); // 마린
+	AddImage("Vulture_4", L"./Resources/Vulture/vulture0006.bmp"); // 마린
+	AddImage("Vulture_5", L"./Resources/Vulture/vulture0008.bmp"); // 마린
+	AddImage("Vulture_6", L"./Resources/Vulture/vulture0010.bmp"); // 마린
+	AddImage("Vulture_7", L"./Resources/Vulture/vulture0012.bmp"); // 마린
+	AddImage("Vulture_8", L"./Resources/Vulture/vulture0014.bmp"); // 마린
+	AddImage("Vulture_9", L"./Resources/Vulture/vulture0016.bmp"); // 마린
+
+
 }

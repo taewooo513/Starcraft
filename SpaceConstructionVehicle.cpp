@@ -91,7 +91,10 @@ void SpaceConstructionVehicle::Move()
 	if (grid->moveStack2.empty() == false)
 	{
 		d = Vector2{ (float)(grid->moveStack2.top().x * 8 * 1.5),(float)(grid->moveStack2.top().y * 8 * 1.5) };
-		rot = atan2(d.x - position.x, d.y - position.y);
+		if (!grid->moveStack2.empty())
+		{
+			rot = atan2(d.x - position.x, d.y - position.y);
+		}
 		if (d.x != 0 && d.y != 0)
 		{
 			if (m_speed < 300)

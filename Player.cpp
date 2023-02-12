@@ -4,6 +4,7 @@
 #include "CommandCenter.h"
 #include "Marine.h"
 #include "FireBat.h"
+#include "Vulture.h"
 void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 {
 	Vector2 tileStartPos, tileEndPos;
@@ -105,8 +106,6 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 			break;
 		}
 	}
-
-	cout << c << endl;
 }
 
 void Player::Init()
@@ -129,6 +128,9 @@ void Player::Init()
 	FireBat* fireBat = new FireBat;
 	fireBat->SetPlayer(this);
 	OBJECTMANAGER->AddObject(fireBat, "marin", 250, 200, 0);
+	Vulture* vulture = new Vulture;
+	vulture->SetPlayer(this);
+	OBJECTMANAGER->AddObject(vulture, "marin", 300, 200, 0);
 
 	//m_units.push_back(scv);
 	Build* commandCenter = new CommandCenter;
