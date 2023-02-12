@@ -7,6 +7,8 @@ CommandCenter::CommandCenter()
 
 CommandCenter::~CommandCenter()
 {
+	player->m_maxSuff -= 10;
+
 	if (player != nullptr)
 	{
 		if (player->m_selectBuild == this)
@@ -28,6 +30,8 @@ CommandCenter::~CommandCenter()
 
 void CommandCenter::Init()
 {
+
+	player->m_maxSuff += 10;
 	grid = GRIDMANAGER->AddGrid(this, 4, 3, 3, 2, 0, 0);
 	grid->gridTag = 3;
 	player->AddBuild(this);
@@ -104,7 +108,7 @@ void CommandCenter::UIRender()
 	{
 		if (KEYMANAGER->GetOnceKeyDown('S'))
 		{
-			addUnitQueue.push_back({ 1,0,12.6 });
+			addUnitQueue.push_back({ 1,0,2.6 });
 		}
 	}
 	if (addUnitQueue.size() == 0)
@@ -116,6 +120,17 @@ void CommandCenter::UIRender()
 	{
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), { UIPosition[8].x - 1 ,UIPosition[8].y - 2 }, 1.7, 0, 0);
+
+		IMAGEMANAGER->DirectDrawText(L"Under Construction", { 420,660 }, { 15,15 }, { 200,200,200,0.8 });
+
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("coolTimeBar"), { 505,694 }, 0.8, 0, 0);
+		for (int i = 0; i < 41; i++)
+		{
+			if (m_maxCompleteTime / 41 * i < m_completeTime)
+			{
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("Coll"), { float(505 + i * 4),694 }, 0.8, 0, 0);
+			}
+		}
 	}
 	else
 	{

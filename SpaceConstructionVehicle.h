@@ -1,8 +1,9 @@
 #pragma once
 #include "WalkUnit.h"
-#include "Build.h"
 #include "Effect.h"
 #include "Player.h"
+
+class Build;
 class SpaceConstructionVehicle : public WalkUnit
 {
 private:

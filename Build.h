@@ -1,9 +1,12 @@
 #pragma once
 #include "Unit.h"
 #include "Player.h"
+
+class SpaceConstructionVehicle;
 class Build : public Object
 {
 protected:
+	SpaceConstructionVehicle* buildUnit = nullptr;
 	float m_hp;
 	float m_costM;
 	float m_costG;
@@ -25,7 +28,7 @@ public:
 	virtual void Render() override;
 	virtual void Release() override;
 	virtual void UIRender() override;
-	virtual void AddBuild();
+	virtual void AddBuild(SpaceConstructionVehicle * spaceConstructionVehicle);
 	virtual void SelectBuild();
 	virtual void SelectBuildCommand();
 

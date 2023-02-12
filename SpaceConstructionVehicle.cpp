@@ -2,6 +2,8 @@
 #include "SpaceConstructionVehicle.h"
 #include "Barrack.h"
 #include "CommandCenter.h"
+#include "Build.h"
+
 SpaceConstructionVehicle::SpaceConstructionVehicle()
 {
 }
@@ -12,9 +14,10 @@ SpaceConstructionVehicle::~SpaceConstructionVehicle()
 
 void SpaceConstructionVehicle::Init()
 {
+	player->m_suff += 1;
 	astarTimer = 0.1;
 	grid = GRIDMANAGER->AddGrid(this, 1, 1, 20, 20, -1, -2);
-	grid->gridTag = rand() % 100 + 100;
+	grid->gridTag = rand() % 10000 + 100;
 	m_isClick = false;
 	m_spark = nullptr;
 	m_nowBuild = nullptr;
@@ -39,15 +42,15 @@ void SpaceConstructionVehicle::Init()
 	m_actionImage_2[7] = IMAGEMANAGER->FindImage("scv_action_2_8");
 	m_actionImage_2[8] = IMAGEMANAGER->FindImage("scv_action_2_9");
 
-	m_idleImage[0] = IMAGEMANAGER->FindImage("scv_idle_1");
-	m_idleImage[1] = IMAGEMANAGER->FindImage("scv_idle_2");
-	m_idleImage[2] = IMAGEMANAGER->FindImage("scv_idle_3");
-	m_idleImage[3] = IMAGEMANAGER->FindImage("scv_idle_4");
+	m_idleImage[8] = IMAGEMANAGER->FindImage("scv_idle_1");
+	m_idleImage[7] = IMAGEMANAGER->FindImage("scv_idle_2");
+	m_idleImage[6] = IMAGEMANAGER->FindImage("scv_idle_3");
+	m_idleImage[5] = IMAGEMANAGER->FindImage("scv_idle_4");
 	m_idleImage[4] = IMAGEMANAGER->FindImage("scv_idle_5");
-	m_idleImage[5] = IMAGEMANAGER->FindImage("scv_idle_6");
-	m_idleImage[6] = IMAGEMANAGER->FindImage("scv_idle_7");
-	m_idleImage[7] = IMAGEMANAGER->FindImage("scv_idle_8");
-	m_idleImage[8] = IMAGEMANAGER->FindImage("scv_idle_9");
+	m_idleImage[3] = IMAGEMANAGER->FindImage("scv_idle_6");
+	m_idleImage[2] = IMAGEMANAGER->FindImage("scv_idle_7");
+	m_idleImage[1] = IMAGEMANAGER->FindImage("scv_idle_8");
+	m_idleImage[0] = IMAGEMANAGER->FindImage("scv_idle_9");
 
 	m_buttom = IMAGEMANAGER->FindImage("tcmdbtns0000");
 	d = { 0,0 };
@@ -67,18 +70,21 @@ void SpaceConstructionVehicle::Move()
 			if (moveNodeStack.top()->regionId == regionId)
 			{
 				moveNodeStack.pop();
-				grid->Astar();
+				grid->Astar(4, 4);
+
 			}
 			if (moveNodeStack.empty() == false)
 			{
 				if (grid->moveStack2.empty() == true)
-					grid->Astar();
+					grid->Astar(4, 4);
+
 			}
 		}
 		else
 		{
 			if (grid->moveStack2.empty() == true)
-				grid->Astar(); //여기선 다음 레기온과의 최단거리 
+				grid->Astar(4, 4);
+			//여기선 다음 레기온과의 최단거리 
 		}
 	}
 
@@ -102,7 +108,8 @@ void SpaceConstructionVehicle::Move()
 				position.y = d.y;
 				if (astarTimer < 0)
 				{
-					grid->Astar();
+					grid->Astar(4, 4);
+
 					astarTimer = 0.1f;
 				}
 				astarTimer -= DELTA_TIME;
@@ -162,7 +169,9 @@ void SpaceConstructionVehicle::Update()
 
 void SpaceConstructionVehicle::Render()
 {
+	float rr = 8.f / 3.141592 * abs(rot);
 	bool isR = false;
+
 	ImageDirection();
 
 	if (m_isClick == true)
@@ -177,15 +186,14 @@ void SpaceConstructionVehicle::Render()
 
 	if (m_nowBuild == nullptr)
 	{
-		IMAGEMANAGER->CenterRenderBlendBlack(m_idleImage[(int)m_dir], position, 1.5f, 0, isR);
+		IMAGEMANAGER->CenterRenderBlendBlack(m_idleImage[(int)rr], position, 1.5f, 0, isR);
 	}
 	else
 	{
-		IMAGEMANAGER->CenterRenderBlendBlack(m_actionImage_1[(int)m_dir], position, 1.5f, 0, isR);
+		IMAGEMANAGER->CenterRenderBlendBlack(m_actionImage_1[(int)rr], position, 1.5f, 0, isR);
 	}
 
 	m_isClick = false;
-
 }
 
 void SpaceConstructionVehicle::UIRender()
@@ -274,7 +282,6 @@ void SpaceConstructionVehicle::BuildObject()
 {
 	if (m_isBuild == true)
 	{
-		page = 0;
 		if (moveNodeStack.empty() == true && grid->moveStack2.empty())
 		{
 			switch (buildIndex)
@@ -296,6 +303,12 @@ void SpaceConstructionVehicle::BuildObject()
 			}
 		}
 	}
+
+	if (m_nowBuild != nullptr)
+	{
+		m_nowBuild->AddBuild(this);
+	}
+
 }
 
 void SpaceConstructionVehicle::ImageDirection()

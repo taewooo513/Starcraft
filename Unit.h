@@ -12,6 +12,9 @@ protected:
 	int m_tribe;
 	int m_state;//중형 대형 소형 
 	bool m_isAttackAble;
+	float m_maxHp;
+	float m_hp;
+
 	bool m_isMoveAble;
 	Vector2 m_destination = { 0,0 };
 	RECT clickRect;

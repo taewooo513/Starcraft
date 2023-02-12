@@ -21,14 +21,17 @@ private:
 	float m_clickStartY;
 	float m_clickEndX;
 	float m_clickEndY;
-
 public:
+	int m_gas = 0;
+	int m_mineral = 50;
+	int m_suff = 0;
+	int m_maxSuff = 0;
 	Build* m_selectBuild;
 	vector<Unit*> m_selectUnits;
 	Unit* m_selectUnit;
 	vector<Build*> m_builds;
 	vector<Unit*> m_units;
-	void Astar(Vector2 startPos, Vector2 endPos,Unit * unit);
+	void Astar(Vector2 startPos, Vector2 endPos, Unit* unit);
 	void Init();
 	void Update();
 	void Render();

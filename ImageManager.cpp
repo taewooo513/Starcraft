@@ -457,7 +457,13 @@ void ImageManager::ImageLoad()
 
 	// SCV
 	AddImage("wirefram0106", L"./Resources/Icon2/wirefram0106.bmp"); //SCVcmdicons0007
+	AddImage("wirefram0000", L"./Resources/Icon2/wirefram0000.bmp"); //SCVcmdicons0007
+	AddImage("wirefram0007", L"./Resources/Icon2/wirefram0007.bmp"); //wirefram0010
+	AddImage("wirefram0010", L"./Resources/Icon2/wirefram0010.bmp"); //wirefram0010
+
 	AddImage("cmdicons0007", L"./Resources/Icon/cmdicons0007.bmp"); //SCVcmdicons0007
+	AddImage("grpwire0000", L"./Resources/Icon3/grpwire0000.bmp"); //SCVcmdicons0007
+	AddImage("grpwire0010", L"./Resources/Icon3/grpwire0010.bmp"); //SCVcmdicons0007
 
 	AddImage("scv_idle_1", L"./Resources/scv/scv0000.bmp");
 	AddImage("scv_idle_2", L"./Resources/scv/scv0002.bmp");
@@ -735,4 +741,113 @@ void ImageManager::ImageLoad()
 
 	AddImage("Coll", L"./Resources/UI2/Coll.bmp"); // 마린
 	AddImage("coolTimeBar", L"./Resources/UI2/coolTimeBar.bmp"); // 마린
+
+
+	//파뱃
+
+	AddImage("firebat_attack_1_1", L"./Resources/firebat/fire1/firebat0000.bmp"); // 마린 공격 프레임 1
+	AddImage("firebat_attack_1_2", L"./Resources/firebat/fire1/firebat0002.bmp");
+	AddImage("firebat_attack_1_3", L"./Resources/firebat/fire1/firebat0004.bmp");
+	AddImage("firebat_attack_1_4", L"./Resources/firebat/fire1/firebat0006.bmp");
+	AddImage("firebat_attack_1_5", L"./Resources/firebat/fire1/firebat0008.bmp");
+	AddImage("firebat_attack_1_6", L"./Resources/firebat/fire1/firebat0010.bmp");
+	AddImage("firebat_attack_1_7", L"./Resources/firebat/fire1/firebat0012.bmp");
+	AddImage("firebat_attack_1_8", L"./Resources/firebat/fire1/firebat0014.bmp");
+	AddImage("firebat_attack_1_9", L"./Resources/firebat/fire1/firebat0016.bmp");
+
+	AddImage("firebat_attack_2_1", L"./Resources/firebat/fire2/firebat0017.bmp"); // 마린 공격프레임 2
+	AddImage("firebat_attack_2_2", L"./Resources/firebat/fire2/firebat0019.bmp");
+	AddImage("firebat_attack_2_3", L"./Resources/firebat/fire2/firebat0021.bmp");
+	AddImage("firebat_attack_2_4", L"./Resources/firebat/fire2/firebat0023.bmp");
+	AddImage("firebat_attack_2_5", L"./Resources/firebat/fire2/firebat0025.bmp");
+	AddImage("firebat_attack_2_6", L"./Resources/firebat/fire2/firebat0027.bmp");
+	AddImage("firebat_attack_2_7", L"./Resources/firebat/fire2/firebat0029.bmp");
+	AddImage("firebat_attack_2_8", L"./Resources/firebat/fire2/firebat0031.bmp");
+	AddImage("firebat_attack_2_9", L"./Resources/firebat/fire2/firebat0033.bmp");
+
+	AddImage("firebat_idle_1", L"./Resources/firebat/Idle/firebat0051.bmp"); // 마린
+	AddImage("firebat_idle_2", L"./Resources/firebat/Idle/firebat0053.bmp"); // 마린
+	AddImage("firebat_idle_3", L"./Resources/firebat/Idle/firebat0055.bmp"); // 마린
+	AddImage("firebat_idle_4", L"./Resources/firebat/Idle/firebat0057.bmp"); // 마린
+	AddImage("firebat_idle_5", L"./Resources/firebat/Idle/firebat0059.bmp"); // 마린
+	AddImage("firebat_idle_6", L"./Resources/firebat/Idle/firebat0061.bmp"); // 마린
+	AddImage("firebat_idle_7", L"./Resources/firebat/Idle/firebat0063.bmp"); // 마린
+	AddImage("firebat_idle_8", L"./Resources/firebat/Idle/firebat0065.bmp"); // 마린
+	AddImage("firebat_idle_9", L"./Resources/firebat/Idle/firebat0067.bmp"); // 마린
+
+
+	AddImage("firebat_run_1_1", L"./Resources/firebat/run/firebat0034.bmp"); // 마린
+	AddImage("firebat_run_1_2", L"./Resources/firebat/run/firebat0036.bmp"); // 마린
+	AddImage("firebat_run_1_3", L"./Resources/firebat/run/firebat0038.bmp"); // 마린
+	AddImage("firebat_run_1_4", L"./Resources/firebat/run/firebat0040.bmp"); // 마린
+	AddImage("firebat_run_1_5", L"./Resources/firebat/run/firebat0042.bmp"); // 마린
+	AddImage("firebat_run_1_6", L"./Resources/firebat/run/firebat0044.bmp"); // 마린
+	AddImage("firebat_run_1_7", L"./Resources/firebat/run/firebat0046.bmp"); // 마린
+	AddImage("firebat_run_1_8", L"./Resources/firebat/run/firebat0048.bmp"); // 마린
+	AddImage("firebat_run_1_9", L"./Resources/firebat/run/firebat0050.bmp"); // 마린
+
+	AddImage("firebat_run_2_1", L"./Resources/firebat/run2/firebat0068.bmp"); // 마린
+	AddImage("firebat_run_2_2", L"./Resources/firebat/run2/firebat0070.bmp"); // 마린
+	AddImage("firebat_run_2_3", L"./Resources/firebat/run2/firebat0072.bmp"); // 마린
+	AddImage("firebat_run_2_4", L"./Resources/firebat/run2/firebat0074.bmp"); // 마린
+	AddImage("firebat_run_2_5", L"./Resources/firebat/run2/firebat0076.bmp"); // 마린
+	AddImage("firebat_run_2_6", L"./Resources/firebat/run2/firebat0078.bmp"); // 마린
+	AddImage("firebat_run_2_7", L"./Resources/firebat/run2/firebat0080.bmp"); // 마린
+	AddImage("firebat_run_2_8", L"./Resources/firebat/run2/firebat0082.bmp"); // 마린
+	AddImage("firebat_run_2_9", L"./Resources/firebat/run2/firebat0084.bmp"); // 마린
+
+	AddImage("firebat_run_3_1", L"./Resources/firebat/run3/firebat0085.bmp"); // 마린
+	AddImage("firebat_run_3_2", L"./Resources/firebat/run3/firebat0087.bmp"); // 마린
+	AddImage("firebat_run_3_3", L"./Resources/firebat/run3/firebat0089.bmp"); // 마린
+	AddImage("firebat_run_3_4", L"./Resources/firebat/run3/firebat0091.bmp"); // 마린
+	AddImage("firebat_run_3_5", L"./Resources/firebat/run3/firebat0093.bmp"); // 마린
+	AddImage("firebat_run_3_6", L"./Resources/firebat/run3/firebat0095.bmp"); // 마린
+	AddImage("firebat_run_3_7", L"./Resources/firebat/run3/firebat0097.bmp"); // 마린
+	AddImage("firebat_run_3_8", L"./Resources/firebat/run3/firebat0099.bmp"); // 마린
+	AddImage("firebat_run_3_9", L"./Resources/firebat/run3/firebat0101.bmp"); // 마린
+
+	AddImage("firebat_run_4_1", L"./Resources/firebat/run4/firebat0102.bmp"); // 마린
+	AddImage("firebat_run_4_2", L"./Resources/firebat/run4/firebat0104.bmp"); // 마린
+	AddImage("firebat_run_4_3", L"./Resources/firebat/run4/firebat0106.bmp"); // 마린
+	AddImage("firebat_run_4_4", L"./Resources/firebat/run4/firebat0108.bmp"); // 마린
+	AddImage("firebat_run_4_5", L"./Resources/firebat/run4/firebat0110.bmp"); // 마린
+	AddImage("firebat_run_4_6", L"./Resources/firebat/run4/firebat0112.bmp"); // 마린
+	AddImage("firebat_run_4_7", L"./Resources/firebat/run4/firebat0114.bmp"); // 마린
+	AddImage("firebat_run_4_8", L"./Resources/firebat/run4/firebat0116.bmp"); // 마린
+	AddImage("firebat_run_4_9", L"./Resources/firebat/run4/firebat0118.bmp"); // 마린
+
+	AddImage("firebat_run_5_1", L"./Resources/firebat/run5/firebat0119.bmp"); // 마린
+	AddImage("firebat_run_5_2", L"./Resources/firebat/run5/firebat0121.bmp"); // 마린
+	AddImage("firebat_run_5_3", L"./Resources/firebat/run5/firebat0123.bmp"); // 마린
+	AddImage("firebat_run_5_4", L"./Resources/firebat/run5/firebat0125.bmp"); // 마린
+	AddImage("firebat_run_5_5", L"./Resources/firebat/run5/firebat0127.bmp"); // 마린
+	AddImage("firebat_run_5_6", L"./Resources/firebat/run5/firebat0129.bmp"); // 마린
+	AddImage("firebat_run_5_7", L"./Resources/firebat/run5/firebat0131.bmp"); // 마린
+	AddImage("firebat_run_5_8", L"./Resources/firebat/run5/firebat0133.bmp"); // 마린
+	AddImage("firebat_run_5_9", L"./Resources/firebat/run5/firebat0135.bmp"); // 마린
+
+	AddImage("firebat_run_6_1", L"./Resources/firebat/run6/firebat0136.bmp"); // 마린
+	AddImage("firebat_run_6_2", L"./Resources/firebat/run6/firebat0138.bmp"); // 마린
+	AddImage("firebat_run_6_3", L"./Resources/firebat/run6/firebat0140.bmp"); // 마린
+	AddImage("firebat_run_6_4", L"./Resources/firebat/run6/firebat0142.bmp"); // 마린
+	AddImage("firebat_run_6_5", L"./Resources/firebat/run6/firebat0144.bmp"); // 마린
+	AddImage("firebat_run_6_6", L"./Resources/firebat/run6/firebat0146.bmp"); // 마린
+	AddImage("firebat_run_6_7", L"./Resources/firebat/run6/firebat0148.bmp"); // 마린
+	AddImage("firebat_run_6_8", L"./Resources/firebat/run6/firebat0150.bmp"); // 마린
+	AddImage("firebat_run_6_9", L"./Resources/firebat/run6/firebat0152.bmp"); // 마린
+
+	AddImage("firebat_run_7_1", L"./Resources/firebat/run7/firebat0153.bmp"); // 마린
+	AddImage("firebat_run_7_2", L"./Resources/firebat/run7/firebat0155.bmp"); // 마린
+	AddImage("firebat_run_7_3", L"./Resources/firebat/run7/firebat0157.bmp"); // 마린
+	AddImage("firebat_run_7_4", L"./Resources/firebat/run7/firebat0159.bmp"); // 마린
+	AddImage("firebat_run_7_5", L"./Resources/firebat/run7/firebat0161.bmp"); // 마린
+	AddImage("firebat_run_7_6", L"./Resources/firebat/run7/firebat0163.bmp"); // 마린
+	AddImage("firebat_run_7_7", L"./Resources/firebat/run7/firebat0165.bmp"); // 마린
+	AddImage("firebat_run_7_8", L"./Resources/firebat/run7/firebat0167.bmp"); // 마린
+	AddImage("firebat_run_7_9", L"./Resources/firebat/run7/firebat0169.bmp"); // 마린
+
+	AddImage("gas", L"./Resources/ResourceIcon/gas.bmp"); // 마린
+	AddImage("min", L"./Resources/ResourceIcon/min.bmp"); // 마린
+	AddImage("suf", L"./Resources/ResourceIcon/suf.bmp"); // 마린
+
 }

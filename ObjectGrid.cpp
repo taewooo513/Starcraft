@@ -4,7 +4,7 @@
 #include "Unit.h"
 #include "MapReader.h"
 
-void ObjectGrid::Astar()
+void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
 {
 	if (lastX != 0 && lastY != 0) // Astar를 위해 현재 서있는 그리드를 지워준다
 	{
@@ -24,11 +24,20 @@ void ObjectGrid::Astar()
 	{
 		moveStack2.pop();
 	}
+
 	Vector2 tileStartPos;
 	tileStartPos = obj->position / 1.5 / 8;
 	Vector2 tileEndPos = unit->m_dest / 1.5 / 8;
+	if (IMAGEMANAGER->GetMapReader()->region->regionsIds[(int)tileStartPos.y][(int)tileStartPos.x].regionsIds == -1)
+	{
+		return;
+	}
 	if (unit->moveNodeStack.empty() == true)
 	{
+		if (IMAGEMANAGER->GetMapReader()->region->regionsIds[(int)tileStartPos.y][(int)tileStartPos.x].regionsIds != IMAGEMANAGER->GetMapReader()->region->regionsIds[(int)tileEndPos.y][(int)tileEndPos.x].regionsIds)
+		{
+			return;
+		}
 	}
 	else
 	{
@@ -56,7 +65,7 @@ void ObjectGrid::Astar()
 			}
 		}
 	}
-	
+
 	//tileEndPos = IMAGEMANAGER->GetMapReader()->mapRegions[nextRegionId]->pos;
 
 	map<pair<float, float>, Vector2> distmap; // 다음,지금
@@ -64,7 +73,7 @@ void ObjectGrid::Astar()
 
 	priority_queue <pair<Vector2, pair<float, float>>, vector<pair<Vector2, pair<float, float>>>, comp> regionQueue;
 	regionQueue.push(make_pair(tileStartPos, make_pair(0, 0)));
-	distmap.insert(make_pair(make_pair(tileStartPos.x, tileStartPos.y), Vector2{ 0.f,0.f }));
+ 	distmap.insert(make_pair(make_pair(tileStartPos.x, tileStartPos.y), Vector2{ 0.f,0.f }));
 
 	while (regionQueue.empty() == false)
 	{
@@ -105,7 +114,7 @@ void ObjectGrid::Astar()
 				}
 				else
 				{
-					if (searchX < 0 || searchX > 511 || searchY < 0 || searchY >511)
+					if ((int)searchX < 0 || (int)searchX > 511 || (int)searchY < 0 || (int)searchY >511)
 					{
 
 					}
@@ -114,7 +123,23 @@ void ObjectGrid::Astar()
 						auto find2 = distmap.find(make_pair(searchX, searchY));
 						if (find2 == distmap.end())
 						{
-							if (GRIDMANAGER->regionsTile[(int)searchX][(int)searchY].isBuildTag == 0)
+							bool isF = false;
+							/*for (int i = searchX - searchSizeX / 2; i < searchX + searchSizeX / 2; i++)
+							{
+								for (int j = searchY - searchSizeY / 2; j < searchY + searchSizeY / 2; j++)
+								{
+									if (i > 511 || i < 0 || j > 511 || j < 0)
+									{
+										break;
+									}
+									if (GRIDMANAGER->regionsTile[(int)i][(int)j].isBuildTag != 0)
+									{
+										isF = true;
+										break;
+									}
+								}
+							}*/
+							if (GRIDMANAGER->regionsTile[(int)searchX][(int)searchY].isBuildTag == 0 && isF == false)
 							{
 								int cost = 10 + iter.second.first;
 								if ((x + y) % 2 == 0)

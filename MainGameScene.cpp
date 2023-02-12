@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MainGameScene.h"
 #include "SpaceConstructionVehicle.h"
+#include "Marine.h"
 #include "Barrack.h"
 #include "MapReader.h"
 MainGameScene::MainGameScene()
@@ -16,7 +17,6 @@ void MainGameScene::Init()
 	player1 = new Player;
 	GRIDMANAGER->Init();
 	player1->Init();
-
 	OBJECTMANAGER->AddObject(new Mineral, "mimeral", 500, 50, 0);
 }
 

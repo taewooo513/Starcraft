@@ -2,7 +2,8 @@
 #include "Player.h"
 #include "SpaceConstructionVehicle.h"
 #include "CommandCenter.h"
-
+#include "Marine.h"
+#include "FireBat.h"
 void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 {
 	Vector2 tileStartPos, tileEndPos;
@@ -82,6 +83,8 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 							}
 							else
 							{
+								testDraw.push_back(make_pair(___iter.second->pos, __iter.second->pos));
+
 								unit->moveNodeStack.push(new MoveNode{ ___iter.second->pos,__iter.second->regionId });
 								__iter = ___iter;
 								break;
@@ -102,7 +105,7 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 			break;
 		}
 	}
-	
+
 	cout << c << endl;
 }
 
@@ -119,6 +122,13 @@ void Player::Init()
 		scv->SetPlayer(this);
 		OBJECTMANAGER->AddObject(scv, "Unit", 2300 + WINSIZE_X / 3, WINSIZE_Y / 2, 1);
 	}
+	Marine* marin = new Marine;
+	marin->SetPlayer(this);
+	OBJECTMANAGER->AddObject(marin, "marin", 200, 200, 0);
+
+	FireBat* fireBat = new FireBat;
+	fireBat->SetPlayer(this);
+	OBJECTMANAGER->AddObject(fireBat, "marin", 250, 200, 0);
 
 	//m_units.push_back(scv);
 	Build* commandCenter = new CommandCenter;
@@ -370,7 +380,16 @@ void Player::UIRender()
 
 	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("playerUI"), { 0,0 }, 1.6f, 0);
 	IMAGEMANAGER->UIMapRender();
+	if (m_selectUnit != nullptr)
+	{
+		m_selectUnit->UIRender();
+	}
 
+	if (m_selectBuild != nullptr)
+	{
+		m_selectBuild->UIRender();
+	}
+	GRIDMANAGER->Render();
 	if (m_isClick == false)
 	{
 		m_cursorImage->CenterRenderBlendBlack(Vector2{ (float)_ptMouse.x - 110,(float)_ptMouse.y - 110 } + IMAGEMANAGER->GetCameraPosition(), 1.7f, 0, 0);
@@ -384,8 +403,22 @@ void Player::UIRender()
 	for (auto iter : m_selectUnits)
 	{
 		iter->m_isClick = true;
-		IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0018"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.8, 0);
-		IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("grpwire0007"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 1.7, 0);
+		if (typeid(*iter).name() == typeid(SpaceConstructionVehicle).name())
+		{
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0018"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.8, 0);
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("grpwire0007"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 1.7, 0);
+		}
+		if (typeid(*iter).name() == typeid(Marine).name())
+		{
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0018"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.8, 0);
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("grpwire0000"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 1.7, 0);
+		}
+		if (typeid(*iter).name() == typeid(FireBat).name())
+		{
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0018"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.8, 0);
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("grpwire0010"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 1.7, 0);
+		}
+
 		count++;
 	}
 	float mapWidth = mapRect.right - mapRect.left;
@@ -396,16 +429,14 @@ void Player::UIRender()
 	IMAGEMANAGER->DrawRect({ 10 + xx ,560 + yy }, { 10 + xx + float(mapWidth / (4096.f + WINSIZE_X * 2.f) * WINSIZE_X), 560 + yy + float(mapHeight / (4096.f + WINSIZE_Y * 2.5f) * WINSIZE_Y) });
 
 
-	if (m_selectUnit != nullptr)
-	{
-		m_selectUnit->UIRender();
-	}
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("min"), { 700,10 }, 1.5f, 0);
+	IMAGEMANAGER->DirectDrawText(to_wstring(m_mineral), { 725,13 }, { 17,17 });
 
-	if (m_selectBuild != nullptr)
-	{
-		m_selectBuild->UIRender();
-	}
-	GRIDMANAGER->Render();
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("gas"), { 800,10 }, 1.5f, 0);
+	IMAGEMANAGER->DirectDrawText(to_wstring(m_gas), { 825,13 }, { 17,17 });
+
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("suf"), { 900,10 }, 1.5f, 0);
+	IMAGEMANAGER->DirectDrawText(to_wstring(m_suff) + L"/" + to_wstring(m_maxSuff), { 925,13 }, { 17,17 });
 }
 
 void Player::Release()

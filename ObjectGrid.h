@@ -18,7 +18,7 @@ public:
 	bool isDestory = false;
 	float lastX, lastY;
 	float x, y;
-	void Astar();
+	void Astar(float searchSizeX, float searchSizeY);
 	Vector2 destPos;
 	void Init(Object* obj, Vector2 collisionGridSize, Vector2 gridSize, float x, float y);
 	void Update();

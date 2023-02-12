@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Build.h"
+#include "SpaceConstructionVehicle.h"
 
 Build::Build()
 {
@@ -30,8 +31,9 @@ void Build::UIRender()
 {
 }
 
-void Build::AddBuild()
+void Build::AddBuild(SpaceConstructionVehicle* spaceConstructionVehicle)
 {
+	buildUnit = spaceConstructionVehicle;
 	if (m_completeTime >= m_maxCompleteTime)
 	{
 		m_buildIndex = 4;
@@ -61,6 +63,7 @@ void Build::SelectBuild()
 		if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
 		{
 			ObjectDestroyed();
+			buildUnit->m_nowBuild = nullptr;
 			EFFECTMANAGER->AddEffect("f2", { position.x - 120,position.y - 90 }, 1, 0.1f);
 		}
 	}

@@ -3,7 +3,14 @@
 class Barrack : public Build
 {
 private:
+	struct AddUnit
+	{
+		float unit;
+		float timeNow;
+		float maxTime;
+	};
 
+	vector<AddUnit> addUnitQueue;
 public:
 	CImage* m_buildImage[4];
 
