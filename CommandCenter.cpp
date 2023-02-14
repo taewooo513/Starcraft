@@ -80,6 +80,10 @@ void CommandCenter::Update()
 
 void CommandCenter::Render()
 {
+	if (m_isClick == true)
+	{
+		IMAGEMANAGER->DrawCircle({ position.x + 100,position.y + 80 }, 50, 30);
+	}
 	if (m_buildIndex < 4)
 	{
 		if (m_buildIndex < 3)
@@ -95,7 +99,7 @@ void CommandCenter::Render()
 	{
 		IMAGEMANAGER->RenderBlendBlack(idle, { position.x + 8 ,position.y - 50 }, 1.5, 0);
 	}
-	IMAGEMANAGER->DrawRect({ (float)clickRect.left, (float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
+	m_isClick = false;
 }
 
 void CommandCenter::Release()
@@ -104,6 +108,7 @@ void CommandCenter::Release()
 
 void CommandCenter::UIRender()
 {
+	m_isClick = true;
 	if (addUnitQueue.size() < 5)
 	{
 		if (KEYMANAGER->GetOnceKeyDown('S'))

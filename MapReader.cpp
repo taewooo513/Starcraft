@@ -13,7 +13,6 @@ void MapReader::Init(ID2D1DeviceContext* context)
 	FILE* wpeFile;
 	FILE* cv5File;
 
-	cout << sizeof(void*);
 	fopen_s(&file, "./Resources/map/MTXM2", "rb");
 	fopen_s(&wpeFile, "./Resources/map/jungle.wpe", "rb");
 	fopen_s(&cv5File, "./Resources/map/jungle.cv5", "rb");
@@ -678,24 +677,15 @@ void MapReader::RenderLine()
 	{
 		index++;
 	}
-	//for (auto iter : mapRegions)
-	//{
-	//	for (auto _iter : iter->nearRegions)
-	//	{
-	//		if (iter->regionId == index)
-	//			IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
-	//	}
-	//}
-	//for (int i = 0; i < 512; i++)
-	//{
-	//	for (int j = 0; j < 512; j++)
-	//	{
-	//		for (auto iter = region->regionsIds[j][i].nearRegionIdstileNum.begin(); iter + 1 != region->regionsIds[j][i].nearRegionIdstileNum.end(); iter++)
-	//		{
-	//			IMAGEMANAGER->DrawLine({ (float)(*iter).x,(float)(*iter).y }, { (float)(*(iter + 1)).x,(float)(*(iter + 1)).y });
-	//		}
-	//	}
-	//}
+	for (auto iter : mapRegions)
+	{
+		for (auto _iter : iter->nearRegions)
+		{
+			if (iter->regionId == index)
+				IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
+		}
+	}
+	
 }
 
 void MapReader::Release()

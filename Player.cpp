@@ -10,7 +10,6 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 	Vector2 tileStartPos, tileEndPos;
 	tileStartPos = startPos / 1.5 / 8;
 	tileEndPos = endPos / 1.5 / 8;
-	cout << " f" << endl;
 	int nowTileRegionId = IMAGEMANAGER->GetMapReader()->region->regionsIds[(int)tileStartPos.y][(int)tileStartPos.x].regionsIds;
 	while (!unit->moveNodeStack.empty())
 	{
@@ -63,8 +62,6 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 				nextRegion.second->whereRegionId = iter.second->regionId;
 
 				auto __iter = nextRegion;
-				unit->moveNodeStack.push(new MoveNode{ __iter.second->pos, iter.second->regionId });
-				testDraw.push_back(make_pair(__iter.second->pos, nextRegion.second->pos));
 
 				while (true)
 				{
@@ -106,6 +103,8 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 			break;
 		}
 	}
+
+	cout << endl;
 }
 
 void Player::Init()
@@ -364,6 +363,7 @@ void Player::Render()
 
 void Player::UIRender()
 {
+	IMAGEMANAGER->FogRender();
 	if (m_clickRad < 3.141592)
 	{
 		m_clickRad += DELTA_TIME * 30;
@@ -420,7 +420,11 @@ void Player::UIRender()
 			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0018"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.8, 0);
 			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("grpwire0010"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 1.7, 0);
 		}
-
+		if (typeid(*iter).name() == typeid(Vulture).name())
+		{
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0018"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.8, 0);
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("grpwire0002"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 1.7, 0);
+		}
 		count++;
 	}
 	float mapWidth = mapRect.right - mapRect.left;
@@ -432,13 +436,13 @@ void Player::UIRender()
 
 
 	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("min"), { 700,10 }, 1.5f, 0);
-	IMAGEMANAGER->DirectDrawText(to_wstring(m_mineral), { 725,13 }, { 17,17 });
+	IMAGEMANAGER->DirectDrawText(to_wstring(m_mineral), { 725,13 }, { 17,17 }, { 0,1,0,1 });
 
 	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("gas"), { 800,10 }, 1.5f, 0);
-	IMAGEMANAGER->DirectDrawText(to_wstring(m_gas), { 825,13 }, { 17,17 });
+	IMAGEMANAGER->DirectDrawText(to_wstring(m_gas), { 825,13 }, { 17,17 }, {0,1,0,1});
 
 	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("suf"), { 900,10 }, 1.5f, 0);
-	IMAGEMANAGER->DirectDrawText(to_wstring(m_suff) + L"/" + to_wstring(m_maxSuff), { 925,13 }, { 17,17 });
+	IMAGEMANAGER->DirectDrawText(to_wstring(m_suff) + L"/" + to_wstring(m_maxSuff), { 925,13 }, { 17,17 }, { 0,1,0,1 });
 }
 
 void Player::Release()

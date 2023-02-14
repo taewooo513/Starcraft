@@ -14,6 +14,7 @@ public:
 		float x, y;
 		int isBuildTag;
 		vector<int> nearRegionIds;
+		int fogTag = 0;
 	};
 
 	struct Regions
@@ -21,8 +22,8 @@ public:
 		tileNum regionsIds[512][512];
 	};
 
-	tileNum regionsTile[512][512];
 public:
+	tileNum regionsTile[512][512];
 
 	vector<ObjectGrid*> objectGrid;
 public:

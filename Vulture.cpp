@@ -14,7 +14,8 @@ void Vulture::Init()
 {
 	astarTimer = 0.1;
 	player->m_suff += 1;
-
+	m_maxHp = 80;
+	m_hp = m_maxHp;
 
 	grid = GRIDMANAGER->AddGrid(this, 4, 4, 20, 20, -2, -1);
 	grid->gridTag = rand() % 10000 + 100;
@@ -75,16 +76,15 @@ void Vulture::Update()
 
 void Vulture::Render()
 {
-	float rr = 8.f / 3.141592 * abs(rot);
-	cout << rot << endl;
+	float rr = 8.f / 3.141592 * abs(imgRot);
 	bool isR = false;
-	if (rot < 0)
+	if (imgRot < 0)
 	{
 		isR = true;
 	}
 	if (m_isClick == true)
 	{
-		IMAGEMANAGER->DrawCircle({ position.x,position.y + 10 }, 9, 6);
+		IMAGEMANAGER->DrawCircle({ position.x,position.y + 10 }, 12, 8);
 	}
 
 	IMAGEMANAGER->CenterRenderBlendBlack(img[(int)rr], position, 1.5, 0, isR);
@@ -94,12 +94,33 @@ void Vulture::Render()
 void Vulture::UIRender()
 {
 	m_isClick = true;
-	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("wirefram0000"), { 319,680 }, 1.5, 0, 0);
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
+	IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0230"), { UIPosition[2].x - 1 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[1].x + 25,UIPosition[1].y + 25 }, 1.7, 0, 0);
+	IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0229"), { UIPosition[1].x - 1 ,UIPosition[1].y - 2 }, 1.7, 0, 0);
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[0].x + 25,UIPosition[0].y + 25 }, 1.7, 0, 0);
+	IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0228"), { UIPosition[0].x - 1 ,UIPosition[0].y - 2 }, 1.7, 0, 0);
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[4].x + 25,UIPosition[4].y + 25 }, 1.7, 0, 0);
+	IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0231"), { UIPosition[4].x  ,UIPosition[4].y + 4 }, 1.7, 0, 0);
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[3].x + 25,UIPosition[3].y + 25 }, 1.7, 0, 0);
+	IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0232"), { UIPosition[3].x - 2 ,UIPosition[3].y - 2 }, 1.7, 0, 0);
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[6].x + 25,UIPosition[6].y + 25 }, 1.7, 0, 0);
+	IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0234"), { UIPosition[6].x + 3,UIPosition[6].y + 5 }, 1.7, 0, 0);
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[7].x + 25,UIPosition[7].y + 25 }, 1.7, 0, 0);
+	IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0235"), { UIPosition[7].x + 3,UIPosition[7].y + 5 }, 1.7, 0, 0);
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("wirefram0002"), { 319,680 }, 1.5, 0, 0);
 	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 300,730 }, { 12,12 }, { 0,255,0,1 });
 
-	IMAGEMANAGER->DirectDrawText(L"Private", { 460,655 }, { 15,15 }, { 255,255,255,1 });
+	IMAGEMANAGER->DirectDrawText(L"Sergeant", { 460,655 }, { 15,15 }, { 255,255,255,1 });
 
-	IMAGEMANAGER->DirectDrawText(L"Terran Marine", { 430,625 }, { 15,15 });
+	IMAGEMANAGER->DirectDrawText(L"Terran Vulture", { 430,625 }, { 15,15 });
 
 }
 
@@ -142,11 +163,7 @@ void Vulture::Move()
 		d = Vector2{ (float)(grid->moveStack2.top().x * 8 * 1.5),(float)(grid->moveStack2.top().y * 8 * 1.5) };
 		if (d.x != 0 && d.y != 0)
 		{
-
-			if (!grid->moveStack2.empty())
-			{
-				rot = atan2(d.x - position.x, d.y - position.y);
-			}
+			rot = atan2(d.x - position.x, d.y - position.y);
 			if (m_speed < 300)
 			{
 				m_speed += 5;
@@ -180,10 +197,9 @@ void Vulture::Move()
 			}
 			else
 			{
-
+				imgRot = rot;
 				position.x += moveDestX;
 				position.y += moveDestY;
-
 			}
 		}
 		else

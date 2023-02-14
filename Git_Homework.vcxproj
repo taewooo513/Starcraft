@@ -155,6 +155,7 @@
     <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectManager.cpp" />
+    <ClCompile Include="Factory.cpp" />
     <ClCompile Include="FireBat.cpp" />
     <ClCompile Include="FlyUnit.cpp" />
     <ClCompile Include="GridManager.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="CTimer.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectManager.h" />
+    <ClInclude Include="Factory.h" />
     <ClInclude Include="FireBat.h" />
     <ClInclude Include="FlyUnit.h" />
     <ClInclude Include="GridManager.h" />

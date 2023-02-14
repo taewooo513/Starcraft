@@ -4,6 +4,7 @@ class Vulture : public WalkUnit
 {
 public:
 	CImage* img[9];
+	float imgRot = 0;
 	float astarTimer = 0;
 	Vulture();
 	bool isDeath = false;

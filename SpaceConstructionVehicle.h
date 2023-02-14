@@ -7,6 +7,7 @@ class Build;
 class SpaceConstructionVehicle : public WalkUnit
 {
 private:
+	float imgRot = 0;
 	float timer = 0;
 	float m_dir = 0;
 	CImage* m_idleImage[9];
@@ -21,6 +22,7 @@ private:
 	{
 		eBegin,
 		eCommandCenter,
+		eFactory,
 		eBarrack,
 	};
 	float randomMoveRot;

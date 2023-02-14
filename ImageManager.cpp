@@ -116,7 +116,6 @@ void ImageManager::Init(ID2D1DeviceContext* context, IDXGISwapChain1* swapChain)
 
 	WCHAR* c_styleFontName = new WCHAR[70];
 	col->GetFontFamily(0, &fontFamily);
-	cout << col->GetFontFamilyCount();
 	fontFamily->GetFamilyNames(&localizedFontName);
 	localizedFontName->GetString(1, c_styleFontName, 65);
 
@@ -139,7 +138,6 @@ void ImageManager::Init(ID2D1DeviceContext* context, IDXGISwapChain1* swapChain)
 	// Get the family name.
 
 	localizedFontName->GetString(0, name, length + 1);
-	cout << name;
 	context->CreateSolidColorBrush({}, &brush);
 }
 
@@ -275,19 +273,28 @@ void ImageManager::DrawCircle(Vector2 vec, float scaleX, float scaleY, D2D1_COLO
 	elipse->radiusY = 2;
 
 	m_d2dContext->CreateSolidColorBrush({ 0,255,0,255 }, &brush);
-	m_d2dContext->DrawEllipse(elipse, brush.Get(), 0.1f);
+	m_d2dContext->DrawEllipse(elipse, brush.Get(), 0.05f);
 }
 
-void ImageManager::DrawRect(Vector2 startPos, Vector2 endPos, D2D1_COLOR_F color)
+void ImageManager::DrawRect(Vector2 startPos, Vector2 endPos, D2D1_COLOR_F color, int rectStyle)
 {
+	if (startPos.x >= WINSIZE_X || startPos.x <= -30 || startPos.y >= WINSIZE_Y || startPos.y <= -30)
+	{
+		return;
+	}
 	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
-
 	matP = D2D1::Matrix3x2F::Translation(0, 0);
 	matW = matP;
 
 	m_d2dContext->SetTransform(matW);
-	m_d2dContext->CreateSolidColorBrush({ 0,255,0,255 }, &brush);
-	m_d2dContext->DrawRectangle({ startPos.x,startPos.y ,endPos.x ,endPos.y }, brush, 1.5);
+	//m_d2dContext->CreateSolidColorBrush(color, &brush);
+	brush->SetColor(color);
+	if (rectStyle == 1)
+		m_d2dContext->FillRectangle({ startPos.x,startPos.y ,endPos.x ,endPos.y }, brush);
+	else
+	{
+		m_d2dContext->DrawRectangle({ startPos.x,startPos.y ,endPos.x ,endPos.y }, brush, 1.5f);
+	}
 }
 
 void ImageManager::DrawRectRed(Vector2 startPos, Vector2 endPos)
@@ -301,7 +308,7 @@ void ImageManager::DrawRectRed(Vector2 startPos, Vector2 endPos)
 
 	ComPtr<ID2D1SolidColorBrush> brush;
 	m_d2dContext->CreateSolidColorBrush({ 255,0,0,255 }, &brush);
-	m_d2dContext->DrawRectangle({ startPos.x,startPos.y ,endPos.x ,endPos.y }, brush.Get(), 1.5);
+	m_d2dContext->FillRectangle({ startPos.x,startPos.y ,endPos.x ,endPos.y }, brush.Get());
 }
 
 void ImageManager::DrawLine(Vector2 startPos, Vector2 endPos)
@@ -330,6 +337,68 @@ void ImageManager::LoadMap()
 {
 	mapReader = new MapReader;
 	mapReader->Init(m_d2dContext);
+}
+
+void ImageManager::FogRender()
+{
+	for (int i = 0; i < 512; i++)
+	{
+		for (int j = 0; j < 512; j++)
+		{
+			if (GRIDMANAGER->regionsTile[j][i].fogTag == 0)
+			{
+				DrawRect({ (float)j * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x,(float)i * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y },
+					{ (float)j * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x + 1, (float)i * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y + 1 }, { 0,0,0,1 }, 1);
+			}
+		}
+	}
+}
+
+void ImageManager::FogUpdate(Vector2 pos, float dest)
+{
+	Vector2 i = pos / 1.5 / 8;
+
+	for (int x = i.x - dest; x < i.x + dest; x++)
+	{
+		for (int y = i.y - dest; y < i.y + dest; y++)
+		{
+			if (sqrt((x - i.x) * (x - i.x) + (y - i.y) * (y - i.y)) < dest)
+			{
+				GRIDMANAGER->regionsTile[x][y].fogTag = 1;
+			}
+		}
+	}
+}
+
+void ImageManager::DrawUI2(CImage* img, Vector2 vec, float scale, float rot, bool isReverse)
+{
+	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
+
+	matR = D2D1::Matrix3x2F::Rotation(rot, { 0,0 });
+	if (isReverse == false)
+	{
+		matS = D2D1::Matrix3x2F::Scale(scale, scale);
+		matP = D2D1::Matrix3x2F::Translation(vec.x - img->GetWidth() * scale / 2, vec.y - img->GetHeight() * scale / 2);
+	}
+	else
+	{
+		matS = D2D1::Matrix3x2F::Scale(-scale, scale);
+		matP = D2D1::Matrix3x2F::Translation(vec.x + img->GetWidth() * scale / 2, vec.y - img->GetHeight() * scale / 2);
+	}
+
+	matW = matS * matP * matR;
+	ComPtr<ID2D1Effect> saturationEffect;
+
+	m_d2dContext->CreateEffect(CLSID_D2D1Saturation, &saturationEffect);
+	//Color_;CLSID_D2D1AlphaMask
+	blendEffect->SetInput(0, img->GetBitMap());
+
+	m_d2dContext->SetTransform(matW);
+	saturationEffect->SetInput(0, img->GetBitMap());
+	saturationEffect->SetValue(D2D1_SATURATION_PROP_SATURATION, 0.0f);
+	saturationEffect->SetInputEffect(0, blendEffect);
+
+	m_d2dContext->DrawImage(saturationEffect.Get());
 }
 
 ID2D1Bitmap* ImageManager::AddBitmap(std::wstring path, UINT* Width, UINT* Height)
@@ -455,15 +524,29 @@ void ImageManager::ImageLoad()
 	AddImage("backgnd", L"./Resources/backgnd.bmp");
 	// 미네랄
 
-	// SCV
+
+	AddImage("cmdicons0002", L"./Resources/Icon/cmdicons0002.bmp"); //SCVcmdicons0007 벌처
+	AddImage("cmdicons0013", L"./Resources/Icon/cmdicons0013.bmp"); //SCVcmdicons0007cmdicons0013 마인
+	AddImage("cmdicons0023", L"./Resources/Icon/cmdicons0023.bmp"); //탱크 
+	AddImage("cmdicons0120", L"./Resources/Icon/cmdicons0120.bmp"); //탱크 cmdicons0120
+
+	AddImage("cmdicons0023", L"./Resources/Icon/cmdicons0023.bmp"); //SCVcmdicons0007
+	AddImage("cmdicons0005", L"./Resources/Icon/cmdicons0005.bmp"); //SCVcmdicons0007
+	AddImage("cmdicons0003", L"./Resources/Icon/cmdicons0003.bmp"); //SCVcmdicons0007
+	AddImage("cmdicons0002", L"./Resources/Icon/cmdicons0002.bmp"); //SCVcmdicons0007
+
+// SCV
 	AddImage("wirefram0106", L"./Resources/Icon2/wirefram0106.bmp"); //SCVcmdicons0007
 	AddImage("wirefram0000", L"./Resources/Icon2/wirefram0000.bmp"); //SCVcmdicons0007
 	AddImage("wirefram0007", L"./Resources/Icon2/wirefram0007.bmp"); //wirefram0010
 	AddImage("wirefram0010", L"./Resources/Icon2/wirefram0010.bmp"); //wirefram0010
+	AddImage("wirefram0002", L"./Resources/Icon2/wirefram0002.bmp"); //벌쳐grpwire0002
 
 	AddImage("cmdicons0007", L"./Resources/Icon/cmdicons0007.bmp"); //SCVcmdicons0007
 	AddImage("grpwire0000", L"./Resources/Icon3/grpwire0000.bmp"); //SCVcmdicons0007
 	AddImage("grpwire0010", L"./Resources/Icon3/grpwire0010.bmp"); //SCVcmdicons0007
+	AddImage("grpwire0002", L"./Resources/Icon3/grpwire0002.bmp"); //벌쳐
+
 
 	AddImage("scv_idle_1", L"./Resources/scv/scv0000.bmp");
 	AddImage("scv_idle_2", L"./Resources/scv/scv0002.bmp");
@@ -542,7 +625,15 @@ void ImageManager::ImageLoad()
 	AddImage("cmdicons0106", L"./Resources/Icon/cmdicons0106.bmp"); // 커멘드센터
 	AddImage("cmdicons0109", L"./Resources/Icon/cmdicons0109.bmp"); // 서플라이 디포트
 	AddImage("cmdicons0110", L"./Resources/Icon/cmdicons0110.bmp"); // 가스
+
 	AddImage("cmdicons0112", L"./Resources/Icon/cmdicons0112.bmp"); // 아카데미
+	AddImage("factory0000", L"./Resources/Bulid/Factory/factory0000.bmp"); // 기본
+	AddImage("factory0001", L"./Resources/Bulid/Factory/factory0001.bmp"); // 완성 전
+	AddImage("factory0002", L"./Resources/Bulid/Factory/factory0002.bmp"); // 띄우기 1
+	AddImage("factory0003", L"./Resources/Bulid/Factory/factory0003.bmp"); // 띄우기 2
+	AddImage("factory0004", L"./Resources/Bulid/Factory/factory0004.bmp"); // 띄우기 3
+	AddImage("factory0005", L"./Resources/Bulid/Factory/factory0005.bmp"); // 띄우기 4
+
 	AddImage("cmdicons0113", L"./Resources/Icon/cmdicons0113.bmp"); // 펙토리
 	AddImage("cmdicons0114", L"./Resources/Icon/cmdicons0114.bmp"); // 스타포트
 	AddImage("cmdicons0122", L"./Resources/Icon/cmdicons0122.bmp"); // 엔지니어링

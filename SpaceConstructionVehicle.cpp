@@ -3,7 +3,7 @@
 #include "Barrack.h"
 #include "CommandCenter.h"
 #include "Build.h"
-
+#include "Factory.h"
 SpaceConstructionVehicle::SpaceConstructionVehicle()
 {
 }
@@ -16,7 +16,7 @@ void SpaceConstructionVehicle::Init()
 {
 	player->m_suff += 1;
 	astarTimer = 0.1;
-	grid = GRIDMANAGER->AddGrid(this, 1, 1, 20, 20, -1, -2);
+	grid = GRIDMANAGER->AddGrid(this, 3, 3, 20, 20, -1, -1);
 	grid->gridTag = rand() % 10000 + 100;
 	m_isClick = false;
 	m_spark = nullptr;
@@ -91,12 +91,9 @@ void SpaceConstructionVehicle::Move()
 	if (grid->moveStack2.empty() == false)
 	{
 		d = Vector2{ (float)(grid->moveStack2.top().x * 8 * 1.5),(float)(grid->moveStack2.top().y * 8 * 1.5) };
-		if (!grid->moveStack2.empty())
-		{
-			rot = atan2(d.x - position.x, d.y - position.y);
-		}
 		if (d.x != 0 && d.y != 0)
 		{
+			rot = atan2(d.x - position.x, d.y - position.y);
 			if (m_speed < 300)
 			{
 				m_speed += 5;
@@ -112,8 +109,7 @@ void SpaceConstructionVehicle::Move()
 				if (astarTimer < 0)
 				{
 					grid->Astar(4, 4);
-
-					astarTimer = 0.1f;
+					//astarTimer = 0.1f;
 				}
 				astarTimer -= DELTA_TIME;
 				if (grid->moveStack2.empty() == false)
@@ -131,9 +127,9 @@ void SpaceConstructionVehicle::Move()
 			}
 			else
 			{
+				imgRot = rot;
 				position.x += moveDestX;
 				position.y += moveDestY;
-
 			}
 		}
 		else
@@ -145,6 +141,7 @@ void SpaceConstructionVehicle::Move()
 
 void SpaceConstructionVehicle::Update()
 {
+	IMAGEMANAGER->FogUpdate(position, 30);
 	if (m_isClick == false)
 	{
 		if (m_isBuild == false)
@@ -172,7 +169,7 @@ void SpaceConstructionVehicle::Update()
 
 void SpaceConstructionVehicle::Render()
 {
-	float rr = 8.f / 3.141592 * abs(rot);
+	float rr = 8.f / 3.141592 * abs(imgRot);
 	bool isR = false;
 
 	ImageDirection();
@@ -182,7 +179,7 @@ void SpaceConstructionVehicle::Render()
 		IMAGEMANAGER->DrawCircle(position, 12, 9);
 	}
 
-	if (rot <= 0)
+	if (imgRot <= 0)
 	{
 		isR = true;
 	}
@@ -213,15 +210,27 @@ void SpaceConstructionVehicle::UIRender()
 		if (KEYMANAGER->GetOnceKeyDown('B'))
 		{
 			buildIndex = eBarrack;
-			page = 2;
+			page = 4;
 		}
 		if (KEYMANAGER->GetOnceKeyDown('C'))
 		{
 			buildIndex = eCommandCenter;
-			page = 2;
+			page = 4;
 		}
 	}
-	else if (page == 3)
+	else if (page == 2)
+	{
+		if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
+		{
+			page = 0;
+		}
+		if (KEYMANAGER->GetOnceKeyDown('F'))
+		{
+			buildIndex = eFactory;
+			page = 4;
+		}
+	}
+	else if (page == 4)
 	{
 		if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
 		{
@@ -233,7 +242,7 @@ void SpaceConstructionVehicle::UIRender()
 			}
 			else
 			{
-				page = 1;
+				page = 0;
 			}
 		}
 	}
@@ -248,7 +257,7 @@ void SpaceConstructionVehicle::Attack()
 
 void SpaceConstructionVehicle::BuildingConstruction()
 {
-	if (page == 2)
+	if (page == 4)
 	{
 		switch (buildIndex)
 		{
@@ -261,12 +270,20 @@ void SpaceConstructionVehicle::BuildingConstruction()
 			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
 			break;
 		case eBarrack:
-			IMAGEMANAGER->DrawRect({ (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)),(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) },
-			{
-				(float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetWidth() ,
-				(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetHeight()
-			});
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50,(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
+			IMAGEMANAGER->DrawRect({
+				(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
+				(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
+				(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f ,
+				(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight() });
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x - 50, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			break;
+		case eFactory:
+			IMAGEMANAGER->DrawRect({
+					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
+					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
+					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f ,
+					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight() });
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
 			break;
 		}
 	}
@@ -303,6 +320,13 @@ void SpaceConstructionVehicle::BuildObject()
 				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
 				buildIndex = 0;
 				break;
+			case eFactory:
+				m_nowBuild = new Factory;
+				m_isBuild = false;
+				m_nowBuild->SetPlayer(player);
+				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
+				buildIndex = 0;
+				break;
 			}
 		}
 	}
@@ -310,6 +334,10 @@ void SpaceConstructionVehicle::BuildObject()
 	if (m_nowBuild != nullptr)
 	{
 		m_nowBuild->AddBuild(this);
+		if (m_nowBuild->isComplete == true)
+		{
+			m_nowBuild = nullptr;
+		}
 	}
 
 }
@@ -328,9 +356,9 @@ void SpaceConstructionVehicle::Command()
 			{
 				page = 1;
 			}
-			if (KEYMANAGER->GetOnceKeyDown('C'))// 특수 건물
+			if (KEYMANAGER->GetOnceKeyDown('V'))// 특수 건물
 			{
-				//page = 2; 
+				page = 2;
 			}
 		}
 		else if (page == 1)
@@ -338,18 +366,23 @@ void SpaceConstructionVehicle::Command()
 			if (KEYMANAGER->GetOnceKeyDown('B')) // 베럭
 			{
 				buildIndex = eBarrack;
-				page = 3;
+				page = 4;
 			}
 			if (KEYMANAGER->GetOnceKeyDown('C')) //커멘드 센터
 			{
 				buildIndex = eCommandCenter;
-				page = 3;
+				page = 4;
 			}
 		}
 	}
 	else
 	{
-
+		if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
+		{
+			m_nowBuild = nullptr;
+			m_isBuild = false;
+			page = 0;
+		}
 	}
 }
 
@@ -360,34 +393,35 @@ void SpaceConstructionVehicle::BuildActive()
 	mousePos.x = (int)mousePos.x;
 	mousePos.y = (int)mousePos.y;
 
-	switch (buildIndex)
-	{
-	case eCommandCenter:
-		IMAGEMANAGER->DrawRect({
-			(float)((int)(mousePos.x) / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().x),
-			(float)((int)(mousePos.y) / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().y) }, {
-			(float)((int)(mousePos.x) / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().x) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f ,
-			(float)((int)(mousePos.y) / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().y) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight() });
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"),
-			{
-				(float)((int)mousePos.x / (int)(32.f * 1.5f) * (32.f * 1.5)),
-				(float)((int)mousePos.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50
-			}, 1.5, 0);
-		break;
-	case eBarrack:
-		IMAGEMANAGER->DrawRect({
-			(float)((int)mousePos.x / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().x),
-			(float)((int)mousePos.y / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().y) }, {
-			(float)((int)mousePos.x / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().x) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetWidth() ,
-			(float)((int)mousePos.y / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().y) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetHeight()
-			});
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"),
-			{
-				(float)((int)mousePos.x / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50,
-				(float)((int)mousePos.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50
-			}, 1.5, 0);
-		break;
-	}
+	//switch (buildIndex)
+	//{
+	//case eCommandCenter:
+	//	IMAGEMANAGER->DrawRect({
+	//		(float)((int)(mousePos.x) / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().x),
+	//		(float)((int)(mousePos.y) / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().y) }, {
+	//		(float)((int)(mousePos.x) / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().x) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f ,
+	//		(float)((int)(mousePos.y) / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().y) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight() }
+	//		, { 0,1,0,0.5 }, 1);
+	//	IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"),
+	//		{
+	//			(float)((int)mousePos.x / (int)(32.f * 1.5f) * (32.f * 1.5)),
+	//			(float)((int)mousePos.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50
+	//		}, 1.5, 0);
+	//	break;
+	//case eBarrack:
+	//	IMAGEMANAGER->DrawRect({
+	//		(float)((int)mousePos.x / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().x),
+	//		(float)((int)mousePos.y / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().y) }, {
+	//		(float)((int)mousePos.x / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().x) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetWidth() ,
+	//		(float)((int)mousePos.y / (int)(32.f * 1.5f) * (32.f * 1.5) - IMAGEMANAGER->GetCameraPosition().y) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetHeight()
+	//		}, { 0,1,0,0.5 }, 1);
+	//	IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"),
+	//		{
+	//			(float)((int)mousePos.x / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50,
+	//			(float)((int)mousePos.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50
+	//		}, 1.5, 0);
+	//	break;
+	//}
 }
 
 void SpaceConstructionVehicle::BuildCommandUI()
@@ -397,57 +431,79 @@ void SpaceConstructionVehicle::BuildCommandUI()
 		if (page == 0)
 		{
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0230"), { UIPosition[2].x - 1 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0230"), { UIPosition[2].x - 1 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[1].x + 25,UIPosition[1].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0229"), { UIPosition[1].x - 1 ,UIPosition[1].y - 2 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0229"), { UIPosition[1].x - 1 ,UIPosition[1].y - 2 }, 1.7, 0, 0);
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[0].x + 25,UIPosition[0].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0228"), { UIPosition[0].x - 1 ,UIPosition[0].y - 2 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0228"), { UIPosition[0].x - 1 ,UIPosition[0].y - 2 }, 1.7, 0, 0);
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[4].x + 25,UIPosition[4].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0231"), { UIPosition[4].x  ,UIPosition[4].y + 4 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0231"), { UIPosition[4].x  ,UIPosition[4].y + 4 }, 1.7, 0, 0);
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[3].x + 25,UIPosition[3].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0232"), { UIPosition[3].x - 2 ,UIPosition[3].y - 2 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0232"), { UIPosition[3].x - 2 ,UIPosition[3].y - 2 }, 1.7, 0, 0);
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[6].x + 25,UIPosition[6].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0234"), { UIPosition[6].x + 3,UIPosition[6].y + 5 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0234"), { UIPosition[6].x + 3,UIPosition[6].y + 5 }, 1.7, 0, 0);
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[7].x + 25,UIPosition[7].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0235"), { UIPosition[7].x + 3,UIPosition[7].y + 5 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0235"), { UIPosition[7].x + 3,UIPosition[7].y + 5 }, 1.7, 0, 0);
 		}
 		else if (page == 1)
 		{
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[0].x + 25,UIPosition[0].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0106"), { UIPosition[0].x - 4 ,UIPosition[0].y - 7 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0106"), { UIPosition[0].x - 4 ,UIPosition[0].y - 7 }, 1.7, 0, 0);
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[1].x + 25,UIPosition[1].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0109"), { UIPosition[1].x - 4 ,UIPosition[1].y - 7 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0109"), { UIPosition[1].x - 4 ,UIPosition[1].y - 7 }, 1.7, 0, 0);
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0110"), { UIPosition[2].x - 4 ,UIPosition[2].y - 7 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0110"), { UIPosition[2].x - 4 ,UIPosition[2].y - 7 }, 1.7, 0, 0);
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[3].x + 25,UIPosition[3].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0111"), { UIPosition[3].x - 4 ,UIPosition[3].y - 7 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0111"), { UIPosition[3].x - 4 ,UIPosition[3].y - 7 }, 1.7, 0, 0);
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[4].x + 25,UIPosition[4].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0122"), { UIPosition[4].x - 4 ,UIPosition[4].y - 7 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0122"), { UIPosition[4].x - 4 ,UIPosition[4].y - 7 }, 1.7, 0, 0);
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[5].x + 25,UIPosition[5].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0124"), { UIPosition[5].x - 4 ,UIPosition[5].y - 7 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0124"), { UIPosition[5].x - 4 ,UIPosition[5].y - 7 }, 1.7, 0, 0);
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[6].x + 25,UIPosition[6].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0112"), { UIPosition[6].x - 4 ,UIPosition[6].y - 7 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0112"), { UIPosition[6].x - 4 ,UIPosition[6].y - 7 }, 1.7, 0, 0);
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[7].x + 25,UIPosition[7].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0125"), { UIPosition[7].x - 2 ,UIPosition[7].y }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0125"), { UIPosition[7].x - 2 ,UIPosition[7].y }, 1.7, 0, 0);
+
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0236"), UIPosition[8], 1.7, 0, 0);
+		}
+		else if (page == 2)
+		{
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[0].x + 25,UIPosition[0].y + 25 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0106"), { UIPosition[0].x - 4 ,UIPosition[0].y - 7 }, 1.7, 0, 0);
+
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[1].x + 25,UIPosition[1].y + 25 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0109"), { UIPosition[1].x - 4 ,UIPosition[1].y - 7 }, 1.7, 0, 0);
+
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0110"), { UIPosition[2].x - 4 ,UIPosition[2].y - 7 }, 1.7, 0, 0);
+
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[3].x + 25,UIPosition[3].y + 25 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0111"), { UIPosition[3].x - 4 ,UIPosition[3].y - 7 }, 1.7, 0, 0);
+
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[4].x + 25,UIPosition[4].y + 25 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0122"), { UIPosition[4].x - 4 ,UIPosition[4].y - 7 }, 1.7, 0, 0);
+
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0236"), UIPosition[8], 1.7, 0, 0);
 		}
 		else if (page == 3)
 		{
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), UIPosition[8], 1.7, 0, 0);
-			BuildActive();
 		}
 	}
 	else

@@ -190,7 +190,7 @@ void Marine::Move()
 				{
 					grid->Astar(2, 2);
 
-					astarTimer = 0.1f;
+					astarTimer = 0.05f;
 				}
 				astarTimer -= DELTA_TIME;
 				if (grid->moveStack2.empty() == false)

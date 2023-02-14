@@ -24,7 +24,7 @@ void Mineral::Init()
 
 	nowCount = maxCount;
 
-	grid = GRIDMANAGER->AddGrid(this, 3, 1, 20, 20, -4, -2);
+	grid = GRIDMANAGER->AddGrid(this, 7, 4, 20, 20, -3, -2);
 	grid->gridTag = rand() % 100000 + 100;
 }
 

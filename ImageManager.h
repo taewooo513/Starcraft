@@ -47,6 +47,7 @@ private:
 	IDWriteFactory3* m_pDWriteFactory;
 	IDWriteTextFormat* m_pTextFormat;
 	ID2D1SolidColorBrush* brush;
+
 	Vector2 m_cameraPosition = { 0,0 };
 	IDWriteFontFile* pFontFile;
 	map <string, CImage*>m_imageList;
@@ -65,7 +66,7 @@ public:
 	CImage* AddImage(const std::string key, std::wstring path);
 	CImage* FindImage(const std::string key);
 
-	vImage* AddImageVector(const std::string key, std::wstring path, int startIndex, int endIndex,bool isPng = false);
+	vImage* AddImageVector(const std::string key, std::wstring path, int startIndex, int endIndex, bool isPng = false);
 	vImage* FindImageVector(const std::string key);
 	vImage* AddImageVectorCopy(const std::string key);
 
@@ -82,10 +83,15 @@ public:
 	void MapRender();
 	void UIMapRender();
 	void DrawCircle(Vector2 vec, float scaleX, float scaleY, D2D1_COLOR_F color = D2D1::ColorF(255, 255, 255, 1));
-	void DrawRect(Vector2 startPos, Vector2 endPos, D2D1_COLOR_F color = D2D1::ColorF(0, 255, 0, 1));
+	void DrawRect(Vector2 startPos, Vector2 endPos, D2D1_COLOR_F color = D2D1::ColorF(0, 255, 0, 1), int rectStyle = 0);
 	void DrawRectRed(Vector2 startPos, Vector2 endPos);
 	void DrawLine(Vector2 startPos, Vector2 endPos);
+	void FogRender();
+	void FogUpdate(Vector2 pos, float dest);
 
+	/*
+*/
+	void DrawUI2(CImage* img, Vector2 vec, float scale, float rot, bool isReverse);
 
 	void DrawRegion();
 	void LoadMap();

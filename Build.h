@@ -19,7 +19,7 @@ protected:
 
 public:
 	bool isComplete = false;
-
+	bool m_isClick = false;
 	Build();
 	virtual ~Build();
 	// Object을(를) 통해 상속됨
