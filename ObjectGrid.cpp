@@ -85,56 +85,107 @@ void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
 	}
 	if (isF == true)
 	{
-		int error = 0;
-		bool found = false;
-		float cX = tileEndPos.x, cY = tileEndPos.y;
-		while (error < 20)
+		priority_queue <pair< pair<float, float>, Vector2>, vector<pair<pair<float, float>, Vector2>>, comp2> regionQueue;
+
+		vector<Vector2> openNode; // 오픈 노드인지 체크
+		tileEndPos.x = (int)tileEndPos.x;
+		tileEndPos.y = (int)tileEndPos.y;
+
+		regionQueue.push(make_pair(make_pair(0, 0), tileEndPos));
+		openNode.push_back(tileEndPos);
+		while (regionQueue.empty() == false)
 		{
-			found = false;
-			for (int i = 0; i < 2 * error + 1; i++)
+			auto iter = regionQueue.top();
+			regionQueue.pop();
+			bool isF = false;
+			if (GRIDMANAGER->regionsTile[(int)iter.second.x][(int)iter.second.y].isBuildTag == 0)
 			{
-				for (int j = 0; j < 2 * error + 1; j++)
+				for (int i = iter.second.x + this->x; i < iter.second.x + m_collisionGridSize.x + this->x; i++)
 				{
-					if (cX < 511 && cY < 511)
+					for (int j = iter.second.y + this->y; j < iter.second.y + m_collisionGridSize.y + this->y; j++)
 					{
-						bool isFF = false;
-						for (int i2 = cX + i - error + this->x; i2 < cX + i - error + m_collisionGridSize.x + this->x; i2++)
+						if (i < 0 || j < 0 || i > 511 || j >511)
 						{
-							for (int j2 = cY + j - error + this->y; j2 < cY + j - error + m_collisionGridSize.y + this->y; j2++)
-							{
-								if (GRIDMANAGER->regionsTile[(int)i2][(int)j2].isBuildTag != 0)
-								{
-									isFF = true;
-									break;
-								}
-							}
-							if (isFF == true)
-							{
-								break;
-							}
+							continue;
 						}
-						if (isFF == false)
+						if (GRIDMANAGER->regionsTile[(int)i][(int)j].isBuildTag != 0 || GRIDMANAGER->regionsTile[(int)i][(int)j].regionsIds != GRIDMANAGER->regionsTile[(int)tileEndPos.x][(int)tileEndPos.y].regionsIds)
 						{
-							cX += i - error;
-							cY += j - error;
-							found = true;
+							isF = true;
 							break;
 						}
 					}
+					if (isF == true)
+					{
+						break;
+					}
 				}
-				if (found == true)
+				if (isF == false)
 				{
+					cout << GRIDMANAGER->regionsTile[(int)tileEndPos.x][(int)tileEndPos.y].regionsIds;
+					tileEndPos = iter.second;
+					for (int a = -1; a < 2; a++)
+					{
+
+						for (int ac = -1; ac < 2; ac++)
+						{
+							cout << GRIDMANAGER->regionsTile[(int)tileEndPos.x + ac][(int)tileEndPos.y + a].regionsIds;
+						}
+						cout << "\n";
+					}
 					break;
 				}
 			}
-			if (found == true)
+
+			for (int y = -1; y < 2; y++)
 			{
-				tileEndPos.x = cX;
-				tileEndPos.y = cY;
-				break;
+				for (int x = -1; x < 2; x++)
+				{
+					float searchX = iter.second.x + x;
+					float searchY = iter.second.y + y;
+					if (y == 0 && x == 0)
+					{
+					}
+					else
+					{
+						if ((int)searchX < 0 || (int)searchX > 511 || (int)searchY < 0 || (int)searchY >511)
+						{
+
+						}
+						else
+						{
+							Vector2 find2 = { 0,0 };
+							for (auto iter : openNode)
+							{
+								if (iter == Vector2{ (float)searchX, (float)searchY })
+								{
+									find2 = iter;
+									break;
+								}
+							}
+							if (find2 == Vector2{ 0,0 })
+							{
+								int cost = 10 + iter.first.first;
+								if ((x + y) % 2 == 0)
+								{
+									cost += 4;
+								}
+
+								float dx = abs(searchX - tileStartPos.x);
+								float dy = abs(searchY - tileStartPos.y);
+								float e1 = abs(dx - dy);
+								float e2 = min(dx, dy);
+								float d = e1 * 10 + e2 * 14;
+
+								regionQueue.push(make_pair(make_pair(cost, d), Vector2{ searchX, searchY }));
+								openNode.push_back({ searchX, searchY });
+							}
+						}
+					}
+				}
 			}
-			error += 1;
+
 		}
+
 	}
 
 	map<pair<float, float>, Vector2> distmap; // 다음,지금
@@ -149,7 +200,6 @@ void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
 		if ((int)iter.first.x == (int)tileEndPos.x && (int)iter.first.y == (int)tileEndPos.y)
 		{
 			auto find = distmap.find(make_pair(iter.first.x, iter.first.y));
-			moveStack2.push({ iter.first });
 			while (true)
 			{
 				if (find != distmap.end())
@@ -191,15 +241,15 @@ void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
 						if (find2 == distmap.end())
 						{
 							bool isF = false;
-							for (int i = searchX + this->x; i < searchX + m_collisionGridSize.x ; i++)
+							for (int i = (int)searchX + this->x; i < (int)searchX + m_collisionGridSize.x + this->x; i++)
 							{
-								for (int j = searchY + this->y; j < searchY + m_collisionGridSize.y; j++)
+								for (int j = (int)searchY + this->y; j < (int)searchY + m_collisionGridSize.y + this->y; j++)
 								{
 									if (i < 0 || j < 0 || i > 511 || j >511)
 									{
-										continue;
+
 									}
-									if (GRIDMANAGER->regionsTile[(int)i][(int)j].isBuildTag != 0)
+									else if (GRIDMANAGER->regionsTile[(int)i][(int)j].isBuildTag != 0)
 									{
 										isF = true;
 										break;

@@ -219,6 +219,8 @@ void Marine::Move()
 			m_speed = 0;
 		}
 	}
+	grid->Update();
+
 }
 
 void Marine::Attack()
@@ -273,6 +275,7 @@ void Marine::Update()
 		m_speed = 0;
 	}
 	CollisionUpdate();
+
 }
 
 void Marine::Render()

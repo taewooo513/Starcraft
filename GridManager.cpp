@@ -63,7 +63,7 @@ void GridManager::Update()
 		}
 		else
 		{
-			(*iter)->Update();
+			//(*iter)->Update();
 			iter++;
 		}
 	}
@@ -95,21 +95,21 @@ void GridManager::Render()
 	//	}
 	//}
 
-	//for (auto iter : IMAGEMANAGER->GetMapReader()->mapRegions)
-	//{
-	//	for (auto _iter : iter->nearRegionPosition)
-	//	{
-	//		for (auto __iter : _iter.second)
-	//		{
-	//			IMAGEMANAGER->DrawRectRed(
-	//				{ float(__iter.x) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
-	//				float(__iter.y) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, 
-	//				{ float(__iter.x)* 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
-	//				float(__iter.y) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y
-	//				});
-	//		}
-	//	}
-	//}
+	for (auto iter : IMAGEMANAGER->GetMapReader()->mapRegions)
+	{
+		for (auto _iter : iter->nearRegionPosition)
+		{
+			for (auto __iter : _iter.second)
+			{
+				IMAGEMANAGER->DrawRectRed(
+					{ float(__iter.x) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
+					float(__iter.y) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, 
+					{ float(__iter.x)* 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
+					float(__iter.y) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y
+					});
+			}
+		}
+	}
 
 	//for (auto iter : objectGrid)
 	//{

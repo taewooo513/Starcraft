@@ -183,6 +183,8 @@ void FireBat::Move()
 			m_speed = 0;
 		}
 	}
+	grid->Update();
+
 }
 
 void FireBat::Attack()

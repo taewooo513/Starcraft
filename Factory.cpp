@@ -73,18 +73,18 @@ void Factory::Render()
 {
 	if (m_isClick == true)
 	{
-		IMAGEMANAGER->DrawCircle({ position.x,position.y + 10 }, 9, 6);
+		IMAGEMANAGER->DrawCircle({ position.x,position.y  }, 50, 30);
 	}
 	if (m_buildIndex < 4)
 	{
 		if (m_buildIndex < 3)
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 20 ,position.y - 20 }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 120 ,position.y - 110 }, 1.5, 0);
 		else
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x  ,position.y - 50 }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 96  ,position.y - 130 }, 1.5, 0);
 	}
 	else
 	{
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { position.x,position.y - 50 }, 1.5, 0);
+		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { position.x - 96,position.y - 130 }, 1.5, 0);
 	}
 	m_isClick = false;
 }

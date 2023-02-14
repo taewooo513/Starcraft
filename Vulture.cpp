@@ -207,6 +207,7 @@ void Vulture::Move()
 			m_speed = 0;
 		}
 	}
+	grid->Update();
 }
 
 void Vulture::Attack()

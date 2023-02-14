@@ -82,18 +82,18 @@ void Barrack::Render()
 {
 	if (m_isClick == true)
 	{
-		IMAGEMANAGER->DrawCircle({ position.x + 100,position.y + 80 }, 50, 30);
+		IMAGEMANAGER->DrawCircle({ position.x  ,position.y }, 50, 30);
 	}
 	if (m_buildIndex < 4)
 	{
 		if (m_buildIndex < 3)
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 20 ,position.y - 20 }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 120 ,position.y - 110 }, 1.5, 0);
 		else
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 50 ,position.y - 50 }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 150 ,position.y - 130 }, 1.5, 0);
 	}
 	else
 	{
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { position.x - 50,position.y - 50 }, 1.5, 0);
+		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { position.x - 150,position.y - 130 }, 1.5, 0);
 	}
 	m_isClick = false;
 }
@@ -104,6 +104,9 @@ void Barrack::Release()
 
 void Barrack::UIRender()
 {
+
+	IMAGEMANAGER->DrawCircle({ position.x ,position.y }, 10, 10);
+
 	m_isClick = true;
 	if (addUnitQueue.size() < 5)
 	{

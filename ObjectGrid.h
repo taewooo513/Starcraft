@@ -34,6 +34,13 @@ public:
 			return false;
 		}
 	};
-
+	struct comp2 {
+		bool operator()(pair<pair<float, float>, Vector2> A, pair<pair<float, float>, Vector2 > B)
+		{
+			if (A.first.first + A.first.second > B.first.first + B.first.second)
+				return true;
+			return false;
+		}
+	};
 };
 

@@ -24,6 +24,8 @@ private:
 		eCommandCenter,
 		eFactory,
 		eBarrack,
+		eAcademy,
+		eEngin
 	};
 	float randomMoveRot;
 	float randomMoveTime;

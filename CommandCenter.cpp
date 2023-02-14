@@ -36,7 +36,7 @@ void CommandCenter::Init()
 	grid->gridTag = 3;
 	player->AddBuild(this);
 
-	m_maxCompleteTime = 75.8f;
+	m_maxCompleteTime = 12.8f;
 	m_completeTime = 0;
 	m_costM = 400;
 	m_costG = 0;
@@ -76,28 +76,29 @@ void CommandCenter::Update()
 	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x;
 	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y;
 	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y;
+	grid->Update();
 }
 
 void CommandCenter::Render()
 {
 	if (m_isClick == true)
 	{
-		IMAGEMANAGER->DrawCircle({ position.x + 100,position.y + 80 }, 50, 30);
+		IMAGEMANAGER->DrawCircle({ position.x,position.y }, 50, 30);
 	}
 	if (m_buildIndex < 4)
 	{
 		if (m_buildIndex < 3)
 		{
-			IMAGEMANAGER->RenderBlendBlack(buildImage[m_buildIndex], { position.x - 20 ,position.y - 20 }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(buildImage[m_buildIndex], { position.x - 120 ,position.y - 120 }, 1.5, 0);
 		}
 		else
 		{
-			IMAGEMANAGER->RenderBlendBlack(buildImage[m_buildIndex], { position.x ,position.y - 50 }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(buildImage[m_buildIndex], { position.x - 96 ,position.y - 130 }, 1.5, 0);
 		}
 	}
 	else
 	{
-		IMAGEMANAGER->RenderBlendBlack(idle, { position.x + 8 ,position.y - 50 }, 1.5, 0);
+		IMAGEMANAGER->RenderBlendBlack(idle, { position.x - 96 ,position.y - 130 }, 1.5, 0);
 	}
 	m_isClick = false;
 }

@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Academy.cpp" />
     <ClCompile Include="Barrack.cpp" />
     <ClCompile Include="Build.cpp" />
     <ClCompile Include="CommandCenter.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectManager.cpp" />
+    <ClCompile Include="EngineeringBay.cpp" />
     <ClCompile Include="Factory.cpp" />
     <ClCompile Include="FireBat.cpp" />
     <ClCompile Include="FlyUnit.cpp" />
@@ -191,6 +193,7 @@
     <ClCompile Include="LoadImage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Academy.h" />
     <ClInclude Include="Barrack.h" />
     <ClInclude Include="Build.h" />
     <ClInclude Include="CommandCenter.h" />
@@ -199,6 +202,7 @@
     <ClInclude Include="CTimer.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectManager.h" />
+    <ClInclude Include="EngineeringBay.h" />
     <ClInclude Include="Factory.h" />
     <ClInclude Include="FireBat.h" />
     <ClInclude Include="FlyUnit.h" />

@@ -341,17 +341,37 @@ void ImageManager::LoadMap()
 
 void ImageManager::FogRender()
 {
-	for (int i = 0; i < 512; i++)
-	{
-		for (int j = 0; j < 512; j++)
-		{
-			if (GRIDMANAGER->regionsTile[j][i].fogTag == 0)
-			{
-				DrawRect({ (float)j * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x,(float)i * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y },
-					{ (float)j * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x + 1, (float)i * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y + 1 }, { 0,0,0,1 }, 1);
-			}
-		}
-	}
+	//for (int i = 0; i < 512; i++)
+	//{
+	//	for (int j = 0; j < 512; j++)
+	//	{
+	//
+	//		if (GRIDMANAGER->regionsTile[j][i].fogTag == 0)
+	//		{
+	//			DrawRect({ (float)j * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x,(float)i * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y },
+	//				{ (float)j * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x + 1, (float)i * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y + 1 }, { 0,0,0,1 }, 1);
+	//		}
+	//		else
+	//		{
+	//			bool isCheck = false;
+	//			int c = 0;
+	//			for (int f = 0; f < 5; f++)
+	//			{
+	//				if (GRIDMANAGER->regionsTile[j][i + f].fogTag == 0 || GRIDMANAGER->regionsTile[j][i - f].fogTag == 0
+	//					|| GRIDMANAGER->regionsTile[j + f][i].fogTag == 0 || GRIDMANAGER->regionsTile[j - f][i].fogTag == 0)
+	//				{
+	//					c++;
+	//					isCheck = true;
+	//				}
+	//			}
+	//			if (isCheck == true)
+	//			{
+	//				DrawRect({ (float)j * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x,(float)i * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y },
+	//					{ (float)j * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x + 1, (float)i * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y + 1 }, { 0,0,0,1.f / 5 * c }, 1);
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 void ImageManager::FogUpdate(Vector2 pos, float dest)
@@ -535,7 +555,7 @@ void ImageManager::ImageLoad()
 	AddImage("cmdicons0003", L"./Resources/Icon/cmdicons0003.bmp"); //SCVcmdicons0007
 	AddImage("cmdicons0002", L"./Resources/Icon/cmdicons0002.bmp"); //SCVcmdicons0007
 
-// SCV
+	// SCV
 	AddImage("wirefram0106", L"./Resources/Icon2/wirefram0106.bmp"); //SCVcmdicons0007
 	AddImage("wirefram0000", L"./Resources/Icon2/wirefram0000.bmp"); //SCVcmdicons0007
 	AddImage("wirefram0007", L"./Resources/Icon2/wirefram0007.bmp"); //wirefram0010
@@ -590,6 +610,10 @@ void ImageManager::ImageLoad()
 	AddImage("cmdicons0229", L"./Resources/Icon/cmdicons0229.bmp"); // stop
 	AddImage("cmdicons0228", L"./Resources/Icon/cmdicons0228.bmp"); // move
 
+	AddImage("tbldmed0000", L"./Resources/Bulid/Building2/tbldmed0000.bmp"); // attack 
+	AddImage("tbldmed0001", L"./Resources/Bulid/Building2/tbldmed0001.bmp"); // stop
+	AddImage("tbldmed0002", L"./Resources/Bulid/Building2/tbldmed0002.bmp"); // move
+
 	// 커멘드 센터 
 	AddImage("control0000", L"./Resources/Bulid/CommandCenter/control0000.bmp"); // 일반상태 
 	AddImage("control0001", L"./Resources/Bulid/CommandCenter/control0001.bmp"); // 완성전단계
@@ -598,6 +622,16 @@ void ImageManager::ImageLoad()
 	AddImage("control0004", L"./Resources/Bulid/CommandCenter/control0004.bmp"); // Up 3
 	AddImage("controlt", L"./Resources/Bulid/CommandCenter/controlt.bmp"); // 유닛 생성중
 
+	//아카데미
+	AddImage("academy0000", L"./Resources/Bulid/Academy/academy0000.bmp"); // 일반상태 
+	AddImage("academy0001", L"./Resources/Bulid/Academy/academy0001.bmp"); // 완성전단계
+
+	// 엔지니어링 베이스
+	AddImage("weaponpl0000", L"./Resources/Bulid/engin/weaponpl0000.bmp"); // 일반상태 
+	AddImage("weaponpl0001", L"./Resources/Bulid/engin/weaponpl0001.bmp"); // 완성전단계
+	AddImage("weaponpl0002", L"./Resources/Bulid/engin/weaponpl0002.bmp"); // Up 1
+	AddImage("weaponpl0003", L"./Resources/Bulid/engin/weaponpl0003.bmp"); // Up 2
+	AddImage("weaponpl0004", L"./Resources/Bulid/engin/weaponpl0004.bmp"); // Up 3
 
 	// 베럭 짓는중
 	AddImage("tbldlrg0000", L"./Resources/Bulid/Buliding/tbldlrg0000.bmp"); // move
