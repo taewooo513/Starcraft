@@ -17,7 +17,6 @@ protected:
 
 	bool m_isMoveAble;
 	Vector2 m_destination = { 0,0 };
-	RECT clickRect;
 public:
 	Vector2 m_dest;
 	bool m_isClick;

@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Unit.h"
 #include "MapReader.h"
+#include "Mineral.h"
 
 class Build;
 class Player
@@ -38,6 +39,8 @@ public:
 	vector<pair<Vector2, Vector2>> testDraw;
 	void UIRender();
 	void Release();
+	
+	vector<Object*> resrouces;
 
 	struct comp {
 		bool operator()(pair<pair<float, float>, MapRegions*>A, pair<pair<float, float>, MapRegions*>B)
@@ -49,6 +52,7 @@ public:
 			return false;
 		}
 	};
+
 	void AddBuild(Build* build)
 	{
 		m_builds.push_back(build);

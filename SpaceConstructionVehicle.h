@@ -15,6 +15,9 @@ private:
 	CImage* m_actionImage_2[9];
 	CImage* m_buttom;
 	Vector2 d;
+	float mineTimer = 0;
+	bool isMine = false;
+	float mineResertTimer = 0;
 	float m_ImageDirection = 0;
 	Effect* m_spark;
 	float astarTimer;
@@ -47,6 +50,7 @@ public:
 	virtual void Render() override;
 	virtual void UIRender() override;
 	virtual void Attack() override;
+	Mineral* me;
 
 	void ImageDirection();
 	void BuildObject();

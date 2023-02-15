@@ -61,6 +61,7 @@ void SpaceConstructionVehicle::Init()
 	m_buttom = IMAGEMANAGER->FindImage("tcmdbtns0000");
 	d = { 0,0 };
 	randomMoveTime = 0;
+	mineTimer = 0;
 }
 
 void SpaceConstructionVehicle::Move()
@@ -68,6 +69,8 @@ void SpaceConstructionVehicle::Move()
 	Vector2 nowRegionPos;
 	nowRegionPos = position / 1.5 / 8;
 	int regionId = GRIDMANAGER->regionsTile[(int)nowRegionPos.x][(int)nowRegionPos.y].regionsIds;
+
+
 
 	if (regionId != -1)
 	{
@@ -148,10 +151,6 @@ void SpaceConstructionVehicle::Move()
 			m_speed = 0;
 		}
 	}
-
-
-
-
 	grid->Update();
 }
 
@@ -179,6 +178,52 @@ void SpaceConstructionVehicle::Update()
 	{
 		m_speed = 0;
 	}
+
+	if (me != nullptr)
+	{
+		if (m_dest.x == 0 && m_dest.y == 0)
+		{
+			if (isMine == false)
+			{
+				if (me->nowMineUnit == nullptr)
+				{
+					me->nowMineUnit = this;
+				}
+			}
+			else if (isMine == true)
+			{
+				mineResertTimer += DELTA_TIME;
+				if (mineResertTimer > 0.5f)
+				{
+					player->m_mineral += 8;
+					m_dest = me->position;
+					isMine = false;
+					mineResertTimer = 0;
+				}
+			}
+		}
+
+		if (me->nowMineUnit == this)
+		{
+			mineTimer += DELTA_TIME;
+			if (mineTimer > 3)
+			{
+				me->MineMineral();
+				isMine = true;
+				mineTimer = 0;
+				for (auto iter : player->m_builds)
+				{
+					if (typeid(*iter).name() == typeid(CommandCenter).name())
+					{
+						me->nowMineUnit = nullptr;
+						m_dest = iter->position;
+					}
+				}
+			}
+		}
+	}
+
+
 	BuildObject();
 	CollisionUpdate();
 }

@@ -84,7 +84,6 @@ void EngineeringBay::Release()
 
 void EngineeringBay::UIRender()
 {
-
 	IMAGEMANAGER->DrawCircle({ position.x ,position.y }, 10, 10);
 
 	m_isClick = true;

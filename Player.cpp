@@ -120,7 +120,7 @@ void Player::Init()
 		scv->SetPlayer(this);
 		OBJECTMANAGER->AddObject(scv, "Unit", 2300 + WINSIZE_X / 3, WINSIZE_Y / 2, 1);
 	}
-	Marine* marin = new Marine;
+	SpaceConstructionVehicle* marin = new SpaceConstructionVehicle;
 	marin->SetPlayer(this);
 	OBJECTMANAGER->AddObject(marin, "marin", 200, 200, 0);
 
@@ -158,12 +158,29 @@ void Player::Update()
 
 	if (KEYMANAGER->GetOnceKeyDown(VK_RBUTTON))
 	{
+
 		m_clickRad = 0;
 		m_rClickPos.x = _ptMouse.x + IMAGEMANAGER->GetCameraPosition().x;
 		m_rClickPos.y = _ptMouse.y + IMAGEMANAGER->GetCameraPosition().y;
 		if (m_selectUnit != nullptr)
 		{
-			m_selectUnit->SetDestPosition(m_rClickPos);
+			for (auto iter : resrouces)
+			{
+				m_selectUnit->SetDestPosition(m_rClickPos);
+				if (PtInRect(&iter->clickRect, _ptMouse))
+				{
+					if (typeid(*m_selectUnit).name() == typeid(SpaceConstructionVehicle).name())
+					{
+						SpaceConstructionVehicle* scv = dynamic_cast<SpaceConstructionVehicle*>(m_selectUnit);
+						if (typeid(*iter).name() == typeid(Mineral).name())
+						{
+							scv->me = dynamic_cast<Mineral*>(iter);
+						}
+					}
+
+					m_selectUnit->SetDestPosition(iter->position);
+				}
+			}
 			Astar(m_selectUnit->GetPosition(), { m_rClickPos }, m_selectUnit);
 		}
 		for (auto iter : m_selectUnits)
@@ -439,7 +456,7 @@ void Player::UIRender()
 	IMAGEMANAGER->DirectDrawText(to_wstring(m_mineral), { 725,13 }, { 17,17 }, { 0,1,0,1 });
 
 	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("gas"), { 800,10 }, 1.5f, 0);
-	IMAGEMANAGER->DirectDrawText(to_wstring(m_gas), { 825,13 }, { 17,17 }, {0,1,0,1});
+	IMAGEMANAGER->DirectDrawText(to_wstring(m_gas), { 825,13 }, { 17,17 }, { 0,1,0,1 });
 
 	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("suf"), { 900,10 }, 1.5f, 0);
 	IMAGEMANAGER->DirectDrawText(to_wstring(m_suff) + L"/" + to_wstring(m_maxSuff), { 925,13 }, { 17,17 }, { 0,1,0,1 });

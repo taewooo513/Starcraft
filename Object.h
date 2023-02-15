@@ -5,6 +5,7 @@ class Object
 public:
 	Vector2 position;
 	ObjectGrid* grid;
+	RECT clickRect;
 
 	Vector2 UIPosition[9] = {
 		{847,606},

@@ -426,16 +426,16 @@ void ImageManager::FogUpdate(Vector2 pos, float dest)
 {
 	Vector2 i = pos / 1.5 / 8;
 
-	for (int x = i.x - dest; x < i.x + dest; x++)
-	{
-		for (int y = i.y - dest; y < i.y + dest; y++)
-		{
-			if (sqrt((x - i.x) * (x - i.x) + (y - i.y) * (y - i.y)) < dest)
-			{
-				GRIDMANAGER->regionsTile[x][y].fogTag = 1;
-			}
-		}
-	}
+	//for (int x = i.x - dest; x < i.x + dest; x++)
+	//{
+	//	for (int y = i.y - dest; y < i.y + dest; y++)
+	//	{
+	//		if (sqrt((x - i.x) * (x - i.x) + (y - i.y) * (y - i.y)) < dest)
+	//		{
+	//			GRIDMANAGER->regionsTile[x][y].fogTag = 1;
+	//		}
+	//	}
+	//}
 }
 
 void ImageManager::DrawUI2(CImage* img, Vector2 vec, float scale, float rot, bool isReverse)

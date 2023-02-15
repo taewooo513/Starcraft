@@ -17,7 +17,9 @@ void MainGameScene::Init()
 	player1 = new Player;
 	GRIDMANAGER->Init();
 	player1->Init();
-	OBJECTMANAGER->AddObject(new Mineral, "mimeral", 500, 50, 0);
+	Object* me = new Mineral;
+	OBJECTMANAGER->AddObject(me, "mimeral", 500, 50, 0);
+	player1->resrouces.push_back(me);
 }
 
 void MainGameScene::Update()

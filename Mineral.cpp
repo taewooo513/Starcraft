@@ -30,10 +30,18 @@ void Mineral::Init()
 
 void Mineral::Update()
 {
+	grid->Update();
+	clickRect = { int(position.x) , int(position.y) , int((position.x + 32 * 4 * 1.5f)) , int((position.y + 32 * 3 * 1.5f)) };
+	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x+50;
+	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x +145;
+	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y +110;
+	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y + 50;
 }
 
 void Mineral::Render()
 {
+	IMAGEMANAGER->DrawRect({ (float)clickRect.left,(float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
+
 	if (KEYMANAGER->GetOnceKeyDown(VK_F1))
 	{
 		nowCount -= 500;
