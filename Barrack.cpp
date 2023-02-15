@@ -25,7 +25,10 @@ Barrack::~Barrack()
 
 void Barrack::Init()
 {
-	grid = GRIDMANAGER->AddGrid(this, 14, 8, 3, 2, 2, 1);
+	workImage = IMAGEMANAGER->AddImageVectorCopy("Barrack_Work");
+	workImage->Setting(0.1, true);
+	grid = GRIDMANAGER->AddGrid(this, 14, 11, 3, 2, -7, -5);
+
 	grid->gridTag = 3;
 
 	player->AddBuild(this);
@@ -45,6 +48,7 @@ void Barrack::Init()
 
 void Barrack::Update()
 {
+	grid->Update();
 	if (addUnitQueue.empty() == false)
 	{
 		if (addUnitQueue.front().timeNow < addUnitQueue.front().maxTime)
@@ -72,14 +76,15 @@ void Barrack::Update()
 	}
 
 	clickRect = { int(position.x) , int(position.y) , int((position.x + 32 * 4 * 1.5f)) , int((position.y + 32 * 3 * 1.5f)) };
-	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x;
-	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x;
-	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y;
-	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y;
+	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x + 95;
+	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x + 95;
+	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y + 80;
+	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y + 80;
 }
 
 void Barrack::Render()
 {
+	IMAGEMANAGER->DrawRect({ (float)clickRect.left,(float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
 	if (m_isClick == true)
 	{
 		IMAGEMANAGER->DrawCircle({ position.x  ,position.y }, 50, 30);
@@ -93,7 +98,12 @@ void Barrack::Render()
 	}
 	else
 	{
+		IMAGEMANAGER->RenderBlendBlack2(IMAGEMANAGER->FindImage("tbrshad0000"), { position.x - 150,position.y - 130 }, 1.5, 0,0.5f);
 		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { position.x - 150,position.y - 130 }, 1.5, 0);
+	}
+	if (!addUnitQueue.empty())
+	{
+		workImage->CenterRenderBlendBlack({ position.x - 150,position.y - 130 }, 1.5, 0, 0);
 	}
 	m_isClick = false;
 }

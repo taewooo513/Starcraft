@@ -119,6 +119,22 @@
     <ClCompile Include="Factory.cpp">
       <Filter>Game\Object\Build\Terran\Factory</Filter>
     </ClCompile>
+    <ClCompile Include="Academy.cpp">
+      <Filter>Game\Object\Build\Terran\Academy</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineeringBay.cpp">
+      <Filter>Game\Object\Build\Terran\EngineeringBay</Filter>
+    </ClCompile>
+    <ClCompile Include="Depot.cpp">
+      <Filter>Game\Object\Build\Terran\Depot</Filter>
+    </ClCompile>
+    <ClCompile Include="Starport.cpp">
+      <Filter>Game\Object\Build\Terran\Starport</Filter>
+    </ClCompile>
+    <ClCompile Include="Armory.cpp">
+      <Filter>Game\Object\Build\Terran\Armory</Filter>
+    </ClCompile>
+    <ClCompile Include="ScienceFacility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -230,6 +246,22 @@
     <ClInclude Include="Factory.h">
       <Filter>Game\Object\Build\Terran\Factory</Filter>
     </ClInclude>
+    <ClInclude Include="Academy.h">
+      <Filter>Game\Object\Build\Terran\Academy</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineeringBay.h">
+      <Filter>Game\Object\Build\Terran\EngineeringBay</Filter>
+    </ClInclude>
+    <ClInclude Include="Depot.h">
+      <Filter>Game\Object\Build\Terran\Depot</Filter>
+    </ClInclude>
+    <ClInclude Include="Starport.h">
+      <Filter>Game\Object\Build\Terran\Starport</Filter>
+    </ClInclude>
+    <ClInclude Include="Armory.h">
+      <Filter>Game\Object\Build\Terran\Armory</Filter>
+    </ClInclude>
+    <ClInclude Include="ScienceFacility.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -339,6 +371,24 @@
     </Filter>
     <Filter Include="Game\Object\Build\Terran\Factory">
       <UniqueIdentifier>{a29ede21-cfed-4c52-a5c3-e0064fe2d438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Build\Terran\Academy">
+      <UniqueIdentifier>{cb249625-6ef3-4d11-9efe-b462dd035f51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Build\Terran\EngineeringBay">
+      <UniqueIdentifier>{dfef6cda-b92b-42e3-b4ee-310f97728988}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Build\Terran\Depot">
+      <UniqueIdentifier>{30047430-12fb-43ec-8a18-915c067961c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Build\Terran\Starport">
+      <UniqueIdentifier>{40236456-0f79-47e6-aeec-7b1eabb91bc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Build\Terran\Bunker">
+      <UniqueIdentifier>{fec23e08-dc09-4dd2-a76c-c9c1c3780486}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Build\Terran\Armory">
+      <UniqueIdentifier>{497763e2-620d-4e9c-8514-2806222b8d4f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

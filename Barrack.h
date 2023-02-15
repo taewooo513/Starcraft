@@ -9,7 +9,7 @@ private:
 		float timeNow;
 		float maxTime;
 	};
-
+	vImage* workImage;
 	vector<AddUnit> addUnitQueue;
 public:
 	CImage* m_buildImage[4];
@@ -22,7 +22,6 @@ public:
 	virtual void Render() override;
 	virtual void Release() override;
 	virtual void UIRender() override;
-
 
 };
 

@@ -8,7 +8,7 @@ class Factory : public Build
 		float timeNow;
 		float maxTime;
 	};
-
+	vImage* idleAnimation;
 	vector<AddUnit> addUnitQueue;
 public:
 	CImage* m_buildImage[4];

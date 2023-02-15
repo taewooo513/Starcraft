@@ -23,7 +23,8 @@ Academy::~Academy()
 
 void Academy::Init()
 {
-	grid = GRIDMANAGER->AddGrid(this, 14, 8, 3, 2, 2, 1);
+	grid = GRIDMANAGER->AddGrid(this, 12, 10, 3, 2, -5, -5);
+
 	grid->gridTag = 3;
 
 	player->AddBuild(this);
@@ -43,20 +44,23 @@ void Academy::Init()
 
 void Academy::Update()
 {
+	grid->Update();
 	if (addUnitQueue.empty() == false)
 	{
 
 	}
 
 	clickRect = { int(position.x) , int(position.y) , int((position.x + 32 * 4 * 1.5f)) , int((position.y + 32 * 3 * 1.5f)) };
-	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x;
-	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x;
-	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y;
-	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y;
+	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x + 85;
+	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x + 85;
+	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y + 75;
+	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y + 75;
 }
 
 void Academy::Render()
 {
+	IMAGEMANAGER->DrawRect({ (float)clickRect.left,(float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
+
 	if (m_isClick == true)
 	{
 		IMAGEMANAGER->DrawCircle({ position.x  ,position.y }, 50, 30);
@@ -64,13 +68,13 @@ void Academy::Render()
 	if (m_buildIndex < 4)
 	{
 		if (m_buildIndex < 3)
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 72 ,position.y - 110 }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 72 ,position.y - 100 }, 1.5, 0);
 		else
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 72 ,position.y - 110 }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 72 ,position.y - 100 }, 1.5, 0);
 	}
 	else
 	{
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("academy0000"), { position.x - 72,position.y - 110 }, 1.5, 0);
+		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("academy0000"), { position.x - 72,position.y - 100 }, 1.5, 0);
 	}
 	m_isClick = false;
 }
@@ -89,6 +93,16 @@ void Academy::UIRender()
 	{
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), { UIPosition[8].x - 1 ,UIPosition[8].y - 2 }, 1.7, 0, 0);
+		IMAGEMANAGER->DirectDrawText(L"Under Construction", { 420,660 }, { 15,15 }, { 200,200,200,0.8 });
+
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("coolTimeBar"), { 505,694 }, 0.8, 0, 0);
+		for (int i = 0; i < 41; i++)
+		{
+			if (m_maxCompleteTime / 41 * i < m_completeTime)
+			{
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("Coll"), { float(505 + i * 4),694 }, 0.8, 0, 0);
+			}
+		}
 	}
 	else
 	{

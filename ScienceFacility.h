@@ -1,28 +1,25 @@
 #pragma once
 #include "Build.h"
-class CommandCenter : public Build
+class ScienceFacility : public Build
 {
-private:
-	CImage* idle;
-	CImage* buildImage[4];
-
 	struct AddUnit
 	{
 		float unit;
 		float timeNow;
 		float maxTime;
 	};
-	bool isWork = false;
-	float workTimer = 0;
+
 	vector<AddUnit> addUnitQueue;
 public:
-	CommandCenter();
-	virtual ~CommandCenter();
+	CImage* m_buildImage[4];
+
+	ScienceFacility();
+	virtual ~ScienceFacility();
+
 	virtual void Init() override;
 	virtual void Update() override;
 	virtual void Render() override;
 	virtual void Release() override;
 	virtual void UIRender() override;
-	
 };
 

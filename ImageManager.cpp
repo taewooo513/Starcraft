@@ -174,6 +174,53 @@ void ImageManager::RenderBlendBlack(CImage* img, Vector2 vec, float scale, float
 	UIRenderBlendBlack(img, { vec.x - GetCameraPosition().x, vec.y - GetCameraPosition().y }, scale, rot);
 }
 
+void ImageManager::RenderBlendBlack2(CImage* img, Vector2 vec, float scale, float rot, float alpha)
+{
+	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
+
+	matR = D2D1::Matrix3x2F::Rotation(rot, { 0,0 });
+	matS = D2D1::Matrix3x2F::Scale(scale, scale);
+	matP = D2D1::Matrix3x2F::Translation(vec.x - GetCameraPosition().x, vec.y - GetCameraPosition().y);
+	matW = matS * matR * matP;
+
+	blendEffect->SetInput(0, img->GetBitMap());
+
+	m_d2dContext->SetTransform(matW);
+	HRESULT hr = S_OK;
+
+	// Create a layer.
+	ID2D1Layer* pLayer = NULL;
+	m_d2dContext->CreateLayer(NULL, &pLayer);
+
+	if (SUCCEEDED(hr))
+	{
+		m_d2dContext->SetTransform(matW);
+		ComPtr<ID2D1SolidColorBrush> b;
+		m_d2dContext->CreateSolidColorBrush({ 0,0,0,0.5f }, &b);
+
+		m_d2dContext->PushLayer(
+			D2D1::LayerParameters(
+				D2D1::InfiniteRect(),
+				NULL,
+				D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
+				D2D1::IdentityMatrix(),
+				alpha),
+			pLayer
+		);
+		m_d2dContext->DrawImage(blendEffect);
+
+		m_d2dContext->PopLayer();
+	}
+
+	pLayer->Release();
+
+
+
+
+	//m_d2dContext->DrawImage(blendEffect);
+}
+
+
 void ImageManager::UIRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot)
 {
 	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
@@ -184,10 +231,11 @@ void ImageManager::UIRenderBlendBlack(CImage* img, Vector2 vec, float scale, flo
 	matW = matS * matR * matP;
 
 	//Color_;CLSID_D2D1AlphaMask
+
 	blendEffect->SetInput(0, img->GetBitMap());
 
-
 	m_d2dContext->SetTransform(matW);
+
 	m_d2dContext->DrawImage(blendEffect);
 }
 
@@ -307,7 +355,7 @@ void ImageManager::DrawRectRed(Vector2 startPos, Vector2 endPos)
 	m_d2dContext->SetTransform(matW);
 
 	ComPtr<ID2D1SolidColorBrush> brush;
-	m_d2dContext->CreateSolidColorBrush({ 255,0,0,255 }, &brush);
+	m_d2dContext->CreateSolidColorBrush({ 255,0,0,0.5f }, &brush);
 	m_d2dContext->FillRectangle({ startPos.x,startPos.y ,endPos.x ,endPos.y }, brush.Get());
 }
 
@@ -614,6 +662,17 @@ void ImageManager::ImageLoad()
 	AddImage("tbldmed0001", L"./Resources/Bulid/Building2/tbldmed0001.bmp"); // stop
 	AddImage("tbldmed0002", L"./Resources/Bulid/Building2/tbldmed0002.bmp"); // move
 
+	AddImage("tbldsml0000", L"./Resources/Bulid/Building3/tbldsml0000.bmp"); // attack 
+	AddImage("tbldsml0001", L"./Resources/Bulid/Building3/tbldsml0001.bmp"); // stop
+	AddImage("tbldsml0002", L"./Resources/Bulid/Building3/tbldsml0002.bmp"); // move
+
+	AddImage("depot0000", L"./Resources/Bulid/depot/depot0000.bmp"); // 일반
+	AddImage("depot0001", L"./Resources/Bulid/depot/depot0001.bmp"); // 완성전
+	AddImage("depotshad", L"./Resources/Bulid/depot/tdeshad0000.bmp"); // 일반 그림자
+	AddImage("depotshad1", L"./Resources/Bulid/depot/tdeshad0001.bmp"); // 완성전 그림자
+
+	AddImageVector("DepotIdle", L"./Resources/Bulid/depot/Idle/depott00", 0, 5);
+
 	// 커멘드 센터 
 	AddImage("control0000", L"./Resources/Bulid/CommandCenter/control0000.bmp"); // 일반상태 
 	AddImage("control0001", L"./Resources/Bulid/CommandCenter/control0001.bmp"); // 완성전단계
@@ -622,9 +681,21 @@ void ImageManager::ImageLoad()
 	AddImage("control0004", L"./Resources/Bulid/CommandCenter/control0004.bmp"); // Up 3
 	AddImage("controlt", L"./Resources/Bulid/CommandCenter/controlt.bmp"); // 유닛 생성중
 
+	// 커멘드 센터 
+	AddImage("research0000", L"./Resources/Bulid/Science/research0000.bmp"); // 일반상태 
+	AddImage("research0001", L"./Resources/Bulid/Science/research0001.bmp"); // 완성전단계
+	AddImage("research0003", L"./Resources/Bulid/Science/research0003.bmp"); // Up 1
+	AddImage("research0004", L"./Resources/Bulid/Science/research0004.bmp"); // Up 2
+	AddImage("research0005", L"./Resources/Bulid/Science/research0005.bmp"); // Up 3
+
 	//아카데미
 	AddImage("academy0000", L"./Resources/Bulid/Academy/academy0000.bmp"); // 일반상태 
 	AddImage("academy0001", L"./Resources/Bulid/Academy/academy0001.bmp"); // 완성전단계
+
+	//아머리
+	AddImage("chemlab0000", L"./Resources/Bulid/Armory/chemlab0000.bmp"); // 일반상태 
+	AddImage("chemlab0001", L"./Resources/Bulid/Armory/chemlab0001.bmp"); // 완성전단계
+
 
 	// 엔지니어링 베이스
 	AddImage("weaponpl0000", L"./Resources/Bulid/engin/weaponpl0000.bmp"); // 일반상태 
@@ -645,9 +716,17 @@ void ImageManager::ImageLoad()
 	AddImage("tbarrack0001", L"./Resources/Bulid/Barrack/tbarrack0001.bmp"); // 완성전
 	AddImage("tbarrack0002", L"./Resources/Bulid/Barrack/tbarrack0002.bmp"); // 공중에 뜨기전
 	AddImage("tbarrack0003", L"./Resources/Bulid/Barrack/tbarrack0003.bmp"); // 공중에 뜨기전
-	AddImage("tbarrack0004", L"./Resources/Bulid/Barrack/tbarrack0004.bmp"); // 공중에 뜨기전
-	AddImage("tbarrack0007", L"./Resources/Bulid/Barrack/tbarrack0007.bmp"); // 유닛 생성중
-	AddImage("tbarrack0008", L"./Resources/Bulid/Barrack/tbarrack0008.bmp"); // 유닛 생성중
+	AddImageVector("Barrack_Work", L"./Resources/Bulid/Barrack/tbarrack00", 7, 8);
+
+	AddImage("tbrshad0000", L"./Resources/Bulid/Barrack/shad/tbrshad0000.bmp"); // 공중에 뜨기전
+
+
+	AddImage("starport0000", L"./Resources/Bulid/starport/starport0000.bmp"); // 평상시
+	AddImage("starport0001", L"./Resources/Bulid/starport/starport0001.bmp"); // 공중에 뜨기전
+	AddImage("starport0002", L"./Resources/Bulid/starport/starport0002.bmp"); // 공중에 뜨기전
+	AddImage("starport0003", L"./Resources/Bulid/starport/starport0003.bmp"); // 공중에 뜨기전
+	AddImage("starport0004", L"./Resources/Bulid/starport/starport0004.bmp"); // 
+	AddImage("starport0005", L"./Resources/Bulid/starport/starport0005.bmp"); // 완성전
 
 	AddImage("tcmdbtns0000", L"./Resources/UI2/tcmdbtns0000.bmp");
 
@@ -661,12 +740,15 @@ void ImageManager::ImageLoad()
 	AddImage("cmdicons0110", L"./Resources/Icon/cmdicons0110.bmp"); // 가스
 
 	AddImage("cmdicons0112", L"./Resources/Icon/cmdicons0112.bmp"); // 아카데미
+
+	// 펙토리
 	AddImage("factory0000", L"./Resources/Bulid/Factory/factory0000.bmp"); // 기본
 	AddImage("factory0001", L"./Resources/Bulid/Factory/factory0001.bmp"); // 완성 전
 	AddImage("factory0002", L"./Resources/Bulid/Factory/factory0002.bmp"); // 띄우기 1
 	AddImage("factory0003", L"./Resources/Bulid/Factory/factory0003.bmp"); // 띄우기 2
 	AddImage("factory0004", L"./Resources/Bulid/Factory/factory0004.bmp"); // 띄우기 3
 	AddImage("factory0005", L"./Resources/Bulid/Factory/factory0005.bmp"); // 띄우기 4
+	AddImageVector("FactoryIdle", L"./Resources/Bulid/Factory/Idle/factoryt00", 0, 2);
 
 	AddImage("cmdicons0113", L"./Resources/Icon/cmdicons0113.bmp"); // 펙토리
 	AddImage("cmdicons0114", L"./Resources/Icon/cmdicons0114.bmp"); // 스타포트

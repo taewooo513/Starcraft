@@ -32,7 +32,7 @@ void CommandCenter::Init()
 {
 
 	player->m_maxSuff += 10;
-	grid = GRIDMANAGER->AddGrid(this, 14, 11, 3, 2, 2, 1);
+	grid = GRIDMANAGER->AddGrid(this, 14, 11, 3, 2, -7, -5);
 	grid->gridTag = 3;
 	player->AddBuild(this);
 
@@ -72,15 +72,17 @@ void CommandCenter::Update()
 
 	clickRect = { int(position.x) , int(position.y) , int((position.x + 32 * 4 * 1.5f)) , int((position.y + 32 * 3 * 1.5f)) };
 
-	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x;
-	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x;
-	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y;
-	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y;
+	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x + 100;
+	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x + 100;
+	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y + 80;
+	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y + 80;
 	grid->Update();
 }
 
 void CommandCenter::Render()
 {
+	IMAGEMANAGER->DrawRect({ (float)clickRect.left,(float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
+
 	if (m_isClick == true)
 	{
 		IMAGEMANAGER->DrawCircle({ position.x,position.y }, 50, 30);
@@ -99,6 +101,20 @@ void CommandCenter::Render()
 	else
 	{
 		IMAGEMANAGER->RenderBlendBlack(idle, { position.x - 96 ,position.y - 130 }, 1.5, 0);
+	}
+
+	if (!addUnitQueue.empty())
+	{
+		workTimer += DELTA_TIME;
+
+		if (workTimer > 0.08f)
+		{
+			isWork = !isWork;
+			workTimer = 0;
+		}
+
+		if (isWork == true)
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("controlt"), { position.x - 96 ,position.y - 130 }, 1.5, 0);
 	}
 	m_isClick = false;
 }

@@ -72,8 +72,10 @@ public:
 
 	void ImageLoad();
 	void DirectDrawText(wstring str, Vector2 pos, Vector2 size, D2D1_COLOR_F color = D2D1::ColorF(255, 255, 255, 1));
+
 	void Render(CImage* img, Vector2 vec, float scale, float rot);
 	void RenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot);
+	void RenderBlendBlack2(CImage* img, Vector2 vec, float scale, float rot,float alpha);
 	void UIRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot);
 
 	void CenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse);

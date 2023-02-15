@@ -25,7 +25,11 @@ private:
 		eFactory,
 		eBarrack,
 		eAcademy,
-		eEngin
+		eEngin,
+		eDepot,
+		eStarport,
+		eArmory,
+		eScience
 	};
 	float randomMoveRot;
 	float randomMoveTime;

@@ -6,6 +6,10 @@
 #include "Factory.h"
 #include "Academy.h"
 #include "EngineeringBay.h"
+#include "Depot.h"
+#include "Starport.h"
+#include "ScienceFacility.h"
+#include "Armory.h"
 SpaceConstructionVehicle::SpaceConstructionVehicle()
 {
 }
@@ -239,6 +243,11 @@ void SpaceConstructionVehicle::UIRender()
 			buildIndex = eEngin;
 			page = 4;
 		}
+		if (KEYMANAGER->GetOnceKeyDown('S'))
+		{
+			buildIndex = eDepot;
+			page = 4;
+		}
 	}
 	else if (page == 2)
 	{
@@ -249,6 +258,21 @@ void SpaceConstructionVehicle::UIRender()
 		if (KEYMANAGER->GetOnceKeyDown('F'))
 		{
 			buildIndex = eFactory;
+			page = 4;
+		}
+		if (KEYMANAGER->GetOnceKeyDown('S'))
+		{
+			buildIndex = eStarport;
+			page = 4;
+		}
+		if (KEYMANAGER->GetOnceKeyDown('A'))
+		{
+			buildIndex = eArmory;
+			page = 4;
+		}
+		if (KEYMANAGER->GetOnceKeyDown('I'))
+		{
+			buildIndex = eScience;
 			page = 4;
 		}
 	}
@@ -295,16 +319,16 @@ void SpaceConstructionVehicle::BuildingConstruction()
 			IMAGEMANAGER->DrawRect({
 				(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
 				(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
-				(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f ,
-				(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight() });
+				(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetWidth() * 1.5f ,
+				(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetHeight() });
 			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x - 50, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
 			break;
 		case eFactory:
 			IMAGEMANAGER->DrawRect({
 					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
 					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f ,
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight() });
+					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("factory0000")->GetWidth() * 1.5f ,
+					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("factory0000")->GetHeight() });
 			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
 			break;
 		case eAcademy:
@@ -322,6 +346,38 @@ void SpaceConstructionVehicle::BuildingConstruction()
 					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("weaponpl0000")->GetWidth() * 1.5f ,
 					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("weaponpl0000")->GetHeight() });
 			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("weaponpl0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			break;
+		case eDepot:
+			IMAGEMANAGER->DrawRect({
+					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
+					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
+					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("depot0000")->GetWidth() * 1.5f ,
+					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("depot0000")->GetHeight() });
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("depot0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			break;
+		case eStarport:
+			IMAGEMANAGER->DrawRect({
+					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
+					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
+					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("starport0000")->GetWidth() * 1.5f ,
+					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("starport0000")->GetHeight() });
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("starport0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			break;
+		case eArmory:
+			IMAGEMANAGER->DrawRect({
+					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
+					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
+					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("chemlab0000")->GetWidth() * 1.5f ,
+					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("chemlab0000")->GetHeight() });
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("chemlab0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			break;
+		case eScience:
+			IMAGEMANAGER->DrawRect({
+					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
+					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
+					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("research0000")->GetWidth() * 1.5f ,
+					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("research0000")->GetHeight() });
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("research0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
 			break;
 		}
 	}
@@ -374,6 +430,34 @@ void SpaceConstructionVehicle::BuildObject()
 				break;
 			case eEngin:
 				m_nowBuild = new EngineeringBay;
+				m_isBuild = false;
+				m_nowBuild->SetPlayer(player);
+				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
+				buildIndex = 0;
+				break;
+			case eDepot:
+				m_nowBuild = new Depot;
+				m_isBuild = false;
+				m_nowBuild->SetPlayer(player);
+				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
+				buildIndex = 0;
+				break;
+			case eStarport:
+				m_nowBuild = new Starport;
+				m_isBuild = false;
+				m_nowBuild->SetPlayer(player);
+				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
+				buildIndex = 0;
+				break;
+			case eArmory:
+				m_nowBuild = new Armory;
+				m_isBuild = false;
+				m_nowBuild->SetPlayer(player);
+				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
+				buildIndex = 0;
+				break;
+			case eScience:
+				m_nowBuild = new ScienceFacility;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
 				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);

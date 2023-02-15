@@ -71,45 +71,45 @@ void GridManager::Update()
 
 void GridManager::Render()
 {
-	//for (int j = 0; j < 512; j++)
-	//{
-	//	for (int i = 0; i < 512; i++)
-	//	{
-	//		if (float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x <= WINSIZE_X && float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x >= 0)
-	//		{
-	//			if (float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y <= WINSIZE_Y && float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y >= 0)
-	//			{
-	//				if (regionsTile[j][i].isBuildTag == 0)
-	//				{
-	//					//IMAGEMANAGER->DrawRect({ float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, { float(j) * 8.f * 1.5f + //float(j) * 8.f * 1.5f /- /IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f + float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y });
-	//				}
-	//				else
-	//				{
-	//					IMAGEMANAGER->DrawRectRed({
-	//						float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
-	//						float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, 
-	//						{ float(j) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y });
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-
-	for (auto iter : IMAGEMANAGER->GetMapReader()->mapRegions)
+	for (int j = 0; j < 512; j++)
 	{
-		for (auto _iter : iter->nearRegionPosition)
+		for (int i = 0; i < 512; i++)
 		{
-			for (auto __iter : _iter.second)
+			if (float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x <= WINSIZE_X && float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x >= 0)
 			{
-				IMAGEMANAGER->DrawRectRed(
-					{ float(__iter.x) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
-					float(__iter.y) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, 
-					{ float(__iter.x)* 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
-					float(__iter.y) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y
-					});
+				if (float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y <= WINSIZE_Y && float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y >= 0)
+				{
+					if (regionsTile[j][i].isBuildTag == 0)
+					{
+						//IMAGEMANAGER->DrawRect({ float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, { float(j) * 8.f * 1.5f + //float(j) * 8.f * 1.5f /- /IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f + float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y });
+					}
+					else
+					{
+						IMAGEMANAGER->DrawRectRed({
+							float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
+							float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, 
+							{ float(j) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y });
+					}
+				}
 			}
 		}
 	}
+
+	//for (auto iter : IMAGEMANAGER->GetMapReader()->mapRegions)
+	//{
+	//	for (auto _iter : iter->nearRegionPosition)
+	//	{
+	//		for (auto __iter : _iter.second)
+	//		{
+	//			IMAGEMANAGER->DrawRectRed(
+	//				{ float(__iter.x) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
+	//				float(__iter.y) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, 
+	//				{ float(__iter.x)* 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
+	//				float(__iter.y) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y
+	//				});
+	//		}
+	//	}
+	//}
 
 	//for (auto iter : objectGrid)
 	//{

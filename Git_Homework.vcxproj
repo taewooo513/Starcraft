@@ -148,12 +148,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Academy.cpp" />
+    <ClCompile Include="Armory.cpp" />
     <ClCompile Include="Barrack.cpp" />
     <ClCompile Include="Build.cpp" />
     <ClCompile Include="CommandCenter.cpp" />
     <ClCompile Include="CSound.cpp" />
     <ClCompile Include="CSoundMgr.cpp" />
     <ClCompile Include="CTimer.cpp" />
+    <ClCompile Include="Depot.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="EngineeringBay.cpp" />
@@ -175,7 +177,9 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ScienceFacility.cpp" />
     <ClCompile Include="SpaceConstructionVehicle.cpp" />
+    <ClCompile Include="Starport.cpp" />
     <ClCompile Include="stdafx.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -194,12 +198,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Academy.h" />
+    <ClInclude Include="Armory.h" />
     <ClInclude Include="Barrack.h" />
     <ClInclude Include="Build.h" />
     <ClInclude Include="CommandCenter.h" />
     <ClInclude Include="CSound.h" />
     <ClInclude Include="CSoundMgr.h" />
     <ClInclude Include="CTimer.h" />
+    <ClInclude Include="Depot.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectManager.h" />
     <ClInclude Include="EngineeringBay.h" />
@@ -221,8 +227,10 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ScienceFacility.h" />
     <ClInclude Include="singleton.h" />
     <ClInclude Include="SpaceConstructionVehicle.h" />
+    <ClInclude Include="Starport.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Storm\Storm.h" />
     <ClInclude Include="TestScene.h" />
