@@ -143,7 +143,6 @@ void Player::Init()
 			Unit* scv = new SpaceConstructionVehicle;
 			scv->SetPlayer(this);
 			OBJECTMANAGER->AddObject(scv, "Unit", iter->x, iter->y, 1);
-
 		}
 		break;
 		}

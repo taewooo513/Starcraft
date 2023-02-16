@@ -16,13 +16,14 @@ public:
 	CImage* run7Image[9];
 	CImage* run8Image[9];
 	CImage* deathImage[8];
-
 	bool nowFire = false;
+
+	bool onceFire = false;
 	float fireImageDel = 0;
 	float fireImageDel2 = 0;
-	bool isFire = true;
+	bool isFire = false;
 	bool isDeath = false;
-	bool isFire2 =false;
+	bool isFire2 = false;
 	int fireCount = 0;
 	int runFrame = 0;
 	float runImageTimeDelay;

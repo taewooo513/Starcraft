@@ -48,7 +48,7 @@ void Barrack::Init()
 
 void Barrack::Update()
 {
-	grid->Update();
+	//grid->Update();
 	if (addUnitQueue.empty() == false)
 	{
 		if (addUnitQueue.front().timeNow < addUnitQueue.front().maxTime)
@@ -98,7 +98,7 @@ void Barrack::Render()
 	}
 	else
 	{
-		IMAGEMANAGER->RenderBlendBlack2(IMAGEMANAGER->FindImage("tbrshad0000"), { position.x - 150,position.y - 130 }, 1.5, 0,0.5f);
+		IMAGEMANAGER->RenderBlendBlack2(IMAGEMANAGER->FindImage("tbrshad0000"), { position.x - 150,position.y - 130 }, 1.5, 0, 0.5f);
 		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { position.x - 150,position.y - 130 }, 1.5, 0);
 	}
 	if (!addUnitQueue.empty())
@@ -114,7 +114,6 @@ void Barrack::Release()
 
 void Barrack::UIRender()
 {
-
 	IMAGEMANAGER->DrawCircle({ position.x ,position.y }, 10, 10);
 
 	m_isClick = true;

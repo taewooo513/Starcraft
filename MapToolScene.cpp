@@ -95,94 +95,101 @@ void MapToolScene::Render()
 {
 	IMAGEMANAGER->MapRender();
 
-	for (auto iter : objdatas1)
+	if (team == 0)
 	{
-		switch (iter->key)
+
+		for (auto iter : objdatas1)
 		{
-		case 0:
-			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { iter->x,iter->y }, 1.5, 0, 0);
-			break;
-		case 1:
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { iter->x,iter->y }, 1.5, 0);
-			break;
-		case 2:
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { iter->x,iter->y }, 1.5, 0);
-			break;
-		case 3:
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("depot0000"), { iter->x,iter->y }, 1.5, 0);
-			break;
-		case 4:
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("weaponpl0000"), { iter->x,iter->y }, 1.5, 0);
-			break;
-		case 5:
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { iter->x,iter->y }, 1.5, 0);
-			break;
-		case 6:
-			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("marin_idle_1_9"), { iter->x,iter->y }, 1.5, 0, 0);
-			break;
-		case 7:
-			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("scv_idle_9"), { iter->x,iter->y }, 1.5, 0, 0);
-			break;
-		case 8:
-			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("Vulture_9"), { iter->x,iter->y }, 1.5, 0, 0);
-			break;
-		case 9:
-			//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
-			//IMAGEMANAGER->DirectDrawText(L"탱크", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
-			break;
-		case 10:
-			//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
-			//IMAGEMANAGER->DirectDrawText(L"가스", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
-			break;
-		case 11:
-			//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
-			//IMAGEMANAGER->DirectDrawText(L"고스트", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
-			break;
+			switch (iter->key)
+			{
+			case 0:
+				IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { iter->x,iter->y }, 1.5, 0, 0);
+				break;
+			case 1:
+				IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { iter->x,iter->y }, 1.5, 0);
+				break;
+			case 2:
+				IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { iter->x,iter->y }, 1.5, 0);
+				break;
+			case 3:
+				IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("depot0000"), { iter->x,iter->y }, 1.5, 0);
+				break;
+			case 4:
+				IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("weaponpl0000"), { iter->x,iter->y }, 1.5, 0);
+				break;
+			case 5:
+				IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { iter->x,iter->y }, 1.5, 0);
+				break;
+			case 6:
+				IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("marin_idle_1_9"), { iter->x,iter->y }, 1.5, 0, 0);
+				break;
+			case 7:
+				IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("scv_idle_9"), { iter->x,iter->y }, 1.5, 0, 0);
+				break;
+			case 8:
+				IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("Vulture_9"), { iter->x,iter->y }, 1.5, 0, 0);
+				break;
+			case 9:
+				//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
+				//IMAGEMANAGER->DirectDrawText(L"탱크", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
+				break;
+			case 10:
+				//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
+				//IMAGEMANAGER->DirectDrawText(L"가스", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
+				break;
+			case 11:
+				//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
+				//IMAGEMANAGER->DirectDrawText(L"고스트", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
+				break;
+			}
 		}
 	}
-	for (auto iter : objdatas2)
+	else
 	{
-		switch (iter->key)
+		for (auto iter : objdatas2)
 		{
-		case 0:
-			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { iter->x,iter->y }, 1.5, 0, 0);
-			break;
-		case 1:
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { iter->x,iter->y }, 1.5, 0);
-			break;
-		case 2:
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { iter->x,iter->y }, 1.5, 0);
-			break;
-		case 3:
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("depot0000"), { iter->x,iter->y }, 1.5, 0);
-			break;
-		case 4:
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("weaponpl0000"), { iter->x,iter->y }, 1.5, 0);
-			break;
-		case 5:
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { iter->x,iter->y }, 1.5, 0);
-			break;
-		case 6:
-			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("marin_idle_1_9"), { iter->x,iter->y }, 1.5, 0, 0);
-			break;
-		case 7:
-			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("scv_idle_9"), { iter->x,iter->y }, 1.5, 0, 0);
-			break;
-		case 8:
-			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("Vulture_9"), { iter->x,iter->y }, 1.5, 0, 0);
-			break;
-		case 9:
-			//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
-			//IMAGEMANAGER->DirectDrawText(L"탱크", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
-			break;
-		case 10:
-			//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
-			//IMAGEMANAGER->DirectDrawText(L"가스", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
-			break;
-		case 11:
-			//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
-			//IMAGEMANAGER->DirectDrawText(L"고스트", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
-			break;
+			switch (iter->key)
+			{
+			case 0:
+				IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { iter->x,iter->y }, 1.5, 0, 0);
+				break;
+			case 1:
+				IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { iter->x,iter->y }, 1.5, 0);
+				break;
+			case 2:
+				IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { iter->x,iter->y }, 1.5, 0);
+				break;
+			case 3:
+				IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("depot0000"), { iter->x,iter->y }, 1.5, 0);
+				break;
+			case 4:
+				IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("weaponpl0000"), { iter->x,iter->y }, 1.5, 0);
+				break;
+			case 5:
+				IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { iter->x,iter->y }, 1.5, 0);
+				break;
+			case 6:
+				IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("marin_idle_1_9"), { iter->x,iter->y }, 1.5, 0, 0);
+				break;
+			case 7:
+				IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("scv_idle_9"), { iter->x,iter->y }, 1.5, 0, 0);
+				break;
+			case 8:
+				IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("Vulture_9"), { iter->x,iter->y }, 1.5, 0, 0);
+				break;
+			case 9:
+				//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
+				//IMAGEMANAGER->DirectDrawText(L"탱크", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
+				break;
+			case 10:
+				//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
+				//IMAGEMANAGER->DirectDrawText(L"가스", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
+				break;
+			case 11:
+				//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
+				//IMAGEMANAGER->DirectDrawText(L"고스트", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
+				break;
+			}
 		}
 	}
 }
@@ -255,6 +262,19 @@ void MapToolScene::UIRender()
 				break;
 			}
 		}
+	}
+
+	if (team == 0)
+	{
+		RECT rt = { 50 , 50, 150 , 150 };
+
+		IMAGEMANAGER->DrawRect({ (float)rt.left,(float)rt.top }, { (float)rt.right,(float)rt.bottom }, { 0,255,0,1 }, true);
+	}
+	else
+	{
+		RECT rt = { 50 , 50, 150 , 150 };
+
+		IMAGEMANAGER->DrawRect({ (float)rt.left,(float)rt.top }, { (float)rt.right,(float)rt.bottom }, { 255,0,0,1 }, true);
 	}
 
 	switch (objTag)

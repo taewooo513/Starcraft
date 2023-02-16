@@ -41,7 +41,7 @@ public:
 	void Release();
 	
 	vector<Object*> resrouces;
-
+	Player* otherPlayer;
 	struct comp {
 		bool operator()(pair<pair<float, float>, MapRegions*>A, pair<pair<float, float>, MapRegions*>B)
 		{

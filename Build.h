@@ -7,7 +7,7 @@ class Build : public Object
 {
 protected:
 	SpaceConstructionVehicle* buildUnit = nullptr;
-	float m_hp;
+
 	float m_costM;
 	float m_costG;
 	float m_maxHp;

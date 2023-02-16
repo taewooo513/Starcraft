@@ -186,6 +186,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Tank.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="TimerManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
@@ -236,6 +237,7 @@
     <ClInclude Include="Starport.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Storm\Storm.h" />
+    <ClInclude Include="Tank.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="TimerManager.h" />
     <ClInclude Include="TitleScene.h" />

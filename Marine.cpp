@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "Marine.h"
 #include "Player.h"
+
 void Marine::Init()
 {
+	range = 300;
 	runImageTimeDelay = 0;
 	astarTimer = 0.1;
 	grid = GRIDMANAGER->AddGrid(this, 2, 2, 20, 20, 0, 0);
@@ -160,7 +162,6 @@ void Marine::Move()
 		{
 			if (grid->moveStack2.empty() == true)
 				grid->Astar(2, 2);
-			//여기선 다음 레기온과의 최단거리 
 		}
 	}
 
@@ -225,10 +226,44 @@ void Marine::Move()
 
 void Marine::Attack()
 {
+	float dest = sqrt((attackObject->position.x - position.x) * (attackObject->position.x - position.x) + (attackObject->position.y - position.y) * (attackObject->position.y - position.y));
+	if (range > dest)
+	{
+		fireImageDel2 += DELTA_TIME;
+		if (fireImageDel2 < 0.5f && onceFire == true)
+		{
+			attackObject->m_hp -= m_attack;
+			onceFire = false;
+		}
+
+		m_dest = { 0,0 };
+	}
+	else
+	{
+		m_dest = attackObject->position;
+		player->Astar(position, m_dest, this);
+	}
 }
 
 void Marine::Update()
 {
+	if (attackObject == nullptr)
+	{
+		for (auto iter : player->otherPlayer->m_units)
+		{
+			float dest = sqrt((iter->position.x - position.x) * (iter->position.x - position.x) + (iter->position.y - position.y) * (iter->position.y - position.y));
+			if (range > dest)
+			{
+				attackObject = iter;
+				break;
+			}
+		}
+	}
+	if (attackObject != nullptr)
+	{
+		Attack();
+	}
+
 
 	if (KEYMANAGER->GetOnceKeyDown(VK_F2))
 	{
@@ -282,6 +317,7 @@ void Marine::Render()
 {
 	float rr = 8.f / 3.141592 * abs(rot);
 	bool isR = false;
+
 	if (isDeath == false)
 	{
 		if (rot < 0)
@@ -295,13 +331,14 @@ void Marine::Render()
 
 		if (m_speed == 0)
 		{
-			if (isFire == false)
+			if (attackObject == nullptr)
 			{
 				IMAGEMANAGER->CenterRenderBlendBlack(idleImage[(int)rr], position, 1.5f, 0, isR);
+				nowFire = false;
+				onceFire = true;
 			}
 			else
 			{
-				fireImageDel2 += DELTA_TIME;
 				if (fireImageDel2 > 0.5)
 				{
 					fireImageDel += DELTA_TIME;
@@ -317,6 +354,8 @@ void Marine::Render()
 						fireCount = 0;
 					}
 				}
+
+				rot = atan2(position.y - attackObject->position.y, position.x - attackObject->position.x);
 
 				if (nowFire == false)
 				{

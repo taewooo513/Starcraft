@@ -13,11 +13,13 @@ protected:
 	int m_state;//중형 대형 소형 
 	bool m_isAttackAble;
 	float m_maxHp;
-	float m_hp;
+	float range = 0;
 
 	bool m_isMoveAble;
 	Vector2 m_destination = { 0,0 };
 public:
+	Object* attackObject;
+
 	Vector2 m_dest;
 	bool m_isClick;
 	float rot = 0; // 이미지 각도

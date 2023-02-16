@@ -6,6 +6,7 @@ public:
 	Vector2 position;
 	ObjectGrid* grid;
 	RECT clickRect;
+	float m_hp;
 
 	Vector2 UIPosition[9] = {
 		{847,606},
@@ -21,7 +22,6 @@ public:
 private:
 
 	string name;
-	float m_hp;
 	bool m_isObjectDestroyed = false;
 
 public:

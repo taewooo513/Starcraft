@@ -6,5 +6,6 @@ public:
 	Player2();
 	~Player2();
 public:
+	void Init();
 };
 

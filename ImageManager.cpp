@@ -1085,5 +1085,58 @@ void ImageManager::ImageLoad()
 	AddImage("Vulture_8", L"./Resources/Vulture/vulture0014.bmp"); // ¸¶¸°
 	AddImage("Vulture_9", L"./Resources/Vulture/vulture0016.bmp"); // ¸¶¸°
 
+	AddImage("tank0000", L"./Resources/tank/tank0000.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0002", L"./Resources/tank/tank0002.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0004", L"./Resources/tank/tank0004.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0006", L"./Resources/tank/tank0006.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0008", L"./Resources/tank/tank0008.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0010", L"./Resources/tank/tank0010.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0012", L"./Resources/tank/tank0012.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0014", L"./Resources/tank/tank0014.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0016", L"./Resources/tank/tank0016.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	// ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0018", L"./Resources/tank/tank0018.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0020", L"./Resources/tank/tank0020.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0022", L"./Resources/tank/tank0022.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0024", L"./Resources/tank/tank0024.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0026", L"./Resources/tank/tank0026.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0028", L"./Resources/tank/tank0028.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0030", L"./Resources/tank/tank0030.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0032", L"./Resources/tank/tank0032.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0033", L"./Resources/tank/tank0033.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	// ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0035", L"./Resources/tank/tank0035.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0037", L"./Resources/tank/tank0037.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0039", L"./Resources/tank/tank0039.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0041", L"./Resources/tank/tank0041.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0043", L"./Resources/tank/tank0043.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0045", L"./Resources/tank/tank0045.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0047", L"./Resources/tank/tank0047.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0049", L"./Resources/tank/tank0049.bmp"); // ÅÊÅ© ÀÏ¹Ý
+	AddImage("tank0050", L"./Resources/tank/tank0050.bmp"); // ÅÊÅ© ÀÏ¹Ý
+
+	AddImage("tankt0000", L"./Resources/tankT/tankt0000.bmp"); // ÅÊÅ© ÀÏ¹Ý ¸Ó¸®
+	AddImage("tankt0002", L"./Resources/tankT/tankt0002.bmp"); // ÅÊÅ© ÀÏ¹Ý ¸Ó¸®
+	AddImage("tankt0004", L"./Resources/tankT/tankt0004.bmp"); // ÅÊÅ© ÀÏ¹Ý ¸Ó¸®
+	AddImage("tankt0006", L"./Resources/tankT/tankt0006.bmp"); // ÅÊÅ© ÀÏ¹Ý ¸Ó¸®
+	AddImage("tankt0008", L"./Resources/tankT/tankt0008.bmp"); // ÅÊÅ© ÀÏ¹Ý ¸Ó¸®
+	AddImage("tankt0010", L"./Resources/tankT/tankt0010.bmp"); // ÅÊÅ© ÀÏ¹Ý ¸Ó¸®
+	AddImage("tankt0012", L"./Resources/tankT/tankt0012.bmp"); // ÅÊÅ© ÀÏ¹Ý ¸Ó¸®
+	AddImage("tankt0014", L"./Resources/tankT/tankt0014.bmp"); // ÅÊÅ© ÀÏ¹Ý ¸Ó¸®
+	AddImage("tankt0016", L"./Resources/tankT/tankt0016.bmp"); // ÅÊÅ© ÀÏ¹Ý ¸Ó¸®
+
+	AddImage("stankt0000", L"./Resources/sTankT/stankt0000.bmp"); // ½ÃÁîÅÊÅ© ¸Ó¸®
+	AddImage("stankt0002", L"./Resources/sTankT/stankt0002.bmp"); // ½ÃÁîÅÊÅ© ¸Ó¸®
+	AddImage("stankt0004", L"./Resources/sTankT/stankt0004.bmp"); // ½ÃÁîÅÊÅ© ¸Ó¸®
+	AddImage("stankt0006", L"./Resources/sTankT/stankt0006.bmp"); // ½ÃÁîÅÊÅ© ¸Ó¸®
+	AddImage("stankt0008", L"./Resources/sTankT/stankt0008.bmp"); // ½ÃÁîÅÊÅ© ¸Ó¸®
+	AddImage("stankt0010", L"./Resources/sTankT/stankt0010.bmp"); // ½ÃÁîÅÊÅ© ¸Ó¸®
+	AddImage("stankt0012", L"./Resources/sTankT/stankt0012.bmp"); // ½ÃÁîÅÊÅ© ¸Ó¸®
+	AddImage("stankt0014", L"./Resources/sTankT/stankt0014.bmp"); // ½ÃÁîÅÊÅ© ¸Ó¸®
+	AddImage("stankt0016", L"./Resources/sTankT/stankt0016.bmp"); // ½ÃÁîÅÊÅ© ¸Ó¸®
+	AddImage("sTank", L"./Resources/sTank/stank0005.bmp"); // ½ÃÁîÅÊÅ© ¸ö
+
+	AddImageVector("sTankT", L"./Resources/sTankT/stankt00", 17, 99);// ½ÃÁîÅÊÅ© ÇÏ´ÂÁß ¸Ó¸®
+	AddImageVector("sTank", L"./Resources/sTank/stank00", 0, 5); // ½ÃÁîÅÊÅ© ÇÏ´ÂÁß ¸ö
 
 }

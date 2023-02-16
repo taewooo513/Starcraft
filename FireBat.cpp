@@ -171,10 +171,8 @@ void FireBat::Move()
 			}
 			else
 			{
-				
 				position.x += moveDestX;
 				position.y += moveDestY;
-
 			}
 		}
 		else
