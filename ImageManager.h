@@ -39,7 +39,15 @@ class ImageManager : public Singleton<ImageManager>
 private:
 	MapReader* mapReader;
 	D2D1_ELLIPSE* elipse;
-
+	struct comp
+	{
+		bool operator()(pair<float, GridManager::tileNum*> A, pair<float, GridManager::tileNum*> B)
+		{
+			if (A.first > B.first)
+				return true;
+			return false;
+		}
+	};
 	IWICImagingFactory* factory = nullptr;
 	ID2D1DeviceContext* m_d2dContext;
 	IDXGISwapChain1* m_swapChain;
@@ -76,7 +84,7 @@ public:
 
 	void Render(CImage* img, Vector2 vec, float scale, float rot);
 	void RenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot);
-	void RenderBlendBlack2(CImage* img, Vector2 vec, float scale, float rot,float alpha);
+	void RenderBlendBlack2(CImage* img, Vector2 vec, float scale, float rot, float alpha);
 	void UIRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot);
 
 	void CenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse);

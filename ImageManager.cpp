@@ -389,53 +389,49 @@ void ImageManager::LoadMap()
 
 void ImageManager::FogRender()
 {
-	//for (int i = 0; i < 512; i++)
-	//{
-	//	for (int j = 0; j < 512; j++)
-	//	{
-	//
-	//		if (GRIDMANAGER->regionsTile[j][i].fogTag == 0)
-	//		{
-	//			DrawRect({ (float)j * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x,(float)i * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y },
-	//				{ (float)j * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x + 1, (float)i * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y + 1 }, { 0,0,0,1 }, 1);
-	//		}
-	//		else
-	//		{
-	//			bool isCheck = false;
-	//			int c = 0;
-	//			for (int f = 0; f < 5; f++)
-	//			{
-	//				if (GRIDMANAGER->regionsTile[j][i + f].fogTag == 0 || GRIDMANAGER->regionsTile[j][i - f].fogTag == 0
-	//					|| GRIDMANAGER->regionsTile[j + f][i].fogTag == 0 || GRIDMANAGER->regionsTile[j - f][i].fogTag == 0)
-	//				{
-	//					c++;
-	//					isCheck = true;
-	//				}
-	//			}
-	//			if (isCheck == true)
-	//			{
-	//				DrawRect({ (float)j * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x,(float)i * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y },
-	//					{ (float)j * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x + 1, (float)i * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y + 1 }, { 0,0,0,1.f / 5 * c }, 1);
-	//			}
-	//		}
-	//	}
-	//}
+	for (int i = 0; i < 512; i++)
+	{
+		for (int j = 0; j < 512; j++)
+		{
+			DrawRect({ (float)j * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x,(float)i * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y },
+				{ (float)j * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x + 1, (float)i * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y + 1 }, { 0,0,0,1.f - GRIDMANAGER->regionsTile[j][i].fogTag }, 1);
+		}
+
+	}
+
+
 }
 
 void ImageManager::FogUpdate(Vector2 pos, float dest)
 {
 	Vector2 i = pos / 1.5 / 8;
+	priority_queue < pair<float, GridManager::tileNum*>, vector<float, GridManager::tileNum*>, comp> regionQueue;
 
-	//for (int x = i.x - dest; x < i.x + dest; x++)
-	//{
-	//	for (int y = i.y - dest; y < i.y + dest; y++)
-	//	{
-	//		if (sqrt((x - i.x) * (x - i.x) + (y - i.y) * (y - i.y)) < dest)
-	//		{
-	//			GRIDMANAGER->regionsTile[x][y].fogTag = 1;
-	//		}
-	//	}
-	//}
+	list<GridManager::tileNum*> tiless;
+	for (int x = i.x - dest; x < i.x + dest; x++)
+	{
+		for (int y = i.y - dest; y < i.y + dest; y++)
+		{
+			if (sqrt((x - i.x) * (x - i.x) + (y - i.y) * (y - i.y)) < dest)
+			{
+				if (x > 0 && x < 511 && y > 0 && y < 511)
+				{
+					regionQueue.push(make_pair(sqrt((x - pos.x) * (x - pos.x) + (y - pos.y) * (y - pos.y)), &GRIDMANAGER->regionsTile[x][y]));
+				}
+			}
+		}
+	}
+	for (int x = 0; x < 512; x++)
+	{
+		for (int y = 0; y < 512; y++)
+		{
+			if (GRIDMANAGER->regionsTile[x][y].fogTag > 0.5f)
+			{
+				regionQueue.push(, GRIDMANAGER->regionsTile[x][y]);
+				GRIDMANAGER->regionsTile[x][y].fogTag -= DELTA_TIME;
+			}
+		}
+	}
 }
 
 void ImageManager::DrawUI2(CImage* img, Vector2 vec, float scale, float rot, bool isReverse)

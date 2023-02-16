@@ -14,7 +14,7 @@ public:
 		float x, y;
 		int isBuildTag;
 		vector<int> nearRegionIds;
-		int fogTag = 0;
+		float fogTag = 0;
 	};
 
 	struct Regions
