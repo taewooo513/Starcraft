@@ -70,7 +70,7 @@ namespace MY_UTILITY // utility
 		*str = ss.str();
 	}
 
-	inline void ConvertVec2StructureString(vector<StructureData*> vec, string* str)
+	inline void ConvertVec2StructureString(vector<ObjectData*> vec, string* str)
 	{
 		std::stringstream ss;
 		for (auto iter = vec.begin(); iter != vec.end(); iter++) {
@@ -79,20 +79,16 @@ namespace MY_UTILITY // utility
 			{
 				ss << " ";
 			}
-			ss << (*iter)->isBack;
-			ss << ",";
 			ss << (*iter)->key;
 			ss << ",";
 			ss << (*iter)->x;
 			ss << ",";
 			ss << (*iter)->y;
-			ss << ",";
-			ss << (*iter)->page;
 		}
 		*str = ss.str();
 	}
 
-	inline void ConvertStructureString2Vec(vector<StructureData*>* vec, string str)
+	inline void ConvertStructureString2Vec(vector<ObjectData*>* vec, string str)
 	{
 		istringstream is(str);
 
@@ -105,16 +101,12 @@ namespace MY_UTILITY // utility
 			while (getline(iss, buffer2, ',')) {
 				_vec.push(buffer2);
 			}
-			StructureData* sd = new StructureData;
-			sd->isBack = stoi(_vec.front());
-			_vec.pop();
-			sd->key = _vec.front();
+			ObjectData* sd = new ObjectData;
+			sd->key = stoi(_vec.front());
 			_vec.pop();
 			sd->x = stoi(_vec.front());
 			_vec.pop();
 			sd->y = stoi(_vec.front());
-			_vec.pop();
-			sd->page = stoi(_vec.front());
 			_vec.pop();
 			vec->push_back(sd);
 		}

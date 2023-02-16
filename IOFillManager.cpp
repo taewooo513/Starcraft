@@ -79,7 +79,7 @@ string IOFillManager::GetFileData(string section, string key)
 	char* cBuf = NULL;
 	cBuf = (char*)malloc(sizeof(char) * 10000);
 	memset(cBuf, 0x00, sizeof(cBuf));
-	string path = "./MapFile/Structures/" + m_nowStageFileName + ".ini";
+	string path = "./MapFile/LostTemple.ini";
 
 	GetPrivateProfileString(section.c_str(), key.c_str(), "", cBuf, 10000, path.c_str());
 
@@ -90,7 +90,7 @@ string IOFillManager::GetFileData(string section, string key)
 
 void IOFillManager::WriteFileData(string section, string key, string inputStr)
 {
-	string path = "./MapFile/Structures/" + m_nowStageFileName + ".ini";
+	string path = "./MapFile/LostTemple.ini";
 
 	WritePrivateProfileString(section.c_str(), key.c_str(), inputStr.c_str(), path.c_str());
 }

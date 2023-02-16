@@ -65,7 +65,7 @@ void CommandCenter::Update()
 			addUnitQueue.front().timeNow = addUnitQueue.front().maxTime;
 			SpaceConstructionVehicle* scv = new SpaceConstructionVehicle;
 			scv->SetPlayer(player);
-			OBJECTMANAGER->AddObject(scv, "scv", position.x, position.y, 1);
+			OBJECTMANAGER->AddObject(scv, "scv", position.x - 20, position.y + 100, 1);
 			addUnitQueue.erase(addUnitQueue.begin());
 		}
 	}

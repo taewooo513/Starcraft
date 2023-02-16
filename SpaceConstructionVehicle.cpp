@@ -135,7 +135,8 @@ void SpaceConstructionVehicle::Move()
 						d = { 0,0 };
 						m_dest = { 0,0 };
 						m_speed = 0;
-						m_isBuild = true;
+						if (buildIndex != 0)
+							m_isBuild = true;
 					}
 				}
 			}
@@ -151,7 +152,8 @@ void SpaceConstructionVehicle::Move()
 			m_speed = 0;
 		}
 	}
-	grid->Update();
+
+	grid->Update(true);
 }
 
 void SpaceConstructionVehicle::Update()
@@ -178,6 +180,7 @@ void SpaceConstructionVehicle::Update()
 	{
 		m_speed = 0;
 	}
+	isa = false;
 
 	if (me != nullptr)
 	{
@@ -189,22 +192,57 @@ void SpaceConstructionVehicle::Update()
 				{
 					me->nowMineUnit = this;
 				}
+				else if (me->nowMineUnit != this)
+				{
+					float fDest = 10000;
+					auto lastMe = me;
+					for (auto iter : player->resrouces)
+					{
+						float dest = sqrt((iter->position.x - position.x) * (iter->position.x - position.x) + (iter->position.y - position.y) * (iter->position.y - position.y));
+						if (fDest > dest && dest < 150)
+						{
+							if (typeid(*iter).name() == typeid(Mineral).name())
+							{
+								auto a = dynamic_cast<Mineral*>(iter);
+								if (a->nowMineUnit == nullptr)
+								{
+									fDest = dest;
+									me = a;
+								}
+							}
+						}
+					}
+					if (lastMe != me)
+					{
+						m_dest = me->position;
+						player->Astar(position, m_dest, this);
+					}
+				}
 			}
 			else if (isMine == true)
 			{
 				mineResertTimer += DELTA_TIME;
+				imgRot = atan2(m_command->position.x - position.x, m_command->position.y - position.y);
+
+
+				isa = true;
+
 				if (mineResertTimer > 0.5f)
 				{
 					player->m_mineral += 8;
 					m_dest = me->position;
 					isMine = false;
 					mineResertTimer = 0;
+					player->Astar(position, m_dest, this);
 				}
 			}
 		}
 
 		if (me->nowMineUnit == this)
 		{
+			imgRot = atan2(me->position.x - position.x, me->position.y - position.y);
+
+			isa = true;
 			mineTimer += DELTA_TIME;
 			if (mineTimer > 3)
 			{
@@ -216,7 +254,9 @@ void SpaceConstructionVehicle::Update()
 					if (typeid(*iter).name() == typeid(CommandCenter).name())
 					{
 						me->nowMineUnit = nullptr;
+						m_command = iter;
 						m_dest = iter->position;
+						player->Astar(position, m_dest, this);
 					}
 				}
 			}
@@ -240,9 +280,19 @@ void SpaceConstructionVehicle::Render()
 		IMAGEMANAGER->DrawCircle(position, 12, 9);
 	}
 
-	if (imgRot <= 0)
+	if (isa == true)
 	{
-		isR = true;
+		if (imgRot <= 0)
+		{
+			isR = true;
+		}
+	}
+	else
+	{
+		if (imgRot <= 0)
+		{
+			isR = true;
+		}
 	}
 
 	if (m_nowBuild == nullptr)
@@ -344,6 +394,19 @@ void SpaceConstructionVehicle::UIRender()
 
 void SpaceConstructionVehicle::Attack()
 {
+}
+
+void SpaceConstructionVehicle::ResetParam()
+{
+	if (me != nullptr)
+	{
+		me->nowMineUnit = nullptr;
+	}
+	if (m_nowBuild == nullptr)
+	{
+		buildIndex = 0;
+		m_isBuild = false;
+	}
 }
 
 void SpaceConstructionVehicle::BuildingConstruction()

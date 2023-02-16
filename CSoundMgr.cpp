@@ -1,53 +1,190 @@
-#include "stdafx.h"
+#include "Stdafx.h"
 #include "CSoundMgr.h"
-#include "CSound.h" 
 
-CSoundMgr::CSoundMgr()
-	: m_pSound(nullptr)
-	, m_pBGM(nullptr)
+CSoundMgr::CSoundMgr() : _system(nullptr),
+_channel(nullptr),
+_sound(nullptr)
 {
 }
 
-CSoundMgr::~CSoundMgr()
+HRESULT CSoundMgr::init(void)
 {
+	// 사운드 시스템 생성
+	System_Create(&_system);
+
+	_system->init(totalSoundChannel, FMOD_INIT_NORMAL, 0);
+
+	_sound = new Sound * [totalSoundChannel];
+	_channel = new Channel * [totalSoundChannel];
+
+	// 메모리 한번 정리
+	memset(_sound, 0, sizeof(Sound*) * (totalSoundChannel));
+	memset(_channel, 0, sizeof(Channel*) * (totalSoundChannel));
+
+	return S_OK;
 }
 
-int CSoundMgr::init(HWND hwnd)
+void CSoundMgr::release(void)
 {
-	if (FAILED(DirectSoundCreate8(NULL, &m_pSound, NULL)))
+	// 사운드 삭제
+	if (_channel != nullptr || _sound != nullptr)
 	{
-		MessageBox(NULL, "사운드디바이스생성실패", "SYSTEM ERROR", MB_OK);
-		return false;
+		for (int i = 0; i < totalSoundChannel; i++)
+		{
+			if (_channel != nullptr)
+			{
+				if (_channel[i]) _channel[i]->stop();
+			}
+
+			if (_sound != nullptr)
+			{
+				if (_sound != nullptr) _sound[i]->release();
+			}
+		}
 	}
 
-	// 사운드 디바이스 협조레벨 설정.
-	if (FAILED(m_pSound->SetCooperativeLevel(hwnd, DISCL_EXCLUSIVE))) // Flag값 정리
+	SAFE_DELETE_ARRAY(_channel);
+	SAFE_DELETE_ARRAY(_sound);
+
+	// 시스템 해제
+	if (_system != nullptr)
 	{
-		MessageBox(NULL, "사운드디바이스 협조레벨 설정", "SYSTEM ERROR", MB_OK);
-		return false;
+		_system->release();
+		_system->close();
+	}
+}
+
+void CSoundMgr::update(void)
+{
+	_system->update();
+}
+
+void CSoundMgr::addSound(string keyName, string soundName, bool backGround, bool loop)
+{
+	if (loop)
+	{
+		if (backGround)
+		{
+			_system->createStream(soundName.c_str(), FMOD_LOOP_NORMAL, 0, &_sound[_mTotalSounds.size()]);
+		}
+		else
+		{
+			_system->createSound(soundName.c_str(), FMOD_LOOP_NORMAL, 0, &_sound[_mTotalSounds.size()]);
+		}
+	}
+	else
+	{
+		_system->createSound(soundName.c_str(), FMOD_DEFAULT, 0, &_sound[_mTotalSounds.size()]);
 	}
 
-	return true;
+	_mTotalSounds.insert(make_pair(keyName, &_sound[_mTotalSounds.size()]));
 }
 
-void CSoundMgr::RegisterToBGM(CSound* _pSound)
+void CSoundMgr::play(string keyName, float volume)
 {
-	if (m_pBGM != nullptr)
-		m_pBGM->Stop(true);
+	arrSoundIter iter = _mTotalSounds.begin();
+	int count = 0;
 
-	m_pBGM = _pSound;
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			_system->playSound(*iter->second, nullptr,false, &_channel[count]);
+
+			_channel[count]->setVolume(volume);
+
+			break;
+		}
+	}
+
+
 }
 
-CSound* CSoundMgr::AddSound(string key, string path)
+
+
+void CSoundMgr::stop(string keyName)
 {
-	CSound* sound = new CSound;
-	sound->Load(path);
-	m_sounds.insert(make_pair(key, sound));
-	return sound;
+	arrSoundIter iter = _mTotalSounds.begin();
+
+	int count = 0;
+
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			_channel[count]->stop();
+
+			break;
+		}
+	}
 }
 
-CSound* CSoundMgr::FindSound(string key)
+void CSoundMgr::pause(string keyName)
 {
-	auto find = m_sounds.find(key);
-	return find->second;
+	arrSoundIter iter = _mTotalSounds.begin();
+
+	int count = 0;
+
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			_channel[count]->setPaused(true);
+
+			break;
+		}
+	}
 }
+void CSoundMgr::resume(string keyName)
+{
+	arrSoundIter iter = _mTotalSounds.begin();
+
+	int count = 0;
+
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			_channel[count]->setPaused(false);
+
+			break;
+		}
+	}
+}
+
+bool CSoundMgr::isPlaySound(string keyName)
+{
+	arrSoundIter iter = _mTotalSounds.begin();
+	bool isPlay;
+	int count = 0;
+
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			_channel[count]->isPlaying(&isPlay);
+
+			break;
+		}
+	}
+	return isPlay;
+}
+
+bool CSoundMgr::isPauseSound(string keyName)
+{
+	bool isPause;
+	int count = 0;
+
+	arrSoundIter iter = _mTotalSounds.begin();
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			_channel[count]->isPlaying(&isPause);
+			break;
+		}
+	}
+
+	return isPause;
+}
+

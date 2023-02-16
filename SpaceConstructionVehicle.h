@@ -36,12 +36,16 @@ private:
 	};
 	float randomMoveRot;
 	float randomMoveTime;
+	bool isa = false;
 	int index = 0;
+	
 public:
 	int page = 0;
 	int buildIndex = 0;
 	bool m_isBuild = false;
 	Build* m_nowBuild;
+	Build* m_command = nullptr;
+
 	SpaceConstructionVehicle();
 	~SpaceConstructionVehicle();
 	virtual void Init() override;
@@ -50,6 +54,7 @@ public:
 	virtual void Render() override;
 	virtual void UIRender() override;
 	virtual void Attack() override;
+	virtual void ResetParam() override;
 	Mineral* me;
 
 	void ImageDirection();

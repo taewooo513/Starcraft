@@ -114,29 +114,40 @@ void Player::Init()
 	m_isCameraClick = true;
 	m_cursorImage = IMAGEMANAGER->AddImageVectorCopy("arrow0000");
 	m_cursorImage->Setting(0.15, true);
-	for (int i = 0; i < 1; i++)
+	string unitsStr;
+	unitsStr = FILEMANAGER->GetFileData("Player1", "Batch");
+	vector<ObjectData*> objs;
+	MY_UTILITY::ConvertStructureString2Vec(&objs, unitsStr);
+
+	for (auto iter : objs)
 	{
-		Unit* scv = new SpaceConstructionVehicle;
-		scv->SetPlayer(this);
-		OBJECTMANAGER->AddObject(scv, "Unit", 2300 + WINSIZE_X / 3, WINSIZE_Y / 2, 1);
+		switch (iter->key)
+		{
+		case 0:
+		{
+			Object* me = new Mineral;
+			OBJECTMANAGER->AddObject(me, "mimeral", iter->x, iter->y, 0);
+			resrouces.push_back(me);
+		}
+		break;
+		case 1:
+		{
+			Build* commandCenter = new CommandCenter;
+			commandCenter->SetPlayer(this);
+			OBJECTMANAGER->AddObject(commandCenter, "Build", iter->x, iter->y, 0);
+			commandCenter->AddComplete();
+		}
+		break;
+		case 7:
+		{
+			Unit* scv = new SpaceConstructionVehicle;
+			scv->SetPlayer(this);
+			OBJECTMANAGER->AddObject(scv, "Unit", iter->x, iter->y, 1);
+
+		}
+		break;
+		}
 	}
-	SpaceConstructionVehicle* marin = new SpaceConstructionVehicle;
-	marin->SetPlayer(this);
-	OBJECTMANAGER->AddObject(marin, "marin", 200, 200, 0);
-
-	FireBat* fireBat = new FireBat;
-	fireBat->SetPlayer(this);
-	OBJECTMANAGER->AddObject(fireBat, "marin", 250, 200, 0);
-	Vulture* vulture = new Vulture;
-	vulture->SetPlayer(this);
-	OBJECTMANAGER->AddObject(vulture, "marin", 300, 200, 0);
-
-	//m_units.push_back(scv);
-	Build* commandCenter = new CommandCenter;
-	commandCenter->SetPlayer(this);
-	OBJECTMANAGER->AddObject(commandCenter, "Build", WINSIZE_X / 2, WINSIZE_Y / 2, 0);
-	commandCenter->AddComplete();
-	//m_builds.push_back(commandCenter);
 
 	m_selectBuild = nullptr;
 	m_selectUnit = nullptr;
@@ -164,6 +175,8 @@ void Player::Update()
 		m_rClickPos.y = _ptMouse.y + IMAGEMANAGER->GetCameraPosition().y;
 		if (m_selectUnit != nullptr)
 		{
+			m_selectUnit->ResetParam();
+			Vector2 p = m_rClickPos;
 			for (auto iter : resrouces)
 			{
 				m_selectUnit->SetDestPosition(m_rClickPos);
@@ -177,16 +190,35 @@ void Player::Update()
 							scv->me = dynamic_cast<Mineral*>(iter);
 						}
 					}
-
+					p = iter->position;
 					m_selectUnit->SetDestPosition(iter->position);
 				}
 			}
-			Astar(m_selectUnit->GetPosition(), { m_rClickPos }, m_selectUnit);
+			Astar(m_selectUnit->GetPosition(), { p }, m_selectUnit);
 		}
 		for (auto iter : m_selectUnits)
 		{
-			iter->SetDestPosition(m_rClickPos);
-			Astar(iter->GetPosition(), { m_rClickPos }, iter);
+			iter->ResetParam();
+
+			Vector2 p = m_rClickPos;
+			for (auto _iter : resrouces)
+			{
+				iter->SetDestPosition(m_rClickPos);
+				if (PtInRect(&_iter->clickRect, _ptMouse))
+				{
+					if (typeid(*iter).name() == typeid(SpaceConstructionVehicle).name())
+					{
+						SpaceConstructionVehicle* scv = dynamic_cast<SpaceConstructionVehicle*>(iter);
+						if (typeid(*_iter).name() == typeid(Mineral).name())
+						{
+							scv->me = dynamic_cast<Mineral*>(_iter);
+						}
+					}
+					p = _iter->position;
+					iter->SetDestPosition(_iter->position);
+				}
+			}
+			Astar(iter->GetPosition(), { p }, iter);
 		}
 	}
 
@@ -222,8 +254,10 @@ void Player::Update()
 				SpaceConstructionVehicle* scv = dynamic_cast<SpaceConstructionVehicle*>(m_selectUnit);
 				if (scv->buildIndex != 0)
 				{
-					m_selectUnit->SetDestPosition({ (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().y });
-					Astar(m_selectUnit->GetPosition(), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().y }, m_selectUnit);
+					m_selectUnit->SetDestPosition({ (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x,
+						(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().y });
+					Astar(m_selectUnit->GetPosition(), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x,
+						(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().y }, m_selectUnit);
 					scv->m_isBuild = true;
 				}
 			}

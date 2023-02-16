@@ -35,9 +35,6 @@
     <ClCompile Include="WinMain.cpp">
       <Filter>Game\Object\Boss\Pattern</Filter>
     </ClCompile>
-    <ClCompile Include="CSound.cpp">
-      <Filter>Core\Manager\SoundManager</Filter>
-    </ClCompile>
     <ClCompile Include="CSoundMgr.cpp">
       <Filter>Core\Manager\SoundManager</Filter>
     </ClCompile>
@@ -95,17 +92,12 @@
     <ClCompile Include="MainGameScene.cpp">
       <Filter>Game\Scene\MainGameScene</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Game\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Barrack.cpp">
       <Filter>Game\Object\Build\Terran\Barrack</Filter>
     </ClCompile>
     <ClCompile Include="CommandCenter.cpp">
       <Filter>Game\Object\Build\Terran\CommandCenter</Filter>
     </ClCompile>
-    <ClCompile Include="TitleScene.cpp" />
-    <ClCompile Include="Mineral.cpp" />
     <ClCompile Include="GridManager.cpp">
       <Filter>Game\Grid</Filter>
     </ClCompile>
@@ -115,7 +107,6 @@
     <ClCompile Include="ObjectGrid.cpp">
       <Filter>Game\Grid</Filter>
     </ClCompile>
-    <ClCompile Include="Vulture.cpp" />
     <ClCompile Include="Factory.cpp">
       <Filter>Game\Object\Build\Terran\Factory</Filter>
     </ClCompile>
@@ -134,7 +125,27 @@
     <ClCompile Include="Armory.cpp">
       <Filter>Game\Object\Build\Terran\Armory</Filter>
     </ClCompile>
-    <ClCompile Include="ScienceFacility.cpp" />
+    <ClCompile Include="MapToolScene.cpp">
+      <Filter>Game\Scene\MapToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>Game\Scene\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Mineral.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Vulture.cpp">
+      <Filter>Game\Object\Unit\Terran\Vulture</Filter>
+    </ClCompile>
+    <ClCompile Include="ScienceFacility.cpp">
+      <Filter>Game\Object\Build\Terran\ScienceFacility</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game\Player\Player1</Filter>
+    </ClCompile>
+    <ClCompile Include="Player2.cpp">
+      <Filter>Game\Player\Player2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -179,9 +190,6 @@
     <ClInclude Include="CSound.h">
       <Filter>Core\Manager\SoundManager</Filter>
     </ClInclude>
-    <ClInclude Include="CSound.h">
-      <Filter>Core\Manager\SoundManager</Filter>
-    </ClInclude>
     <ClInclude Include="CSoundMgr.h">
       <Filter>Core\Manager\SoundManager</Filter>
     </ClInclude>
@@ -221,9 +229,6 @@
     <ClInclude Include="MainGameScene.h">
       <Filter>Game\Scene\MainGameScene</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Game\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Storm\Storm.h" />
     <ClInclude Include="Barrack.h">
       <Filter>Game\Object\Build\Terran\Barrack</Filter>
@@ -231,8 +236,6 @@
     <ClInclude Include="CommandCenter.h">
       <Filter>Game\Object\Build\Terran\CommandCenter</Filter>
     </ClInclude>
-    <ClInclude Include="TitleScene.h" />
-    <ClInclude Include="Mineral.h" />
     <ClInclude Include="GridManager.h">
       <Filter>Game\Grid</Filter>
     </ClInclude>
@@ -242,7 +245,6 @@
     <ClInclude Include="ObjectGrid.h">
       <Filter>Game\Grid</Filter>
     </ClInclude>
-    <ClInclude Include="Vulture.h" />
     <ClInclude Include="Factory.h">
       <Filter>Game\Object\Build\Terran\Factory</Filter>
     </ClInclude>
@@ -261,7 +263,27 @@
     <ClInclude Include="Armory.h">
       <Filter>Game\Object\Build\Terran\Armory</Filter>
     </ClInclude>
-    <ClInclude Include="ScienceFacility.h" />
+    <ClInclude Include="MapToolScene.h">
+      <Filter>Game\Scene\MapToolScene</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>Game\Scene\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Mineral.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Vulture.h">
+      <Filter>Game\Object\Unit\Terran\Vulture</Filter>
+    </ClInclude>
+    <ClInclude Include="ScienceFacility.h">
+      <Filter>Game\Object\Build\Terran\ScienceFacility</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game\Player\Player1</Filter>
+    </ClInclude>
+    <ClInclude Include="Player2.h">
+      <Filter>Game\Player\Player2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -389,6 +411,21 @@
     </Filter>
     <Filter Include="Game\Object\Build\Terran\Armory">
       <UniqueIdentifier>{497763e2-620d-4e9c-8514-2806222b8d4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\MapToolScene">
+      <UniqueIdentifier>{b9db343b-c2d8-42ff-afa8-82acfe42a6c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Unit\Terran\Vulture">
+      <UniqueIdentifier>{7c9eb855-e1ff-45a3-ba23-f7504e3f7a87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Build\Terran\ScienceFacility">
+      <UniqueIdentifier>{a33f438e-2bbb-4190-935c-17b97bc3317c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Player2">
+      <UniqueIdentifier>{7bfd2ca1-2897-4417-9995-bd761c00e7f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Player1">
+      <UniqueIdentifier>{36aeb352-bebd-498a-8728-8f585b65e40b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

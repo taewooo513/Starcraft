@@ -21,7 +21,7 @@ public:
 	void Astar(float searchSizeX, float searchSizeY);
 	Vector2 destPos;
 	void Init(Object* obj, Vector2 collisionGridSize, Vector2 gridSize, float x, float y);
-	void Update();
+	void Update(bool isA = false);
 	void Render();
 	void Release();
 	int nowTileRegionId = 0;

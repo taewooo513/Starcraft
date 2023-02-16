@@ -47,13 +47,14 @@ private:
 	IDWriteFactory3* m_pDWriteFactory;
 	IDWriteTextFormat* m_pTextFormat;
 	ID2D1SolidColorBrush* brush;
-
 	Vector2 m_cameraPosition = { 0,0 };
 	IDWriteFontFile* pFontFile;
 	map <string, CImage*>m_imageList;
 	map <string, vImage*> m_vImageList;
 	IDWriteTextLayout* pTextLayout_;
+
 public:
+	map<string, CImage*> mapToolImage;
 	ImageManager();
 	~ImageManager();
 public:

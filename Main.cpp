@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Main.h"
-#include"CSound.h"
 void Main::Init()
 {
 	srand(time(NULL));
@@ -13,10 +12,14 @@ void Main::Init()
 	TIMERMANAGER->Init();
 	SCENEMANAGER->Init();
 	KEYMANAGER->Init();
-	SOUNDMANAGER->init(_hWnd);
+	SOUNDMANAGER->init();
 	TIMERMANAGER->Init();
+	SOUNDMANAGER->addSound("main-menu", "./Resources/Sound/main-menu.mp3", false, true);
+	SOUNDMANAGER->addSound("terran-2", "./Resources/Sound/starcraft-terran-theme-2.mp3", false, true);
+	SOUNDMANAGER->addSound("terran-1", "./Resources/Sound/terran-theme-1.mp3", false, true);
+
 	srand(GetTickCount64());
-	SCENEMANAGER->ChangeScene("MainGameScene");
+	SCENEMANAGER->ChangeScene("TitleScene");
 }
 
 void Main::Update()
@@ -134,11 +137,11 @@ void Main::CreateDeviceD3D()
 
 	pD2DFactory->CreateDevice(dxgiDevice.Get(), &g_device);
 
-	 g_device->CreateDeviceContext(
+	g_device->CreateDeviceContext(
 		D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
 		&m_d2dContext
 	);
-	cout  << endl;
+	cout << endl;
 }
 
 void Main::CreateSwapChain()

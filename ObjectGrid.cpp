@@ -312,8 +312,9 @@ void ObjectGrid::Init(Object* obj, Vector2 collisionGridSize, Vector2 gridSize, 
 	lastX = 0, lastY = 0;
 }
 
-void ObjectGrid::Update()
+void ObjectGrid::Update(bool isA)
 {
+
 	if (lastX != 0 && lastY != 0)
 	{
 		for (int i = lastX; i < lastX + m_collisionGridSize.x; i++)
@@ -327,13 +328,15 @@ void ObjectGrid::Update()
 	}
 	int fx = (int)(obj->position.x / 8 / 1.5) + x;
 	int fy = (int)(obj->position.y / 8 / 1.5) + y;
-
-	for (int i = fx; i < fx + m_collisionGridSize.x; i++)
+	if (isA == false)
 	{
-		for (int j = fy; j < fy + m_collisionGridSize.y; j++)
+		for (int i = fx; i < fx + m_collisionGridSize.x; i++)
 		{
-			if (GRIDMANAGER->regionsTile[i][j].isBuildTag == 0)
-				GRIDMANAGER->regionsTile[i][j].isBuildTag = gridTag;
+			for (int j = fy; j < fy + m_collisionGridSize.y; j++)
+			{
+				if (GRIDMANAGER->regionsTile[i][j].isBuildTag == 0)
+					GRIDMANAGER->regionsTile[i][j].isBuildTag = gridTag;
+			}
 		}
 	}
 	lastX = fx;

@@ -40,6 +40,8 @@ void Mineral::Update()
 
 void Mineral::Render()
 {
+	IMAGEMANAGER->DrawCircle({ position.x  ,position.y }, 35, 20);
+
 	IMAGEMANAGER->DrawRect({ (float)clickRect.left,(float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
 
 	if (KEYMANAGER->GetOnceKeyDown(VK_F1))

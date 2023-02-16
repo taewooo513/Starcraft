@@ -1,25 +1,42 @@
 #pragma once
-#include <dsound.h>
-#include <dinput.h>
+#include "singleton.h"
+constexpr auto soundBuffer = 20;
+constexpr auto extraSoundChannel = 5;
+constexpr auto totalSoundChannel = soundBuffer + extraSoundChannel;
 
-#pragma comment(lib, "dsound.lib")
+using namespace FMOD;
 
-class CSound;
-class CSoundMgr : public Singleton<CSoundMgr>
+class CSoundMgr : public Singleton <CSoundMgr>
 {
 private:
-	LPDIRECTSOUND8	m_pSound;	// 사운드카드 대표 객체
-	CSound* m_pBGM;		// 현재 지정된 BGM Sound
-	map<string, CSound*> m_sounds;
+	typedef map<string, Sound**> arrSounds;
+	typedef map<string, Sound**>::iterator arrSoundIter;
+	typedef map<string, Channel**> arrChannels;
+	typedef map<string, Channel**>::iterator arrChannelIter;
+
+	System* _system;   //노래가 끝나면 다음노래 재생 등의 기능, 사운드를 켜주고 꺼주는 기능
+	Sound** _sound;      //퍼즈, 재생, 반복 등등의 기능
+	Channel** _channel;   //사운드에 대한 메모리 버퍼, 사운드는 전방향에서 들려야함, 소리를 어디 위치에서부터 들리게 할지 선택하는 기능 채널과 사운드는 반드시 1대1 매칭해야함
+
+	arrSounds _mTotalSounds;
+
 public:
 	CSoundMgr();
-	~CSoundMgr();
-	int init(HWND hwnd);
-	LPDIRECTSOUND8 GetSoundDevice() { return m_pSound; }
-	void RegisterToBGM(CSound* _pSound);
+	~CSoundMgr() { release(); }
+	HRESULT init(void);
+	void release(void);
+	void update(void);
 
-	CSound* AddSound(string key, string path);
-	CSound* FindSound(string key);
+	void addSound(string keyName, string soundName, bool backGround, bool loop);
+
+	void play(string keyName, float volume);
+	void pause(string keyName);
+	void stop(string keyName);
+	void resume(string keyName);
+
+	bool isPlaySound(string keyName);
+	bool isPauseSound(string keyName);
+
 };
 
 #define SOUNDMANAGER CSoundMgr::GetInstance()

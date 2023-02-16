@@ -73,10 +73,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(IncludePath)</IncludePath>
-    <ExternalIncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>C:\Users\taewo\Desktop\Skul-main\Storm;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(LibraryPath)</LibraryPath>
-    <ReferencePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(ReferencePath)</ReferencePath>
+    <IncludePath>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64;C:\Users\taewo\Desktop\Skul-main\Storm;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(LibraryPath)</LibraryPath>
+    <ReferencePath>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(ReferencePath)</ReferencePath>
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -128,6 +128,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\taewo\Desktop\Skul-main\Storm;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <HeapReserveSize>1999999</HeapReserveSize>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,7 +153,6 @@
     <ClCompile Include="Barrack.cpp" />
     <ClCompile Include="Build.cpp" />
     <ClCompile Include="CommandCenter.cpp" />
-    <ClCompile Include="CSound.cpp" />
     <ClCompile Include="CSoundMgr.cpp" />
     <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="Depot.cpp" />
@@ -169,12 +169,14 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainGameScene.cpp" />
     <ClCompile Include="MapReader.cpp" />
+    <ClCompile Include="MapToolScene.cpp" />
     <ClCompile Include="Marine.cpp" />
     <ClCompile Include="Mineral.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectGrid.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Player2.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScienceFacility.cpp" />
@@ -202,7 +204,6 @@
     <ClInclude Include="Barrack.h" />
     <ClInclude Include="Build.h" />
     <ClInclude Include="CommandCenter.h" />
-    <ClInclude Include="CSound.h" />
     <ClInclude Include="CSoundMgr.h" />
     <ClInclude Include="CTimer.h" />
     <ClInclude Include="Depot.h" />
@@ -219,12 +220,14 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="MainGameScene.h" />
     <ClInclude Include="MapReader.h" />
+    <ClInclude Include="MapToolScene.h" />
     <ClInclude Include="Marine.h" />
     <ClInclude Include="Mineral.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectGrid.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Player2.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ScienceFacility.h" />

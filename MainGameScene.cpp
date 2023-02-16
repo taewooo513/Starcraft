@@ -14,12 +14,12 @@ MainGameScene::~MainGameScene()
 
 void MainGameScene::Init()
 {
+	SOUNDMANAGER->stop("main-menu");
+	SOUNDMANAGER->play("terran-1",0.5f);
 	player1 = new Player;
 	GRIDMANAGER->Init();
 	player1->Init();
-	Object* me = new Mineral;
-	OBJECTMANAGER->AddObject(me, "mimeral", 500, 50, 0);
-	player1->resrouces.push_back(me);
+	
 }
 
 void MainGameScene::Update()

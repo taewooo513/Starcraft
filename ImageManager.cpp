@@ -593,6 +593,19 @@ void ImageManager::ImageLoad()
 	// 미네랄
 
 
+	AddImage("cmdicons0323", L"./Resources/Icon/cmdicons0323.bmp"); //공업
+	AddImage("cmdicons0238", L"./Resources/Icon/cmdicons0238.bmp"); //아카데미 
+	AddImage("cmdicons0237", L"./Resources/Icon/cmdicons0237.bmp"); //스팀펙 
+	AddImage("cmdicons0243", L"./Resources/Icon/cmdicons0243.bmp"); //마인
+	AddImage("cmdicons0245", L"./Resources/Icon/cmdicons0245.bmp"); //시즈탱크
+	AddImage("cmdicons0246", L"./Resources/Icon/cmdicons0246.bmp"); //일반탱크
+	AddImage("cmdicons0120", L"./Resources/Icon/cmdicons0120.bmp"); //펙토리 업글
+	AddImage("cmdicons0240", L"./Resources/Icon/cmdicons0240.bmp"); //락다운
+	AddImage("cmdicons0287", L"./Resources/Icon/cmdicons0287.bmp"); //벌쳐 발업cmdicons0333
+	AddImage("cmdicons0333", L"./Resources/Icon/cmdicons0333.bmp"); //공중 공업
+
+
+
 	AddImage("cmdicons0002", L"./Resources/Icon/cmdicons0002.bmp"); //SCVcmdicons0007 벌처
 	AddImage("cmdicons0013", L"./Resources/Icon/cmdicons0013.bmp"); //SCVcmdicons0007cmdicons0013 마인
 	AddImage("cmdicons0023", L"./Resources/Icon/cmdicons0023.bmp"); //탱크 
@@ -796,6 +809,10 @@ void ImageManager::ImageLoad()
 	AddImageVector("Multi Player", L"./Resources/lobby/Multi Player/multi", 0, 49, true); // 일반
 	AddImageVector("Exit", L"./Resources/lobby/Exit/exit", 0, 49, true); // 일반
 	AddImageVector("Single Player", L"./Resources/lobby/Single Player/single", 0, 34, true); // 일반
+
+	AddImageVector("editoron", L"./Resources/lobby/Editor/English/editoron", 0, 19, true); // 마우스 
+	AddImageVector("exiton", L"./Resources/lobby/Exit/English/exiton", 0, 29, true); // 마우스
+	AddImageVector("singleon", L"./Resources/lobby/Single Player/English/singleon", 8, 67, true); // 마우스
 
 	AddImage("marin_attack_1_1", L"./Resources/marin/Attack/marine0034.bmp"); // 마린 공격 프레임 1
 	AddImage("marin_attack_1_2", L"./Resources/marin/Attack/marine0036.bmp");

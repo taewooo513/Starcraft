@@ -3,6 +3,7 @@
 #include "TestScene.h"
 #include "MainGameScene.h"
 #include "TitleScene.h"
+#include "MapToolScene.h"
 SceneManager::SceneManager()
 {
 }
@@ -23,6 +24,8 @@ void SceneManager::Init()
 	AddScene("MainGameScene", new MainGameScene);
 	AddScene("TitleScene", new TitleScene);
 	AddScene("TestScene", new TestScene);
+	AddScene("MapToolScene", new MapToolScene);
+
 	// 페이드인아웃 할때 다른플레그이면 알파값을 초기화해줌
 	// 초기화를해줘야하는데 어떻게 해야할지 몰라서 해둠
 
@@ -72,9 +75,9 @@ void SceneManager::Release()
 		iter.clear();
 	}
 	m_tiles.clear();
+	m_curScene->Release();
 	for (auto iter : m_sceneList)
 	{
-		iter.second->Release();
 		SAFE_DELETE(iter.second);
 	}
 	m_sceneList.clear();

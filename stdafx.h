@@ -1,8 +1,7 @@
 #pragma once
 #include <SDKDDKVer.h>
 #pragma comment (lib, "msimg32.lib") //마이크로소프트(ms) 이미지(img) 32비트(32) 라이브러리
-
-
+#pragma warning(disable : 4005)
 #include <wincodecsdk.h>
 #pragma comment(lib,"windowscodecs.lib")
 #include <mmsystem.h>
@@ -62,7 +61,7 @@
 
 //#include "./Storm/SFmpqapi.h"
 //#include "./Storm/SFmpq_static.h"
-
+#include <ole2.h>
 #pragma comment(lib , "Dwrite.lib")
 #pragma comment( lib, "dxerr.lib" )
 #pragma comment( lib, "dxguid.lib" )
@@ -72,6 +71,8 @@
 #include <wincodecsdk.h>
 #pragma comment(lib,"windowscodecs.lib")
 #pragma endregion
+#include <fmod.hpp>
+#pragma comment (lib, "fmod_vc.lib")
 
 //#pragma comment(lib,"./Storm/SFmpq.lib")
 //#pragma comment(lib,"./Storm/SFmpq_static.lib")
@@ -99,13 +100,11 @@ enum ItemTag
 	eEnd
 };
 
-struct StructureData
+struct ObjectData
 {
-	string key = "";
+	int key = -1;
 	float x = 0;
 	float y = 0;
-	bool isBack = false;
-	int page = 0;
 };
 
 enum class eSkulSpecies
