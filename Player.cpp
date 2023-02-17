@@ -4,6 +4,13 @@
 #include "CommandCenter.h"
 #include "Marine.h"
 #include "FireBat.h"
+#include "Barrack.h"
+#include "EngineeringBay.h"
+#include "Academy.h"
+#include "Factory.h"
+#include "ScienceFacility.h"
+#include "Armory.h"
+#include "Starport.h"
 #include "Vulture.h"
 void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 {
@@ -165,7 +172,43 @@ void Player::Init()
 
 void Player::Update()
 {
-	
+	for (int i = 0; i < 10; i++)
+	{
+		buildList[i] = false;
+	}
+	for (auto iter : m_builds)
+	{
+		if (typeid(*iter).name() == typeid(Barrack).name())
+		{
+			buildList[eBarrack] = true;
+		}
+		if (typeid(*iter).name() == typeid(CommandCenter).name())
+		{
+			buildList[eCommandCenter] = true;
+		}
+		if (typeid(*iter).name() == typeid(EngineeringBay).name())
+		{
+			buildList[eEngine] = true;
+		}
+		if (typeid(*iter).name() == typeid(Academy).name())
+		{
+			buildList[eAcademy] = true;
+		}
+		if (typeid(*iter).name() == typeid(Armory).name())
+		{
+			buildList[eArmory] = true;
+		}
+		if (typeid(*iter).name() == typeid(Factory).name())
+		{
+			buildList[eFactory] = true;
+		}
+		if (typeid(*iter).name() == typeid(Starport).name())
+		{
+			buildList[eStarport] = true;
+		}
+	}
+
+
 	updateTimer += DELTA_TIME;
 	if (m_selectBuild != nullptr)
 	{

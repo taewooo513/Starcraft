@@ -23,6 +23,18 @@ private:
 	float m_clickEndX;
 	float m_clickEndY;
 public:
+	enum BuildList
+	{
+		eCommandCenter,
+		eBarrack,
+		eAcademy,
+		eEngine,
+		eFactory,
+		eArmory,
+		eScienceFacility,
+		eStarport
+	};
+	bool buildList[10];
 	int m_gas = 0;
 	int m_mineral = 50;
 	int m_suff = 0;
