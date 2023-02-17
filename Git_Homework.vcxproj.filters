@@ -38,9 +38,6 @@
     <ClCompile Include="CSoundMgr.cpp">
       <Filter>Core\Manager\SoundManager</Filter>
     </ClCompile>
-    <ClCompile Include="CSound.cpp">
-      <Filter>Core\Manager\SoundManager</Filter>
-    </ClCompile>
     <ClCompile Include="CSoundMgr.cpp">
       <Filter>Core\Manager\SoundManager</Filter>
     </ClCompile>
@@ -146,6 +143,9 @@
     <ClCompile Include="Player2.cpp">
       <Filter>Game\Player\Player2</Filter>
     </ClCompile>
+    <ClCompile Include="Tank.cpp">
+      <Filter>Game\Object\Unit\Terran\Tank</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -185,9 +185,6 @@
       <Filter>Core\Manager\FileManager</Filter>
     </ClInclude>
     <ClInclude Include="CSoundMgr.h">
-      <Filter>Core\Manager\SoundManager</Filter>
-    </ClInclude>
-    <ClInclude Include="CSound.h">
       <Filter>Core\Manager\SoundManager</Filter>
     </ClInclude>
     <ClInclude Include="CSoundMgr.h">
@@ -283,6 +280,9 @@
     </ClInclude>
     <ClInclude Include="Player2.h">
       <Filter>Game\Player\Player2</Filter>
+    </ClInclude>
+    <ClInclude Include="Tank.h">
+      <Filter>Game\Object\Unit\Terran\Tank</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -426,6 +426,15 @@
     </Filter>
     <Filter Include="Game\Player\Player1">
       <UniqueIdentifier>{36aeb352-bebd-498a-8728-8f585b65e40b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Goliat">
+      <UniqueIdentifier>{cd3d6e70-3262-4f7b-88f1-34a5564a60f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Unit\Terran\Tank">
+      <UniqueIdentifier>{09e5726a-182a-440f-9924-02f8b3ba5602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Unit\Terran\Goliat">
+      <UniqueIdentifier>{3bdb845a-2e0d-4166-bc50-2d00c7e4c764}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

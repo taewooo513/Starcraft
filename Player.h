@@ -39,7 +39,7 @@ public:
 	vector<pair<Vector2, Vector2>> testDraw;
 	void UIRender();
 	void Release();
-	
+	float updateTimer = 0;
 	vector<Object*> resrouces;
 	Player* otherPlayer;
 	struct comp {

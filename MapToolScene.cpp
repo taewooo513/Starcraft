@@ -17,7 +17,6 @@ void MapToolScene::Init()
 
 	MY_UTILITY::ConvertStructureString2Vec(&objdatas1, player1);
 	MY_UTILITY::ConvertStructureString2Vec(&objdatas2, player2);
-
 }
 
 void MapToolScene::Update()
@@ -97,7 +96,6 @@ void MapToolScene::Render()
 
 	if (team == 0)
 	{
-
 		for (auto iter : objdatas1)
 		{
 			switch (iter->key)

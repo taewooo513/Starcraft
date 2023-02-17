@@ -15,6 +15,10 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 	{
 		unit->moveNodeStack.pop();
 	}
+	if (nowTileRegionId == -1)
+	{
+		return;
+	}
 	if (nowTileRegionId == IMAGEMANAGER->GetMapReader()->region->regionsIds[(int)tileEndPos.y][(int)tileEndPos.x].regionsIds)
 	{
 		return;
@@ -161,6 +165,8 @@ void Player::Init()
 
 void Player::Update()
 {
+	
+	updateTimer += DELTA_TIME;
 	if (m_selectBuild != nullptr)
 	{
 		m_selectBuild->SelectBuild();
@@ -414,6 +420,21 @@ void Player::Render()
 void Player::UIRender()
 {
 	IMAGEMANAGER->FogRender();
+	if (updateTimer > 0.5)
+	{
+		for (int x = 0; x < 512; x++)
+		{
+			for (int y = 0; y < 512; y++)
+			{
+				if (GRIDMANAGER->regionsTile[x][y].fogTag > 0.5f)
+				{
+					GRIDMANAGER->regionsTile[x][y].fogTag -= DELTA_TIME * 15;
+				}
+			}
+		}
+		updateTimer = 0;
+	}
+
 	if (m_clickRad < 3.141592)
 	{
 		m_clickRad += DELTA_TIME * 30;

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "ImageManager.h"
 #include "MapReader.h"
+#include <numeric>
+#include <d3dx9math.h>
 ImageManager::ImageManager()
 {
 }
@@ -394,7 +396,7 @@ void ImageManager::FogRender()
 		for (int j = 0; j < 512; j++)
 		{
 			DrawRect({ (float)j * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x,(float)i * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y },
-				{ (float)j * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x + 1, (float)i * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y + 1 }, { 0,0,0,1.f - GRIDMANAGER->regionsTile[j][i].fogTag }, 1);
+				{ (float)j * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x, (float)i * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y  }, { 0,0,0,1.f - GRIDMANAGER->regionsTile[j][i].fogTag }, 1);
 		}
 
 	}
@@ -405,30 +407,34 @@ void ImageManager::FogRender()
 void ImageManager::FogUpdate(Vector2 pos, float dest)
 {
 	Vector2 i = pos / 1.5 / 8;
-	priority_queue < pair<float, GridManager::tileNum*>, vector<float, GridManager::tileNum*>, comp> regionQueue;
-
+	vector<pair<pair<float, Vector2>, GridManager::tileNum*>> obstacle;
 	list<GridManager::tileNum*> tiless;
-	for (int x = i.x - dest; x < i.x + dest; x++)
+
+	float rotA = atan2(i.y - (i.y + dest), i.x - i.x);
+	float rotB = atan2(i.y - (i.y + dest), i.x - (i.x + 1));
+	float rot = abs(rotB - rotA);
+
+	float r = 0;
+	while (r < 3.141592 * 2.f)
 	{
-		for (int y = i.y - dest; y < i.y + dest; y++)
+		r += rot / 2.f;
+		for (int j = 0; j < dest; j++)
 		{
-			if (sqrt((x - i.x) * (x - i.x) + (y - i.y) * (y - i.y)) < dest)
+			float x = round(cos(r) * j + i.x);
+			float y = round(sin(r) * j + i.y);
+
+			if (x > 0 && x < 511 && y > 0 && y < 511)
 			{
-				if (x > 0 && x < 511 && y > 0 && y < 511)
+				if (mapReader->miniTiles2[(int)i.y][(int)i.x] != 1)
 				{
-					regionQueue.push(make_pair(sqrt((x - pos.x) * (x - pos.x) + (y - pos.y) * (y - pos.y)), &GRIDMANAGER->regionsTile[x][y]));
+					if (mapReader->miniTiles2[(int)y][(int)x] == 1)
+						break;
 				}
+				GRIDMANAGER->regionsTile[(int)x][(int)y].fogTag = 1;
 			}
-		}
-	}
-	for (int x = 0; x < 512; x++)
-	{
-		for (int y = 0; y < 512; y++)
-		{
-			if (GRIDMANAGER->regionsTile[x][y].fogTag > 0.5f)
+			else
 			{
-				regionQueue.push(, GRIDMANAGER->regionsTile[x][y]);
-				GRIDMANAGER->regionsTile[x][y].fogTag -= DELTA_TIME;
+				break;
 			}
 		}
 	}

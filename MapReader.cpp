@@ -112,9 +112,18 @@ void MapReader::Init(ID2D1DeviceContext* context)
 					if (_vf4.flag[subY * 4 + subX] == 1 || _vf4.flag[subY * 4 + subX] == 3 || _vf4.flag[subY * 4 + subX] == 3 || _vf4.flag[subY * 4 + subX] == 19 || _vf4.flag[subY * 4 + subX] == 17)
 					{
 						miniTiles[y * 4 + subY][x * 4 + subX] = 1;
+						if (_vf4.flag[subY * 4 + subX] == 3)
+						{
+							miniTiles2[y * 4 + subY][x * 4 + subX] = 1;
+						}
+						else
+						{
+							miniTiles2[y * 4 + subY][x * 4 + subX] = 0;
+						}
 					}
 					else
 					{
+						miniTiles2[y * 4 + subY][x * 4 + subX] = 0;
 						miniTiles[y * 4 + subY][x * 4 + subX] = 0;
 					}
 				}
@@ -673,19 +682,19 @@ void MapReader::MapRegionSetting()
 
 void MapReader::RenderLine()
 {
-	if (KEYMANAGER->GetOnceKeyDown(VK_SPACE))
-	{
-		index++;
-	}
-	for (auto iter : mapRegions)
-	{
-		for (auto _iter : iter->nearRegions)
-		{
-			if (iter->regionId == index)
-				IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, _iter.second->pos.y * 1.5f * 8 });
-		}
-	}
-	
+	//if (KEYMANAGER->GetOnceKeyDown(VK_SPACE))
+	//{
+	//	index++;
+	//}
+	//for (auto iter : mapRegions)
+	//{
+	//	for (auto _iter : iter->nearRegions)
+	//	{
+	//		if (iter->regionId == index)
+	//			IMAGEMANAGER->DrawLine({ iter->pos.x * 1.5f * 8, iter->pos.y * 1.5f * 8 }, { _iter.second->pos.x * 1.5f * 8, //_iter.second->pos.y * 1.5f * 8 });
+	//	}
+	//}
+
 }
 
 void MapReader::Release()

@@ -41,9 +41,9 @@ private:
 	D2D1_ELLIPSE* elipse;
 	struct comp
 	{
-		bool operator()(pair<float, GridManager::tileNum*> A, pair<float, GridManager::tileNum*> B)
+		bool operator()(pair<pair<float, Vector2>, GridManager::tileNum*> A, pair<pair<float, Vector2>, GridManager::tileNum*> B)
 		{
-			if (A.first > B.first)
+			if (A.first.first > B.first.first)
 				return true;
 			return false;
 		}

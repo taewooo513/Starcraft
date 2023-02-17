@@ -57,7 +57,6 @@ struct tileNum
 	int regionsIds;
 	vector<int> nearRegionIds;
 	vector<Vector2> nearRegionPosition;
-
 };
 
 struct Regions
@@ -83,6 +82,8 @@ private:
 public:
 	Regions* region;
 	int miniTiles[128 * 4][128 * 4];
+	int miniTiles2[128 * 4][128 * 4];
+
 	vector<MapRegions*> mapRegions;
 	MapReader() {}
 	~MapReader() {}
