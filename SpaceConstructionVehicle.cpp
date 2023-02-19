@@ -16,10 +16,27 @@ SpaceConstructionVehicle::SpaceConstructionVehicle()
 
 SpaceConstructionVehicle::~SpaceConstructionVehicle()
 {
+
+	if (player->m_selectUnit == this)
+	{
+		player->m_selectUnit = nullptr;
+	}
+	for (auto iter = player->m_units.begin(); iter < player->m_units.end(); iter++)
+	{
+		if ((*iter) == this)
+		{
+			player->m_units.erase(iter);
+			break;
+		}
+	}
 }
 
 void SpaceConstructionVehicle::Init()
 {
+	m_maxHp = 60;
+	m_hp = m_maxHp;
+	BuildTimer = 3;
+	buildDest = { 0,0 };
 	player->m_suff += 1;
 	astarTimer = 0.1;
 	grid = GRIDMANAGER->AddGrid(this, 3, 3, 20, 20, -1, -1);
@@ -62,6 +79,8 @@ void SpaceConstructionVehicle::Init()
 	d = { 0,0 };
 	randomMoveTime = 0;
 	mineTimer = 0;
+	isFA = true;
+
 }
 
 void SpaceConstructionVehicle::Move()
@@ -154,11 +173,89 @@ void SpaceConstructionVehicle::Move()
 	}
 
 	grid->Update(true);
+
 }
 
 void SpaceConstructionVehicle::Update()
 {
+	if (isdeath == true)
+	{
+		ObjectDestroyed();
+	}
+	if (m_hp <= 0 && isdeath == false)
+	{
+		SOUNDMANAGER->play("tscdth00", 0.5f);
+		isdeath = true;
+		EFFECTMANAGER->AddEffect("bang2Effect", { position.x - 80,position.y - 100 }, 1.1, 0.07f);
+	}
+
 	IMAGEMANAGER->FogUpdate(position, 30);
+	if (m_nowBuild == nullptr)
+	{
+		if (GRIDMANAGER->regionsTile[(int)(position.x / 1.5f / 8.f)][(int)(position.y / 1.5f / 8.f)].isBuildTag != 0)
+		{
+			position.x += cos(5) * DELTA_TIME * 100;
+			position.y += sin(5) * DELTA_TIME * 100;
+			imgRot = 5;
+		}
+	}
+	else
+	{
+		if (isFA == true)
+		{
+			BuildTimer += DELTA_TIME;
+
+			if (BuildTimer > 3)
+			{
+				isFA = false;
+			}
+			else
+			{
+				float rrr = atan2(m_nowBuild->position.x - position.x, m_nowBuild->position.y - position.y);
+				imgRot = rrr > 0 ? 3.141592 - rrr : -3.141592 - rrr;
+			}
+		}
+		else
+		{
+			if (buildDest.x == 0 && buildDest.y == 0)
+			{
+				float rX = rand() % 200 - 100 + m_nowBuild->position.x;
+				float rY = rand() % 200 - 100 + m_nowBuild->position.y;
+				buildDest.x = rX;
+				buildDest.y = rY;
+			}
+
+			float rrr = atan2(buildDest.y - position.y, buildDest.x - position.x);
+			if (m_speed2 < 300)
+			{
+				m_speed2 += 5;
+			}
+			float moveDestX = cos(rrr) * DELTA_TIME * m_speed2;
+			float moveDestY = sin(rrr) * DELTA_TIME * m_speed2;
+			float length = sqrt((buildDest.x - position.x) * (buildDest.x - position.x) + (buildDest.y - position.y) * (buildDest.y - position.y));
+
+			if (length < DELTA_TIME* m_speed2)
+			{
+				float rrr = atan2(buildDest.x - position.x, buildDest.y - position.y);
+				imgRot = rrr > 0 ? 3.141592 - rrr : -3.141592 - rrr;
+				position.x = buildDest.x;
+				position.y = buildDest.y;
+
+				BuildTimer = 0;
+				buildDest = { 0,0 };
+				m_speed2 = 0;
+				isFA = true;
+			}
+			else
+			{
+				float rrr = atan2(buildDest.x - position.x, buildDest.y - position.y);
+				imgRot = rrr > 0 ? 3.141592 - rrr : -3.141592 - rrr;
+				position.x += moveDestX;
+				position.y += moveDestY;
+			}
+		}
+	}
+
 	if (m_isClick == false)
 	{
 		if (m_isBuild == false)
@@ -312,6 +409,10 @@ void SpaceConstructionVehicle::UIRender()
 	Command();
 	m_isClick = true;
 
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("wirefram0106"), { 319,680 }, 1.5, 0, 0);
+	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 285,730 }, { 12,12 }, { 0,255,0,1 });
+
+
 	if (page == 1)
 	{
 		if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
@@ -406,6 +507,7 @@ void SpaceConstructionVehicle::ResetParam()
 	{
 		buildIndex = 0;
 		m_isBuild = false;
+
 	}
 }
 
@@ -416,76 +518,59 @@ void SpaceConstructionVehicle::BuildingConstruction()
 		switch (buildIndex)
 		{
 		case eCommandCenter:
-			IMAGEMANAGER->DrawRect({
-				(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
-				(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
-				(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetWidth() * 1.5f ,
-				(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("control0000")->GetHeight() });
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("control0000"), {
+				(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) ,
+				(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
+			RectSzie(4, 3);
 			break;
 		case eBarrack:
-			IMAGEMANAGER->DrawRect({
-				(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
-				(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
-				(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetWidth() * 1.5f ,
-				(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetHeight() });
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x - 50, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), {
+			(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x - 50) / (int)(32.f * 1.5f) * (32.f * 1.5)) ,
+			(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
+			RectSzie(4, 3);
 			break;
 		case eFactory:
-			IMAGEMANAGER->DrawRect({
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("factory0000")->GetWidth() * 1.5f ,
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("factory0000")->GetHeight() });
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), {
+			(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) ,
+			(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
+			RectSzie(4, 3);
 			break;
 		case eAcademy:
-			IMAGEMANAGER->DrawRect({
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("academy0000")->GetWidth() * 1.5f ,
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("academy0000")->GetHeight() });
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("academy0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("academy0000"), {
+			(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) ,
+			(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
+			RectSzie(3, 2);
 			break;
 		case eEngin:
-			IMAGEMANAGER->DrawRect({
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("weaponpl0000")->GetWidth() * 1.5f ,
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("weaponpl0000")->GetHeight() });
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("weaponpl0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("weaponpl0000"), {
+			(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) ,
+			(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
+			RectSzie(4, 3);
 			break;
 		case eDepot:
-			IMAGEMANAGER->DrawRect({
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("depot0000")->GetWidth() * 1.5f ,
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("depot0000")->GetHeight() });
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("depot0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("depot0000"), {
+			(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) ,
+			(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
+			RectSzie(3, 2);
 			break;
 		case eStarport:
-			IMAGEMANAGER->DrawRect({
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("starport0000")->GetWidth() * 1.5f ,
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("starport0000")->GetHeight() });
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("starport0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("starport0000"), {
+			(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) ,
+			(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
+			RectSzie(4, 3);
 			break;
 		case eArmory:
-			IMAGEMANAGER->DrawRect({
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("chemlab0000")->GetWidth() * 1.5f ,
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("chemlab0000")->GetHeight() });
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("chemlab0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("chemlab0000"), {
+			(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) ,
+			(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
+			RectSzie(3, 2);
 			break;
 		case eScience:
-			IMAGEMANAGER->DrawRect({
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)),
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) }, {
-					(float)((_ptMouse.x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("research0000")->GetWidth() * 1.5f ,
-					(float)((_ptMouse.y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + (float)IMAGEMANAGER->FindImage("research0000")->GetHeight() });
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("research0000"), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x, (float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 + IMAGEMANAGER->GetCameraPosition().y }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("research0000"), {
+			(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) ,
+			(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
+			RectSzie(3, 2);
+
 			break;
 		}
 	}
@@ -513,63 +598,90 @@ void SpaceConstructionVehicle::BuildObject()
 				m_nowBuild->SetPlayer(player);
 				m_isBuild = false;
 				buildIndex = 0;
-				OBJECTMANAGER->AddObject(m_nowBuild, "CommandCenter", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
+				OBJECTMANAGER->AddObject(m_nowBuild, "CommandCenter",
+					buildPos.x + 1,
+					buildPos.y
+					, 0);
 				break;
 			case eBarrack:
 				m_nowBuild = new Barrack;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
 				buildIndex = 0;
+				OBJECTMANAGER->AddObject(m_nowBuild, "CommandCenter",
+					buildPos.x + 1,
+					buildPos.y
+					, 0);
 				break;
 			case eFactory:
 				m_nowBuild = new Factory;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
 				buildIndex = 0;
+				OBJECTMANAGER->AddObject(m_nowBuild, "CommandCenter",
+					buildPos.x + 1,
+					buildPos.y
+					, 0);
 				break;
 			case eAcademy:
 				m_nowBuild = new Academy;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
 				buildIndex = 0;
+				OBJECTMANAGER->AddObject(m_nowBuild, "CommandCenter",
+					buildPos.x + 1,
+					buildPos.y
+					, 0);
 				break;
 			case eEngin:
 				m_nowBuild = new EngineeringBay;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
 				buildIndex = 0;
+				OBJECTMANAGER->AddObject(m_nowBuild, "CommandCenter",
+					buildPos.x + 1,
+					buildPos.y
+					, 0);
 				break;
 			case eDepot:
 				m_nowBuild = new Depot;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
 				buildIndex = 0;
+				OBJECTMANAGER->AddObject(m_nowBuild, "CommandCenter",
+					buildPos.x + 1,
+					buildPos.y
+					, 0);
 				break;
 			case eStarport:
 				m_nowBuild = new Starport;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
 				buildIndex = 0;
+				OBJECTMANAGER->AddObject(m_nowBuild, "CommandCenter",
+					buildPos.x + 1,
+					buildPos.y
+					, 0);
 				break;
 			case eArmory:
 				m_nowBuild = new Armory;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
 				buildIndex = 0;
+				OBJECTMANAGER->AddObject(m_nowBuild, "CommandCenter",
+					buildPos.x + 1,
+					buildPos.y
+					, 0);
 				break;
 			case eScience:
 				m_nowBuild = new ScienceFacility;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
-				OBJECTMANAGER->AddObject(m_nowBuild, "Barrack", (float)((int)position.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + 32, (float)((int)position.y / (int)(32.f * 1.5f) * (32.f * 1.5)), 0);
 				buildIndex = 0;
+				OBJECTMANAGER->AddObject(m_nowBuild, "CommandCenter",
+					buildPos.x + 1,
+					buildPos.y
+					, 0);
 				break;
 			}
 		}
@@ -757,47 +869,43 @@ void SpaceConstructionVehicle::BuildCommandUI()
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[0].x + 25,UIPosition[0].y + 25 }, 1.7, 0, 0);
 			if (player->buildList[Player::BuildList::eBarrack] == true)
 			{
-				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0106"), { UIPosition[0].x - 4 ,UIPosition[0].y - 7 }, 1.7, 0, 0);
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0113"), { UIPosition[0].x - 4 ,UIPosition[0].y - 7 }, 1.7, 0, 0);
 			}
 			else
 			{
-				IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0106"), { UIPosition[0].x - 4 ,UIPosition[0].y - 7 }, 1.7, 0, 0);
+				IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0113"), { UIPosition[0].x - 4 ,UIPosition[0].y - 7 }, 1.7, 0, 0);
 			}
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[1].x + 25,UIPosition[1].y + 25 }, 1.7, 0, 0);
 
 			if (player->buildList[Player::BuildList::eFactory] == true)
 			{
-				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0109"), { UIPosition[1].x - 4 ,UIPosition[1].y - 7 }, 1.7, 0, 0);
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0114"), { UIPosition[1].x - 4 ,UIPosition[1].y - 7 }, 1.7, 0, 0);
 			}
 			else
 			{
-				IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0109"), { UIPosition[1].x - 4 ,UIPosition[1].y - 7 }, 1.7, 0, 0);
+				IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0114"), { UIPosition[1].x - 4 ,UIPosition[1].y - 7 }, 1.7, 0, 0);
 			}
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
 
 			if (player->buildList[Player::BuildList::eFactory] == true)
 			{
-				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0110"), { UIPosition[2].x - 4 ,UIPosition[2].y - 7 }, 1.7, 0, 0);
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0116"), { UIPosition[2].x - 4 ,UIPosition[2].y - 7 }, 1.7, 0, 0);
 			}
 			else
 			{
-				IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0110"), { UIPosition[2].x - 4 ,UIPosition[2].y - 7 }, 1.7, 0, 0);
+				IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0116"), { UIPosition[2].x - 4 ,UIPosition[2].y - 7 }, 1.7, 0, 0);
 			}
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[3].x + 25,UIPosition[3].y + 25 }, 1.7, 0, 0);
 			if (player->buildList[Player::BuildList::eFactory] == true)
 			{
-				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0111"), { UIPosition[3].x - 4 ,UIPosition[3].y - 7 }, 1.7, 0, 0);
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0123"), { UIPosition[3].x - 4 ,UIPosition[3].y - 7 }, 1.7, 0, 0);
 			}
 			else
 			{
-				IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0111"), { UIPosition[3].x - 4 ,UIPosition[3].y - 7 }, 1.7, 0, 0);
+				IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0123"), { UIPosition[3].x - 4 ,UIPosition[3].y - 7 }, 1.7, 0, 0);
 			}
-
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[4].x + 25,UIPosition[4].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0122"), { UIPosition[4].x - 4 ,UIPosition[4].y - 7 }, 1.7, 0, 0);
-
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
-			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0236"), UIPosition[8], 1.7, 0, 0);
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), UIPosition[8], 1.7, 0, 0);
 		}
 		else if (page == 3)
 		{
@@ -809,5 +917,53 @@ void SpaceConstructionVehicle::BuildCommandUI()
 	{
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), UIPosition[8], 1.7, 0, 0);
+	}
+}
+
+void SpaceConstructionVehicle::RectSzie(int sizeX, int sizeY)
+{
+	isBuildAble_ = true;
+	for (int i = 0; i < sizeX; i++)
+	{
+		for (int j = 0; j < sizeY; j++)
+		{
+			int searchX = (int)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + i * 32 * 1.5f;
+			int searchY = (int)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + j * 32 * 1.5f;
+			searchX = searchX / 1.5f / 8;
+			searchY = searchY / 1.5f / 8;
+			bool isBuildAble = false;
+			for (int x2 = searchX; x2 < searchX + 4; x2++)
+			{
+				for (int y2 = searchY; y2 < searchY + 4; y2++)
+				{
+					if (GRIDMANAGER->regionsTile[x2][y2].isBuildTag != 0)
+					{
+						isBuildAble = true;
+						isBuildAble_ = false;
+						break;
+					}
+				}
+				if (isBuildAble == true)
+					break;
+			}
+			if (isBuildAble == false)
+			{
+				IMAGEMANAGER->DrawRect({
+					(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + i * 32 * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
+					(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + j * 32 * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, {
+					(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + i * 32 * 1.5f + float(32 * 1.5) - IMAGEMANAGER->GetCameraPosition().x ,
+					(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + j * 32 * 1.5f + float(32 * 1.5) - IMAGEMANAGER->GetCameraPosition().y
+					}, { 0,1,0,0.5 }, 1);
+			}
+			else
+			{
+				IMAGEMANAGER->DrawRect({
+					(float)((_ptMouse.x + (int)IMAGEMANAGER->GetCameraPosition().x % (int)(32 * 1.5f)) / (int)(32.f * 1.5f) * (32.f * 1.5)) + i * 32 * 1.5f ,
+					(float)((_ptMouse.y + (int)IMAGEMANAGER->GetCameraPosition().y % (int)(32 * 1.5f)) / (int)(32.f * 1.5f) * (32.f * 1.5)) + j * 32 * 1.5f }, {
+					(float)((_ptMouse.x + (int)IMAGEMANAGER->GetCameraPosition().x % (int)(32 * 1.5f)) / (int)(32.f * 1.5f) * (32.f * 1.5)) + float(i * 32 * 1.5f + 32 * 1.5) ,
+					(float)((_ptMouse.y + (int)IMAGEMANAGER->GetCameraPosition().y % (int)(32 * 1.5f)) / (int)(32.f * 1.5f) * (32.f * 1.5)) + float(j * 32 * 1.5f + 32 * 1.5)
+					}, { 1,0,0,0.5 }, 1);
+			}
+		}
 	}
 }

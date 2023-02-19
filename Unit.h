@@ -6,6 +6,8 @@ class Unit : public Object
 protected:
 	float m_direction;
 	float m_speed;
+	float m_speed2 = 0;
+
 	float m_defense;
 	float m_attack;
 	float m_attackSpeed;

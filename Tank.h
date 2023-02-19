@@ -19,6 +19,7 @@ public:
 	float astarTimer = 0;
 	Tank();
 	int moveFrame = 0;
+	float fireImageDel2 = 0;
 	float moveFrameTime = 0;
 	bool isDeath = false;
 	virtual ~Tank();

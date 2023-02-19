@@ -41,9 +41,6 @@
     <ClCompile Include="CSoundMgr.cpp">
       <Filter>Core\Manager\SoundManager</Filter>
     </ClCompile>
-    <ClCompile Include="CSound.cpp">
-      <Filter>Core\Manager\SoundManager</Filter>
-    </ClCompile>
     <ClCompile Include="CSoundMgr.cpp">
       <Filter>Core\Manager\SoundManager</Filter>
     </ClCompile>
@@ -146,6 +143,10 @@
     <ClCompile Include="Tank.cpp">
       <Filter>Game\Object\Unit\Terran\Tank</Filter>
     </ClCompile>
+    <ClCompile Include="Machines.cpp">
+      <Filter>Game\Object\Build\Terran\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="VultureBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -284,6 +285,10 @@
     <ClInclude Include="Tank.h">
       <Filter>Game\Object\Unit\Terran\Tank</Filter>
     </ClInclude>
+    <ClInclude Include="Machines.h">
+      <Filter>Game\Object\Build\Terran\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="VultureBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -357,9 +362,6 @@
     </Filter>
     <Filter Include="Game\Object\Unit\Terran\FireBat">
       <UniqueIdentifier>{3c4085b1-fbcb-41f8-9f6e-177e1be57922}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Object\Unit\Terran\SCV">
-      <UniqueIdentifier>{03114c72-cddd-44bd-9475-b82d72379b8a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Object\Build">
       <UniqueIdentifier>{3fc3af51-6bfe-4ddc-8352-a8f6dbcb4973}</UniqueIdentifier>
@@ -435,6 +437,9 @@
     </Filter>
     <Filter Include="Game\Object\Unit\Terran\Goliat">
       <UniqueIdentifier>{3bdb845a-2e0d-4166-bc50-2d00c7e4c764}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Unit\Terran\SCV">
+      <UniqueIdentifier>{03114c72-cddd-44bd-9475-b82d72379b8a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

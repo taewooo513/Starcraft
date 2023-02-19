@@ -1,5 +1,6 @@
 #pragma once
 #include "Build.h"
+class Machines;
 class Factory : public Build
 {
 	struct AddUnit
@@ -22,5 +23,6 @@ public:
 	virtual void Release() override;
 	virtual void UIRender() override;
 
+	Machines* mac = nullptr;
 };
 

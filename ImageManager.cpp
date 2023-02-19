@@ -396,12 +396,10 @@ void ImageManager::FogRender()
 		for (int j = 0; j < 512; j++)
 		{
 			DrawRect({ (float)j * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x,(float)i * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y },
-				{ (float)j * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x, (float)i * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y  }, { 0,0,0,1.f - GRIDMANAGER->regionsTile[j][i].fogTag }, 1);
+				{ (float)j * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x, (float)i * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, { 0,0,0,1.f - GRIDMANAGER->regionsTile[j][i].fogTag }, 1);
 		}
 
 	}
-
-
 }
 
 void ImageManager::FogUpdate(Vector2 pos, float dest)
@@ -595,6 +593,7 @@ void ImageManager::ImageLoad()
 	// 미네랄
 
 
+
 	AddImage("cmdicons0323", L"./Resources/Icon/cmdicons0323.bmp"); //공업
 	AddImage("cmdicons0238", L"./Resources/Icon/cmdicons0238.bmp"); //아카데미 
 	AddImage("cmdicons0237", L"./Resources/Icon/cmdicons0237.bmp"); //스팀펙 
@@ -680,6 +679,9 @@ void ImageManager::ImageLoad()
 	AddImage("tbldsml0000", L"./Resources/Bulid/Building3/tbldsml0000.bmp"); // attack 
 	AddImage("tbldsml0001", L"./Resources/Bulid/Building3/tbldsml0001.bmp"); // stop
 	AddImage("tbldsml0002", L"./Resources/Bulid/Building3/tbldsml0002.bmp"); // move
+	AddImage("cmdicons0254", L"./Resources/Icon/cmdicons0254.bmp"); // stop
+	AddImage("cmdicons0255", L"./Resources/Icon/cmdicons0255.bmp"); // move
+	AddImage("cmdicons0237", L"./Resources/Icon/cmdicons0237.bmp"); // move
 
 	AddImage("depot0000", L"./Resources/Bulid/depot/depot0000.bmp"); // 일반
 	AddImage("depot0001", L"./Resources/Bulid/depot/depot0001.bmp"); // 완성전
@@ -732,6 +734,10 @@ void ImageManager::ImageLoad()
 	AddImage("tbarrack0002", L"./Resources/Bulid/Barrack/tbarrack0002.bmp"); // 공중에 뜨기전
 	AddImage("tbarrack0003", L"./Resources/Bulid/Barrack/tbarrack0003.bmp"); // 공중에 뜨기전
 	AddImageVector("Barrack_Work", L"./Resources/Bulid/Barrack/tbarrack00", 7, 8);
+	AddImageVector("deathEffect", L"./Resources/ty/death/tbangl00", 0, 9);
+	AddImageVector("bang1Effect", L"./Resources/ty/bang1/eychit00", 0, 13);
+
+	AddImageVector("bang2Effect", L"./Resources/ty/bang2/tbangs00", 0, 8);
 
 	AddImage("tbrshad0000", L"./Resources/Bulid/Barrack/shad/tbrshad0000.bmp"); // 공중에 뜨기전
 
@@ -763,13 +769,37 @@ void ImageManager::ImageLoad()
 	AddImage("factory0003", L"./Resources/Bulid/Factory/factory0003.bmp"); // 띄우기 2
 	AddImage("factory0004", L"./Resources/Bulid/Factory/factory0004.bmp"); // 띄우기 3
 	AddImage("factory0005", L"./Resources/Bulid/Factory/factory0005.bmp"); // 띄우기 4
+
+	AddImageVector("tmnexplo0000", L"./Resources/ty/tmnexplo00", 0, 9); // 기본
+
+	AddImageVector("machines", L"./Resources/Bulid/Factory/machines00", 0, 3); // 기본
+	AddImage("machines", L"./Resources/Bulid/Factory/machines0000.bmp"); // 기본
+	AddImage("machines0004", L"./Resources/Bulid/Factory/machines0004.bmp"); // 띄우기 4
+
+	AddImageVector("machinec0000", L"./Resources/Bulid/Factory/machinec00", 0, 3); // 완성 전
+
 	AddImageVector("FactoryIdle", L"./Resources/Bulid/Factory/Idle/factoryt00", 0, 2);
+	AddImageVector("grenade0000", L"./Resources/Vulture/grenade00", 0, 3);
+
+	AddImageVector("mush", L"./Resources/ty/mush/mushroom00", 0, 13);
+	AddImageVector("bang1", L"./Resources/ty/bang1/eychit00", 0, 13);
 
 	AddImage("cmdicons0113", L"./Resources/Icon/cmdicons0113.bmp"); // 펙토리
 	AddImage("cmdicons0114", L"./Resources/Icon/cmdicons0114.bmp"); // 스타포트
 	AddImage("cmdicons0122", L"./Resources/Icon/cmdicons0122.bmp"); // 엔지니어링
 	AddImage("cmdicons0124", L"./Resources/Icon/cmdicons0124.bmp"); // 터렛
+	AddImage("cmdicons0123", L"./Resources/Icon/cmdicons0123.bmp"); // 터렛
+
 	AddImage("cmdicons0125", L"./Resources/Icon/cmdicons0125.bmp"); // 벙커
+	AddImage("cmdicons0116", L"./Resources/Icon/cmdicons0116.bmp"); // 사이언스
+	AddImage("cmdicons0120", L"./Resources/Icon/cmdicons0120.bmp"); // 벙커
+
+	AddImage("cmdicons0287", L"./Resources/Icon/cmdicons0287.bmp"); // 벙커cmdicons0287
+
+	AddImage("cmdicons0292", L"./Resources/Icon/cmdicons0292.bmp"); // 벙커cmdicons0287
+	AddImage("cmdicons0288", L"./Resources/Icon/cmdicons0288.bmp"); // 벙커cmdicons0287
+	AddImage("tcmdbtns0012", L"./Resources/UI2/tcmdbtns0012.bmp"); // 벙커cmdicons0287
+
 
 	// 마린 이미지 
 	AddImage("cmdicons0000", L"./Resources/Icon/cmdicons0000.bmp"); // 마린 아이콘 

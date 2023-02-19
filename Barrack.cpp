@@ -37,7 +37,7 @@ void Barrack::Init()
 	m_buildImage[2] = IMAGEMANAGER->FindImage("tbldlrg0002");
 	m_buildImage[3] = IMAGEMANAGER->FindImage("tbarrack0001");
 
-	m_maxCompleteTime = 10.5f;
+	m_maxCompleteTime = 1000.5f;
 	m_completeTime = 0;
 	m_costM = 100;
 	m_costG = 0;
@@ -48,7 +48,9 @@ void Barrack::Init()
 
 void Barrack::Update()
 {
-	//grid->Update();
+	grid->Update();
+	IMAGEMANAGER->FogUpdate(position, 30);
+
 	if (addUnitQueue.empty() == false)
 	{
 		if (addUnitQueue.front().timeNow < addUnitQueue.front().maxTime)
@@ -62,14 +64,14 @@ void Barrack::Update()
 			{
 				Marine* marine = new Marine;
 				marine->SetPlayer(player);
-				OBJECTMANAGER->AddObject(marine, "marine", position.x, position.y, 1);
+				OBJECTMANAGER->AddObject(marine, "marine", position.x, position.y + 100, 1);
 				addUnitQueue.erase(addUnitQueue.begin());
 			}
 			else if (addUnitQueue.front().unit == 2)
 			{
 				FireBat* fireBat = new FireBat;
 				fireBat->SetPlayer(player);
-				OBJECTMANAGER->AddObject(fireBat, "fireBat", position.x, position.y, 1);
+				OBJECTMANAGER->AddObject(fireBat, "fireBat", position.x, position.y + 100, 1);
 				addUnitQueue.erase(addUnitQueue.begin());
 			}
 		}
@@ -92,18 +94,20 @@ void Barrack::Render()
 	if (m_buildIndex < 4)
 	{
 		if (m_buildIndex < 3)
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 120 ,position.y - 110 }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x  ,position.y }, 1.5, 0);
 		else
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 150 ,position.y - 130 }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x  ,position.y }, 1.5, 0);
 	}
 	else
 	{
-		IMAGEMANAGER->RenderBlendBlack2(IMAGEMANAGER->FindImage("tbrshad0000"), { position.x - 150,position.y - 130 }, 1.5, 0, 0.5f);
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { position.x - 150,position.y - 130 }, 1.5, 0);
+		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("tbrshad0000"), { position.x ,position.y }, 1.5, 0, 0.5f);
+		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { position.x ,position.y }, 1.5, 0);
 	}
 	if (!addUnitQueue.empty())
 	{
-		workImage->CenterRenderBlendBlack({ position.x - 150,position.y - 130 }, 1.5, 0, 0);
+		workImage->CenterRenderBlendBlack({
+			position.x - (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetWidth() * 1.5f / 2.f,
+			position.y - (float)IMAGEMANAGER->FindImage("tbarrack0000")->GetHeight() * 1.5f / 2.f }, 1.5, 0, 0);
 	}
 	m_isClick = false;
 }
@@ -121,7 +125,7 @@ void Barrack::UIRender()
 	{
 		if (KEYMANAGER->GetOnceKeyDown('M'))
 		{
-			addUnitQueue.push_back({ 1,0,12.6 });
+			addUnitQueue.push_back({ 1,0,1 });
 		}
 		if (KEYMANAGER->GetOnceKeyDown('F'))
 		{
@@ -134,6 +138,17 @@ void Barrack::UIRender()
 	{
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), { UIPosition[8].x - 1 ,UIPosition[8].y - 2 }, 1.7, 0, 0);
+
+		IMAGEMANAGER->DirectDrawText(L"Under Construction", { 420,660 }, { 15,15 }, { 200,200,200,0.8 });
+
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("coolTimeBar"), { 505,694 }, 0.8, 0, 0);
+		for (int i = 0; i < 41; i++)
+		{
+			if (m_maxCompleteTime / 41 * i < m_completeTime)
+			{
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("Coll"), { float(505 + i * 4),694 }, 0.8, 0, 0);
+			}
+		}
 	}
 	else
 	{
@@ -141,10 +156,16 @@ void Barrack::UIRender()
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0000"), { UIPosition[0].x - 1 ,UIPosition[0].y - 2 }, 1.7, 0, 0);
 
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[1].x + 25,UIPosition[1].y + 25 }, 1.7, 0, 0);
-		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0010"), { UIPosition[1].x - 1 ,UIPosition[1].y - 2 }, 1.7, 0, 0);
-
+		if (player->buildList[Player::BuildList::eAcademy] == true)
+		{
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0010"), { UIPosition[1].x - 1 ,UIPosition[1].y - 2 }, 1.7, 0, 0);
+		}
+		else
+		{
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0010"), { UIPosition[1].x - 1 ,UIPosition[1].y - 2 }, 1.7, 0, 0);
+		}
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
-		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0001"), { UIPosition[2].x - 1 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
+		IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0001"), { UIPosition[2].x - 1 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
 
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0282"), { UIPosition[8].x - 1 ,UIPosition[8].y - 2 }, 1.7, 0, 0);
@@ -152,7 +173,6 @@ void Barrack::UIRender()
 
 	if (addUnitQueue.size() != 0)
 	{
-
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), { UIPosition[8].x - 1 ,UIPosition[8].y - 2 }, 1.7, 0, 0);
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0003"), { 445,700 }, 1.5, 0, 0);
@@ -199,5 +219,5 @@ void Barrack::UIRender()
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0286"), { UIPosition[5].x - 1 ,UIPosition[5].y - 2 }, 1.7, 0, 0);
 
 	}
-	IMAGEMANAGER->DirectDrawText(L"Terran Command Center", { 400,625 }, { 15,15 });
+	IMAGEMANAGER->DirectDrawText(L"Terran Barracks", { 400,625 }, { 15,15 });
 }

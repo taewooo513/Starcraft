@@ -17,6 +17,53 @@ void Main::Init()
 	SOUNDMANAGER->addSound("main-menu", "./Resources/Sound/main-menu.mp3", false, true);
 	SOUNDMANAGER->addSound("terran-2", "./Resources/Sound/starcraft-terran-theme-2.mp3", false, true);
 	SOUNDMANAGER->addSound("terran-1", "./Resources/Sound/terran-theme-1.mp3", false, true);
+	SOUNDMANAGER->addSound("tscdth00", "./Resources/Sound/scv/tscdth00.wav", false, false);
+	SOUNDMANAGER->addSound("tacwht00", "./Resources/Sound/bldg/tacwht00.wav", false, false);
+	SOUNDMANAGER->addSound("tclwht00", "./Resources/Sound/bldg/tclwht00.wav", false, false);
+	SOUNDMANAGER->addSound("tcswht00", "./Resources/Sound/bldg/tcswht00.wav", false, false);
+	SOUNDMANAGER->addSound("tddwht00", "./Resources/Sound/bldg/tddwht00.wav", false, false);
+	SOUNDMANAGER->addSound("twpwht00", "./Resources/Sound/bldg/twpwht00.wav", false, false);
+	SOUNDMANAGER->addSound("tnswht00", "./Resources/Sound/bldg/tnswht00.wav", false, false);
+	SOUNDMANAGER->addSound("tmswht00", "./Resources/Sound/bldg/tmswht00.wav", false, false);
+
+	//scv
+	SOUNDMANAGER->addSound("tscwht00", "./Resources/Sound/scv/tscwht00.wav", false, false);
+	SOUNDMANAGER->addSound("tscwht01", "./Resources/Sound/scv/tscwht01.wav", false, false);
+	SOUNDMANAGER->addSound("tscwht02", "./Resources/Sound/scv/tscwht02.wav", false, false);
+	SOUNDMANAGER->addSound("tscwht03", "./Resources/Sound/scv/tscwht03.wav", false, false);
+
+	//marine
+	SOUNDMANAGER->addSound("tmawht00", "./Resources/Sound/marine/tmawht00.wav", false, false);
+	SOUNDMANAGER->addSound("tmawht01", "./Resources/Sound/marine/tmawht01.wav", false, false);
+	SOUNDMANAGER->addSound("tmawht02", "./Resources/Sound/marine/tmawht02.wav", false, false);
+	SOUNDMANAGER->addSound("tmawht03", "./Resources/Sound/marine/tmawht03.wav", false, false);
+
+	SOUNDMANAGER->addSound("tmadth00", "./Resources/Sound/marine/tmadth00.wav", false, false);
+	SOUNDMANAGER->addSound("tmadth01", "./Resources/Sound/marine/tmadth01.wav", false, false);
+	SOUNDMANAGER->addSound("tmafir00", "./Resources/Sound/marine/tmafir00.wav", false, false);
+
+	//firebat
+	SOUNDMANAGER->addSound("tfbwht00", "./Resources/Sound/firebat/tfbwht00.wav", false, false);
+	SOUNDMANAGER->addSound("tfbwht01", "./Resources/Sound/firebat/tfbwht01.wav", false, false);
+	SOUNDMANAGER->addSound("tfbwht02", "./Resources/Sound/firebat/tfbwht02.wav", false, false);
+	SOUNDMANAGER->addSound("tfbwht03", "./Resources/Sound/firebat/tfbwht03.wav", false, false);
+
+	//vulture
+	SOUNDMANAGER->addSound("tvuwht00", "./Resources/Sound/vulture/tvuwht00.wav", false, false);
+	SOUNDMANAGER->addSound("tvuwht01", "./Resources/Sound/vulture/tvuwht01.wav", false, false);
+	SOUNDMANAGER->addSound("tvuwht02", "./Resources/Sound/vulture/tvuwht02.wav", false, false);
+	SOUNDMANAGER->addSound("tvuwht03", "./Resources/Sound/vulture/tvuwht03.wav", false, false);
+	SOUNDMANAGER->addSound("tvufir00", "./Resources/Sound/vulture/tvufir00.wav", false, false);
+	SOUNDMANAGER->addSound("tvuhit02", "./Resources/Sound/vulture/tvuhit02.wav", false, false);
+
+	//tank
+	SOUNDMANAGER->addSound("ttawht00", "./Resources/Sound/tank/ttawht00.wav", false, false);
+	SOUNDMANAGER->addSound("ttawht01", "./Resources/Sound/tank/ttawht01.wav", false, false);
+	SOUNDMANAGER->addSound("ttawht02", "./Resources/Sound/tank/ttawht02.wav", false, false);
+	SOUNDMANAGER->addSound("ttawht03", "./Resources/Sound/tank/ttawht03.wav", false, false);
+	SOUNDMANAGER->addSound("ttafir00", "./Resources/Sound/tank/ttafir00.wav", false, false);
+	SOUNDMANAGER->addSound("ttafi200", "./Resources/Sound/tank/ttafi200.wav", false, false);
+
 
 	srand(GetTickCount64());
 	SCENEMANAGER->ChangeScene("TitleScene");
@@ -141,7 +188,6 @@ void Main::CreateDeviceD3D()
 		D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
 		&m_d2dContext
 	);
-	cout << endl;
 }
 
 void Main::CreateSwapChain()

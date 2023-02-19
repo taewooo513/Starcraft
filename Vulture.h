@@ -10,6 +10,7 @@ public:
 	bool isDeath = false;
 	virtual ~Vulture();
 	Vector2 d = { 0,0 };
+	float fireImageDel2 = 0;
 	virtual void Init() override;
 	virtual void Update() override;
 	virtual void Render() override;

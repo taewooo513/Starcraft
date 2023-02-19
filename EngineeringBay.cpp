@@ -48,11 +48,12 @@ void EngineeringBay::Update()
 	if (addUnitQueue.empty() == false)
 	{
 	}
+	IMAGEMANAGER->FogUpdate(position, 30);
 
 	clickRect = { int(position.x) , int(position.y) , int((position.x + 32 * 4 * 1.5f)) , int((position.y + 32 * 3 * 1.5f)) };
 	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x + 85;
 	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x + 85;
-	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y +75;
+	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y + 75;
 	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y + 75;
 }
 
@@ -67,13 +68,13 @@ void EngineeringBay::Render()
 	if (m_buildIndex < 4)
 	{
 		if (m_buildIndex < 3)
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 120 ,position.y - 110 }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x  ,position.y }, 1.5, 0);
 		else
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 150 ,position.y - 130 }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x ,position.y }, 1.5, 0);
 	}
 	else
 	{
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("weaponpl0000"), { position.x - 150,position.y - 130 }, 1.5, 0);
+		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("weaponpl0000"), { position.x ,position.y }, 1.5, 0);
 	}
 	m_isClick = false;
 }

@@ -20,11 +20,11 @@ public:
 		{993, 734},
 	};
 private:
-
 	string name;
 	bool m_isObjectDestroyed = false;
 
 public:
+	bool isdeath = 0;
 	Object() {}
 	virtual ~Object() {}
 	virtual void Init() = 0;

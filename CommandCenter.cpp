@@ -71,6 +71,7 @@ void CommandCenter::Update()
 	}
 
 	clickRect = { int(position.x) , int(position.y) , int((position.x + 32 * 4 * 1.5f)) , int((position.y + 32 * 3 * 1.5f)) };
+	IMAGEMANAGER->FogUpdate(position, 30);
 
 	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x + 100;
 	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x + 100;
@@ -91,16 +92,16 @@ void CommandCenter::Render()
 	{
 		if (m_buildIndex < 3)
 		{
-			IMAGEMANAGER->RenderBlendBlack(buildImage[m_buildIndex], { position.x - 120 ,position.y - 120 }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(buildImage[m_buildIndex], { position.x ,position.y }, 1.5, 0);
 		}
 		else
 		{
-			IMAGEMANAGER->RenderBlendBlack(buildImage[m_buildIndex], { position.x - 96 ,position.y - 130 }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(buildImage[m_buildIndex], { position.x  ,position.y }, 1.5, 0);
 		}
 	}
 	else
 	{
-		IMAGEMANAGER->RenderBlendBlack(idle, { position.x - 96 ,position.y - 130 }, 1.5, 0);
+		IMAGEMANAGER->CenterRenderBlendBlack(idle, { position.x  ,position.y }, 1.5, 0);
 	}
 
 	if (!addUnitQueue.empty())

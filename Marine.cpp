@@ -130,7 +130,7 @@ void Marine::Init()
 	fire2Image[2] = IMAGEMANAGER->FindImage("marin_attack_2_7");
 	fire2Image[1] = IMAGEMANAGER->FindImage("marin_attack_2_8");
 	fire2Image[0] = IMAGEMANAGER->FindImage("marin_attack_2_9");
-
+	m_attack = 5;
 	m_isClick = false;
 	m_maxHp = 40;
 	m_hp = m_maxHp;
@@ -191,7 +191,7 @@ void Marine::Move()
 				{
 					grid->Astar(2, 2);
 
-					astarTimer = 0.05f;
+					astarTimer = 0.25f;
 				}
 				astarTimer -= DELTA_TIME;
 				if (grid->moveStack2.empty() == false)
@@ -234,8 +234,8 @@ void Marine::Attack()
 		{
 			attackObject->m_hp -= m_attack;
 			onceFire = false;
+			SOUNDMANAGER->play("tmafir00", 0.5f);
 		}
-
 		m_dest = { 0,0 };
 	}
 	else
@@ -247,6 +247,10 @@ void Marine::Attack()
 
 void Marine::Update()
 {
+	if (isdeath == true)
+	{
+		ObjectDestroyed();
+	}
 	if (attackObject == nullptr)
 	{
 		for (auto iter : player->otherPlayer->m_units)
@@ -257,6 +261,25 @@ void Marine::Update()
 				attackObject = iter;
 				break;
 			}
+		}
+		if (attackObject == nullptr)
+		{
+			for (auto iter : player->otherPlayer->m_builds)
+			{
+				float dest = sqrt((iter->position.x - position.x) * (iter->position.x - position.x) + (iter->position.y - position.y) * (iter->position.y - position.y));
+				if (range > dest)
+				{
+					attackObject = iter;
+					break;
+				}
+			}
+		}
+	}
+	else
+	{
+		if (attackObject->isdeath == true)
+		{
+			attackObject = nullptr;
 		}
 	}
 	if (attackObject != nullptr)
@@ -352,10 +375,12 @@ void Marine::Render()
 					{
 						fireImageDel2 = 0;
 						fireCount = 0;
+						onceFire = true;
 					}
 				}
 
-				rot = atan2(position.y - attackObject->position.y, position.x - attackObject->position.x);
+				rot = atan2(attackObject->position.x - position.x, attackObject->position.y - position.y);
+				rr = 8.f / 3.141592 * abs(rot);
 
 				if (nowFire == false)
 				{
@@ -413,6 +438,13 @@ void Marine::Render()
 		deathImageTimeDelay += DELTA_TIME;
 		if (deathImageTimeDelay > 0.2f)
 		{
+			if (deathFrame == 0)
+			{
+				if (rand() % 2 == 0)
+					SOUNDMANAGER->play("tmadth01", 0.5f);
+				else
+					SOUNDMANAGER->play("tmadth00", 0.5f);
+			}
 			deathImageTimeDelay = 0;
 			deathFrame++;
 		}
@@ -420,7 +452,17 @@ void Marine::Render()
 		{
 			IMAGEMANAGER->CenterRenderBlendBlack(deathImage[deathFrame], position, 1.5f, 0, isR);
 		}
+		else
+		{
+			if (isdeath == false)
+			{
+				isdeath = true;
+			}
+
+		}
 	}
+	IMAGEMANAGER->FogUpdate(position, 30);
+
 	m_isClick = false;
 }
 
@@ -434,6 +476,35 @@ void Marine::UIRender()
 
 	IMAGEMANAGER->DirectDrawText(L"Terran Marine", { 430,625 }, { 15,15 });
 
+	IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0292"), { 453,722 }, 1.7, 0, 0);
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0012"), { 480,750 }, 1.7, 0, 0);
+
+	IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0288"), { 523 ,722 }, 1.7, 0, 0);
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0012"), { 550,750 }, 1.7, 0, 0);
+
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[0].x + 25,UIPosition[0].y + 25 }, 1.7, 0, 0);
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0228"), { UIPosition[0].x  ,UIPosition[0].y }, 1.7, 0, 0);
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[1].x + 25,UIPosition[1].y + 25 }, 1.7, 0, 0);
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0229"), { UIPosition[1].x - 2 ,UIPosition[1].y }, 1.7, 0, 0);
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0230"), { UIPosition[2].x ,UIPosition[2].y }, 1.7, 0, 0);
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[3].x + 25,UIPosition[3].y + 25 }, 1.7, 0, 0);
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0254"), { UIPosition[3].x ,UIPosition[3].y + 3 }, 1.7, 0, 0);
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[4].x + 25,UIPosition[4].y + 25 }, 1.7, 0, 0);
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0255"), { UIPosition[4].x ,UIPosition[4].y + 3 }, 1.7, 0, 0);
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[6].x + 25,UIPosition[6].y + 25 }, 1.7, 0, 0);
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0237"), { UIPosition[6].x ,UIPosition[6].y + 3 }, 1.7, 0, 0);
+
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("wirefram0106"), { 319,680 }, 1.5, 0, 0);
+	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 285,730 }, { 12,12 }, { 0,255,0,1 });
+
+	m_attack = 5;
 }
 
 void Marine::Release()

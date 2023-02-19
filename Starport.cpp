@@ -43,6 +43,8 @@ void Starport::Init()
 
 void Starport::Update()
 {
+	IMAGEMANAGER->FogUpdate(position, 30);
+
 	clickRect = { int(position.x) , int(position.y) , int((position.x + 32 * 4 * 1.5f)) , int((position.y + 32 * 3 * 1.5f)) };
 	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x;
 	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x;
@@ -59,13 +61,13 @@ void Starport::Render()
 	if (m_buildIndex < 4)
 	{
 		if (m_buildIndex < 3)
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 120 ,position.y - 110 }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x  ,position.y}, 1.5, 0);
 		else
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 96 ,position.y - 130 }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x  ,position.y  }, 1.5, 0);
 	}
 	else
 	{
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("starport0000"), { position.x - 96,position.y - 130 }, 1.5, 0);
+		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("starport0000"), { position.x ,position.y }, 1.5, 0);
 	}
 	m_isClick = false;
 }

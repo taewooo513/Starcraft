@@ -12,13 +12,15 @@ Tank::~Tank()
 
 void Tank::Init()
 {
-	sMode = IMAGEMANAGER->FindImageVector("sTank");
-	sModeT = IMAGEMANAGER->FindImageVector("sTankT");
+	sMode = IMAGEMANAGER->AddImageVectorCopy("sTank");
+	sModeT = IMAGEMANAGER->AddImageVectorCopy("sTankT");
 
-
+	range = 250;
 
 	sMode->Setting(0.2f, false);
 	sModeT->Setting(0.0125f, false);
+
+	m_attack = 30;
 
 	astarTimer = 0.1;
 	player->m_suff += 1;
@@ -83,6 +85,39 @@ void Tank::Init()
 
 void Tank::Update()
 {
+	if (isSMode == true)
+	{
+		range = 500;
+	}
+	else
+	{
+		range = 250;
+	}
+	if (attackObject == nullptr)
+	{
+		for (auto iter : player->otherPlayer->m_units)
+		{
+			float dest = sqrt((iter->position.x - position.x) * (iter->position.x - position.x) + (iter->position.y - position.y) * (iter->position.y - position.y));
+			if (range > dest)
+			{
+				attackObject = iter;
+				break;
+			}
+		}
+	}
+	else
+	{
+		if (attackObject->isdeath == true)
+		{
+			attackObject = nullptr;
+		}
+	}
+	if (attackObject != nullptr)
+	{
+		Attack();
+	}
+	IMAGEMANAGER->FogUpdate(position, 30);
+
 	if (isDeath == true)
 	{
 		if (player != nullptr)
@@ -318,7 +353,34 @@ void Tank::Move()
 
 void Tank::Attack()
 {
+	float dest = sqrt((attackObject->position.x - position.x) * (attackObject->position.x - position.x) + (attackObject->position.y - position.y) * (attackObject->position.y - position.y));
+	fireImageDel2 += DELTA_TIME;
 
+	if (range > dest)
+	{
+		imgRot = atan2(attackObject->position.x - position.x, attackObject->position.y - position.y);
+		if (fireImageDel2 > (isSMode == false ? 1.5f : 3.1f))
+		{
+			attackObject->m_hp -= m_attack;
+			fireImageDel2 = 0;
+			if (isSMode == true)
+			{
+				SOUNDMANAGER->play("ttafi200", 0.5f);
+				EFFECTMANAGER->AddEffect("tmnexplo0000", { attackObject->position.x - 30,  attackObject->position.y - 30 }, 1, 0.05f);
+			}
+			else
+			{
+				SOUNDMANAGER->play("ttafir00", 0.5f);
+				EFFECTMANAGER->AddEffect("bang1Effect", { attackObject->position.x - 30,  attackObject->position.y - 30 }, 0.5, 0.05f);
+			}
+		}
+		m_dest = { 0,0 };
+	}
+	else
+	{
+		m_dest = attackObject->position;
+		player->Astar(position, m_dest, this);
+	}
 }
 
 void Tank::CollisionUpdate()

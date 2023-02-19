@@ -9,8 +9,11 @@
 #include "Academy.h"
 #include "Factory.h"
 #include "ScienceFacility.h"
+#include "Tank.h"
 #include "Armory.h"
 #include "Starport.h"
+#include "Depot.h"
+#include "Machines.h"
 #include "Vulture.h"
 void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 {
@@ -115,7 +118,6 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 		}
 	}
 
-	cout << endl;
 }
 
 void Player::Init()
@@ -217,7 +219,6 @@ void Player::Update()
 
 	if (KEYMANAGER->GetOnceKeyDown(VK_RBUTTON))
 	{
-
 		m_clickRad = 0;
 		m_rClickPos.x = _ptMouse.x + IMAGEMANAGER->GetCameraPosition().x;
 		m_rClickPos.y = _ptMouse.y + IMAGEMANAGER->GetCameraPosition().y;
@@ -295,18 +296,54 @@ void Player::Update()
 				m_rClickPos.x = _ptMouse.x + IMAGEMANAGER->GetCameraPosition().x;
 				m_rClickPos.y = _ptMouse.y + IMAGEMANAGER->GetCameraPosition().y;
 
-				if (m_selectUnit != nullptr)
-				{
-				}
-
 				SpaceConstructionVehicle* scv = dynamic_cast<SpaceConstructionVehicle*>(m_selectUnit);
 				if (scv->buildIndex != 0)
 				{
-					m_selectUnit->SetDestPosition({ (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x,
-						(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().y });
-					Astar(m_selectUnit->GetPosition(), { (float)(_ptMouse.x / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().x,
-						(float)(_ptMouse.y / (int)(32.f * 1.5f) * (32.f * 1.5)) + IMAGEMANAGER->GetCameraPosition().y }, m_selectUnit);
-					scv->m_isBuild = true;
+					float width = 0;
+					float height = 0;
+					/*
+						enum eBuildClass
+						{
+							eBegin,
+							eCommandCenter,
+							eFactory,
+							eBarrack,
+							eAcademy,
+							eEngin,
+							eDepot,
+							eStarport,
+							eArmory,
+							eScience
+						};
+					*/
+
+					switch (scv->buildIndex)
+					{
+					case SpaceConstructionVehicle::eBuildClass::eCommandCenter:
+					case SpaceConstructionVehicle::eBuildClass::eFactory:
+					case SpaceConstructionVehicle::eBuildClass::eBarrack:
+					case SpaceConstructionVehicle::eBuildClass::eEngin:
+					case SpaceConstructionVehicle::eBuildClass::eStarport:
+						width = 32.f * 1.5 * 4.f / 2.f;
+						height = 32.f * 1.5 * 3.f / 2.f;
+						break;
+					case SpaceConstructionVehicle::eBuildClass::eDepot:
+					case SpaceConstructionVehicle::eBuildClass::eAcademy:
+					case SpaceConstructionVehicle::eBuildClass::eArmory:
+					case SpaceConstructionVehicle::eBuildClass::eScience:
+						width = 32.f * 1.5 * 3.f / 2.f;
+						height = 32.f * 1.5 * 2.f / 2.f;
+						break;
+					}
+
+					if (scv->isBuildAble_ == true)
+					{
+						scv->m_dest = { (float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + width
+							, (float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + height };
+						Astar(scv->position, scv->m_dest, scv);
+						scv->buildPos = scv->m_dest;
+						scv->m_isBuild = true;
+					}
 				}
 			}
 		}
@@ -371,6 +408,28 @@ void Player::Update()
 				m_selectBuild = iter;
 				m_selectUnit = nullptr;
 				m_selectUnits.clear();
+
+				if (typeid(*m_selectBuild) == typeid(Academy))
+				{
+					SOUNDMANAGER->play("tacwht00", 0.5f);
+				}
+				else if (typeid(*m_selectBuild) == typeid(EngineeringBay))
+				{
+					SOUNDMANAGER->play("twpwht00", 0.5f);
+				}
+				else if (typeid(*m_selectBuild) == typeid(Depot))
+				{
+					SOUNDMANAGER->play("tnswht00", 0.5f);
+				}
+				else if (typeid(*m_selectBuild) == typeid(Armory))
+				{
+					SOUNDMANAGER->play("tclwht00", 0.5f);
+				}
+				else if (typeid(*m_selectBuild) == typeid(Machines))
+				{
+					SOUNDMANAGER->play("tmswht00", 0.5f);
+				}
+
 				break;
 			}
 		}
@@ -397,6 +456,101 @@ void Player::Update()
 						m_selectUnits.clear();
 						m_selectUnit = nullptr;
 						m_selectBuild = nullptr;
+						if (typeid(*iter) == typeid(SpaceConstructionVehicle))
+						{
+							if (rand() % 4 == 0)
+							{
+								SOUNDMANAGER->play("tscwht00", 0.5f);
+							}
+							else if (rand() % 4 == 1)
+							{
+								SOUNDMANAGER->play("tscwht01", 0.5f);
+							}
+							else if (rand() % 4 == 2)
+							{
+								SOUNDMANAGER->play("tscwht02", 0.5f);
+							}
+							else
+							{
+								SOUNDMANAGER->play("tscwht03", 0.5f);
+							}
+						}
+						else if (typeid(*iter) == typeid(Marine))
+						{
+							if (rand() % 4 == 0)
+							{
+								SOUNDMANAGER->play("tmawht00", 0.5f);
+							}
+							else if (rand() % 4 == 1)
+							{
+								SOUNDMANAGER->play("tmawht01", 0.5f);
+							}
+							else if (rand() % 4 == 2)
+							{
+								SOUNDMANAGER->play("tmawht02", 0.5f);
+							}
+							else
+							{
+								SOUNDMANAGER->play("tmawht03", 0.5f);
+							}
+						}
+						else if (typeid(*iter) == typeid(FireBat))
+						{
+							if (rand() % 4 == 0)
+							{
+								SOUNDMANAGER->play("tfbwht00", 0.5f);
+							}
+							else if (rand() % 4 == 1)
+							{
+								SOUNDMANAGER->play("tfbwht01", 0.5f);
+							}
+							else if (rand() % 4 == 2)
+							{
+								SOUNDMANAGER->play("tfbwht02", 0.5f);
+							}
+							else
+							{
+								SOUNDMANAGER->play("tfbwht03", 0.5f);
+							}
+						}
+						else if (typeid(*iter) == typeid(Vulture))
+						{
+							if (rand() % 4 == 0)
+							{
+								SOUNDMANAGER->play("tvuwht00", 0.5f);
+							}
+							else if (rand() % 4 == 1)
+							{
+								SOUNDMANAGER->play("tvuwht01", 0.5f);
+							}
+							else if (rand() % 4 == 2)
+							{
+								SOUNDMANAGER->play("tvuwht02", 0.5f);
+							}
+							else
+							{
+								SOUNDMANAGER->play("tvuwht03", 0.5f);
+							}
+						}
+						else if (typeid(*iter) == typeid(Tank))
+						{
+							if (rand() % 4 == 0)
+							{
+								SOUNDMANAGER->play("ttawht00", 0.5f);
+							}
+							else if (rand() % 4 == 1)
+							{
+								SOUNDMANAGER->play("ttawht01", 0.5f);
+							}
+							else if (rand() % 4 == 2)
+							{
+								SOUNDMANAGER->play("ttawht02", 0.5f);
+							}
+							else
+							{
+								SOUNDMANAGER->play("ttawht03", 0.5f);
+							}
+						}
 					}
 					m_selectUnits.push_back(iter);
 					count++;
@@ -409,6 +563,103 @@ void Player::Update()
 					if (m_selectUnits.size() != 0)
 						m_selectUnits.clear();
 					m_selectUnit = iter;
+
+					if (typeid(*m_selectUnit) == typeid(SpaceConstructionVehicle))
+					{
+						if (rand() % 4 == 0)
+						{
+							SOUNDMANAGER->play("tscwht00", 0.5f);
+						}
+						else if (rand() % 4 == 1)
+						{
+							SOUNDMANAGER->play("tscwht01", 0.5f);
+						}
+						else if (rand() % 4 == 2)
+						{
+							SOUNDMANAGER->play("tscwht02", 0.5f);
+						}
+						else
+						{
+							SOUNDMANAGER->play("tscwht03", 0.5f);
+						}
+					}
+					else if (typeid(*m_selectUnit) == typeid(Marine))
+					{
+						if (rand() % 4 == 0)
+						{
+							SOUNDMANAGER->play("tmawht00", 0.5f);
+						}
+						else if (rand() % 4 == 1)
+						{
+							SOUNDMANAGER->play("tmawht01", 0.5f);
+						}
+						else if (rand() % 4 == 2)
+						{
+							SOUNDMANAGER->play("tmawht02", 0.5f);
+						}
+						else
+						{
+							SOUNDMANAGER->play("tmawht03", 0.5f);
+						}
+					}
+					else if (typeid(*m_selectUnit) == typeid(FireBat))
+					{
+						if (rand() % 4 == 0)
+						{
+							SOUNDMANAGER->play("tfbwht00", 0.5f);
+						}
+						else if (rand() % 4 == 1)
+						{
+							SOUNDMANAGER->play("tfbwht01", 0.5f);
+						}
+						else if (rand() % 4 == 2)
+						{
+							SOUNDMANAGER->play("tfbwht02", 0.5f);
+						}
+						else
+						{
+							SOUNDMANAGER->play("tfbwht03", 0.5f);
+						}
+					}
+					else if (typeid(*m_selectUnit) == typeid(Vulture))
+					{
+						if (rand() % 4 == 0)
+						{
+							SOUNDMANAGER->play("tvuwht00", 0.5f);
+						}
+						else if (rand() % 4 == 1)
+						{
+							SOUNDMANAGER->play("tvuwht01", 0.5f);
+						}
+						else if (rand() % 4 == 2)
+						{
+							SOUNDMANAGER->play("tvuwht02", 0.5f);
+						}
+						else
+						{
+							SOUNDMANAGER->play("tvuwht03", 0.5f);
+						}
+					}
+					else if (typeid(*m_selectUnit) == typeid(Tank))
+					{
+						if (rand() % 4 == 0)
+						{
+							SOUNDMANAGER->play("ttawht00", 0.5f);
+						}
+						else if (rand() % 4 == 1)
+						{
+							SOUNDMANAGER->play("ttawht01", 0.5f);
+						}
+						else if (rand() % 4 == 2)
+						{
+							SOUNDMANAGER->play("ttawht02", 0.5f);
+						}
+						else
+						{
+							SOUNDMANAGER->play("ttawht03", 0.5f);
+						}
+					}
+
 					m_selectBuild = nullptr;
 					break;
 				}

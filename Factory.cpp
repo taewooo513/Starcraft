@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Factory.h"
 #include "Vulture.h"
+#include "Machines.h"
+#include "Tank.h"
 
 Factory::Factory()
 {
@@ -48,6 +50,13 @@ void Factory::Init()
 void Factory::Update()
 {
 	grid->Update();
+	if (mac != nullptr)
+	{
+		if (mac->isComplete == false)
+		{
+			mac->AddBuild(nullptr);
+		}
+	}
 	if (addUnitQueue.empty() == false)
 	{
 		if (addUnitQueue.front().timeNow < addUnitQueue.front().maxTime)
@@ -60,11 +69,19 @@ void Factory::Update()
 			{
 				Vulture* vulture = new Vulture;
 				vulture->SetPlayer(player);
-				OBJECTMANAGER->AddObject(vulture, "fireBat", position.x, position.y, 1);
+				OBJECTMANAGER->AddObject(vulture, "fireBat", position.x, position.y + 100, 1);
+				addUnitQueue.erase(addUnitQueue.begin());
+			}
+			else if (addUnitQueue.front().unit == 2)
+			{
+				Tank* vulture = new Tank;
+				vulture->SetPlayer(player);
+				OBJECTMANAGER->AddObject(vulture, "fireBat", position.x, position.y + 100, 1);
 				addUnitQueue.erase(addUnitQueue.begin());
 			}
 		}
 	}
+	IMAGEMANAGER->FogUpdate(position, 30);
 
 	clickRect = { int(position.x) , int(position.y) , int((position.x + 32 * 4 * 1.5f)) , int((position.y + 32 * 3 * 1.5f)) };
 	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x + 85;
@@ -84,17 +101,17 @@ void Factory::Render()
 	if (m_buildIndex < 4)
 	{
 		if (m_buildIndex < 3)
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 120 ,position.y - 110 }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x  ,position.y }, 1.5, 0);
 		else
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 96  ,position.y - 130 }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x   ,position.y }, 1.5, 0);
 	}
 	else
 	{
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { position.x - 96,position.y - 130 }, 1.5, 0);
+		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { position.x ,position.y }, 1.5, 0);
 	}
 	if (!addUnitQueue.empty())
 	{
-		idleAnimation->CenterRenderBlendBlack({ position.x - 96  ,position.y - 130 }, 1.5, 0, 0);
+		idleAnimation->CenterRenderBlendBlack({ position.x - m_buildImage[0]->GetWidth() * 1.5f / 2,position.y - -m_buildImage[0]->GetHeight() * 1.5f / 2 }, 1.5, 0, 0);
 	}
 	m_isClick = false;
 }
@@ -106,8 +123,6 @@ void Factory::Release()
 void Factory::UIRender()
 {
 	m_isClick = true;
-
-
 
 	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[5].x + 25,UIPosition[5].y + 25 }, 1.7, 0, 0);
 	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0286"), { UIPosition[5].x - 1 ,UIPosition[5].y - 2 }, 1.7, 0, 0);
@@ -134,15 +149,25 @@ void Factory::UIRender()
 		{
 			if (KEYMANAGER->GetOnceKeyDown('V'))
 			{
-				addUnitQueue.push_back({ 1,0,12.6 });
+				addUnitQueue.push_back({ 1,0,1 });
 			}
 			if (KEYMANAGER->GetOnceKeyDown('T'))
 			{
-				//addUnitQueue.push_back({ 2,0,12.6 });
+				addUnitQueue.push_back({ 2,0,1 });
 			}
 			if (KEYMANAGER->GetOnceKeyDown('G'))
 			{
 				//addUnitQueue.push_back({ 2,0,12.6 });
+			}
+			if (mac == nullptr)
+			{
+				if (KEYMANAGER->GetOnceKeyDown('C'))
+				{
+					mac = new Machines;
+					mac->fac = this;
+					mac->SetPlayer(this->player);
+					OBJECTMANAGER->AddObject(mac, "Build", position.x + 140, position.y + 60, 1);
+				}
 			}
 		}
 
@@ -150,14 +175,39 @@ void Factory::UIRender()
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0002"), { UIPosition[0].x - 1 ,UIPosition[0].y - 2 }, 1.7, 0, 0);
 
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[1].x + 25,UIPosition[1].y + 25 }, 1.7, 0, 0);
-		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0023"), { UIPosition[1].x - 1 ,UIPosition[1].y - 2 }, 1.7, 0, 0);
-
+		if (player->buildList[Player::BuildList::eArmory])
+		{
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0023"), { UIPosition[1].x - 1 ,UIPosition[1].y - 2 }, 1.7, 0, 0);
+		}
+		else
+		{
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0023"), { UIPosition[1].x - 1 ,UIPosition[1].y - 2 }, 1.7, 0, 0);
+		}
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
-		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0003"), { UIPosition[2].x - 1 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
+
+		if (player->buildList[Player::BuildList::eArmory])
+		{
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0003"), { UIPosition[2].x - 1 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
+		}
+		else
+		{
+			IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0003"), { UIPosition[2].x - 1 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
+		}
 
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
-		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0282"), { UIPosition[8].x - 1 ,UIPosition[8].y - 2 }, 1.7, 0, 0);
+		if (addUnitQueue.size() != 0)
+		{
+		}
+		else
+		{
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0282"), { UIPosition[8].x - 1 ,UIPosition[8].y - 2 }, 1.7, 0, 0);
+		}
+
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[6].x + 25,UIPosition[6].y + 25 }, 1.7, 0, 0);
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0120"), { UIPosition[6].x - 1 ,UIPosition[6].y - 5 }, 1.7, 0, 0);
 	}
+
+
 
 	if (addUnitQueue.size() != 0)
 	{
@@ -191,9 +241,7 @@ void Factory::UIRender()
 				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("Coll"), { float(535 + i * 4),694 }, 0.8, 0, 0);
 			}
 		}
-
 		IMAGEMANAGER->DirectDrawText(L"Building", { 500,660 }, { 15,15 }, { 255,255,255,1 });
-
 	}
 
 	IMAGEMANAGER->DirectDrawText(L"Terran Factory", { 400,625 }, { 15,15 });

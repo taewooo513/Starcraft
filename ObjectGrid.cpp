@@ -24,7 +24,7 @@ void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
 	{
 		moveStack2.pop();
 	}
-
+	int c = 0;
 	Vector2 tileStartPos;
 	tileStartPos = obj->position / 1.5 / 8;
 	Vector2 tileEndPos = unit->m_dest / 1.5 / 8;
@@ -50,7 +50,6 @@ void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
 			auto find = IMAGEMANAGER->GetMapReader()->mapRegions[nextRegionId]->nearRegionPosition.find(nowTileRegionId);
 			if (find == IMAGEMANAGER->GetMapReader()->mapRegions[nextRegionId]->nearRegionPosition.end())
 			{
-				cout << "인접 Region을 찾지 못함" << endl;
 				return;
 			}
 			for (auto iter : find->second)
@@ -90,7 +89,11 @@ void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
 		vector<Vector2> openNode; // 오픈 노드인지 체크
 		tileEndPos.x = (int)tileEndPos.x;
 		tileEndPos.y = (int)tileEndPos.y;
-
+		c++;
+		if (c < 500)
+		{
+			return;
+		}
 		regionQueue.push(make_pair(make_pair(0, 0), tileEndPos));
 		openNode.push_back(tileEndPos);
 		while (regionQueue.empty() == false)
@@ -121,17 +124,7 @@ void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
 				}
 				if (isF == false)
 				{
-					cout << GRIDMANAGER->regionsTile[(int)tileEndPos.x][(int)tileEndPos.y].regionsIds;
 					tileEndPos = iter.second;
-					for (int a = -1; a < 2; a++)
-					{
-
-						for (int ac = -1; ac < 2; ac++)
-						{
-							cout << GRIDMANAGER->regionsTile[(int)tileEndPos.x + ac][(int)tileEndPos.y + a].regionsIds;
-						}
-						cout << "\n";
-					}
 					break;
 				}
 			}
@@ -214,7 +207,6 @@ void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
 				}
 				else
 				{
-					cout << "찾 못";
 					break;
 				}
 			}

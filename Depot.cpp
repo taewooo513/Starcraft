@@ -25,7 +25,7 @@ void Depot::Init()
 {
 	idle = IMAGEMANAGER->AddImageVectorCopy("DepotIdle");
 	idle->Setting(0.1f, true);
-	grid = GRIDMANAGER->AddGrid(this, 12, 9, 3, 2, -5, -6);
+	grid = GRIDMANAGER->AddGrid(this, 12, 9, 3, 2, -6, -5);
 
 
 	grid->gridTag = 3;
@@ -48,6 +48,8 @@ void Depot::Init()
 void Depot::Update()
 {
 	grid->Update();
+	IMAGEMANAGER->FogUpdate(position, 30);
+
 	clickRect = { int(position.x) , int(position.y) , int((position.x + 32 * 4 * 1.5f)) , int((position.y + 32 * 3 * 1.5f)) };
 	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x + 85;
 	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x + 85;
@@ -66,29 +68,19 @@ void Depot::Render()
 	if (m_buildIndex < 4)
 	{
 		if (m_buildIndex < 3)
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 72 ,position.y - 80 }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x,position.y }, 1.5, 0);
 		else
 		{
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("depotshad1"), { position.x - 72 ,position.y - 110 }, 1.5, 0);
-			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 72 ,position.y - 110 }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("depotshad1"), { position.x ,position.y }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x  ,position.y }, 1.5, 0);
 		}
 		IMAGEMANAGER->DirectDrawText(L"Under Construction", { 420,660 }, { 15,15 }, { 200,200,200,0.8 });
-
-		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("coolTimeBar"), { 505,694 }, 0.8, 0, 0);
-		for (int i = 0; i < 41; i++)
-		{
-			if (m_maxCompleteTime / 41 * i < m_completeTime)
-			{
-				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("Coll"), { float(505 + i * 4),694 }, 0.8, 0, 0);
-			}
-		}
 	}
 	else
 	{
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("depotshad"), { position.x - 72 ,position.y - 110 }, 1.5, 0);
-
-		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("depot0000"), { position.x - 72,position.y - 110 }, 1.5, 0);
-		idle->CenterRenderBlendBlack({ position.x - 72,position.y - 110 }, 1.5, 0, 0);
+		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("depotshad"), { position.x  ,position.y }, 1.5, 0);
+		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("depot0000"), { position.x ,position.y }, 1.5, 0);
+		idle->CenterRenderBlendBlack({ position.x - IMAGEMANAGER->FindImage("depot0000")->GetWidth() * 1.5f / 2 ,position.y - IMAGEMANAGER->FindImage("depot0000")->GetHeight() * 1.5f / 2 }, 1.5, 0, 0);
 	}
 	m_isClick = false;
 }

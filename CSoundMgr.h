@@ -1,6 +1,6 @@
 #pragma once
 #include "singleton.h"
-constexpr auto soundBuffer = 20;
+constexpr auto soundBuffer = 40;
 constexpr auto extraSoundChannel = 5;
 constexpr auto totalSoundChannel = soundBuffer + extraSoundChannel;
 

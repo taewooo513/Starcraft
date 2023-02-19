@@ -87,7 +87,7 @@ public:
 	void RenderBlendBlack2(CImage* img, Vector2 vec, float scale, float rot, float alpha);
 	void UIRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot);
 
-	void CenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse);
+	void CenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse = false);
 	void UICenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse);
 	void UICenterRenderBlendBlack2(CImage* img, Vector2 vec, Vector2 scale, float rot, bool isReverse);
 
@@ -181,7 +181,32 @@ public:
 		IMAGEMANAGER->UIRenderBlendBlack(m_images[m_frame], vec, scale, rot);
 	}
 
+	void RenderBlendBlack(Vector2 vec, float scale, float rot, bool isReverse)
+	{
+		if (m_isEnd == false)
+			m_nowFrame += DELTA_TIME;
 
+		if (m_nowFrame >= m_timeDelay)
+		{
+			if (m_frame >= GetImageSize() - 1)
+			{
+				if (m_isLoop == true)
+				{
+					m_frame = 0;
+				}
+				else
+				{
+					m_isEnd = true;
+				}
+			}
+			else
+			{
+				m_frame++;
+			}
+			m_nowFrame = 0;
+		}
+		IMAGEMANAGER->RenderBlendBlack(m_images[m_frame], vec, scale, rot);
+	}
 	void CenterRenderBlendBlack(Vector2 vec, float scale, float rot, bool isReverse)
 	{
 		if (m_isEnd == false)

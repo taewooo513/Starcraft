@@ -7,7 +7,9 @@ class Build;
 class SpaceConstructionVehicle : public WalkUnit
 {
 private:
+	float BuildTimer = 0;
 	float imgRot = 0;
+	bool isFA = false;
 	float timer = 0;
 	float m_dir = 0;
 	CImage* m_idleImage[9];
@@ -21,6 +23,19 @@ private:
 	float m_ImageDirection = 0;
 	Effect* m_spark;
 	float astarTimer;
+	Vector2 buildDest;
+	float randomMoveRot;
+	float randomMoveTime;
+	bool isa = false;
+	int index = 0;
+public:
+	Vector2 buildPos;
+	int page = 0;
+	int buildIndex = 0;
+	bool m_isBuild = false;
+	Build* m_nowBuild;
+	Build* m_command = nullptr;
+	bool isBuildAble_ = false;
 	enum eBuildClass
 	{
 		eBegin,
@@ -34,18 +49,6 @@ private:
 		eArmory,
 		eScience
 	};
-	float randomMoveRot;
-	float randomMoveTime;
-	bool isa = false;
-	int index = 0;
-	
-public:
-	int page = 0;
-	int buildIndex = 0;
-	bool m_isBuild = false;
-	Build* m_nowBuild;
-	Build* m_command = nullptr;
-
 	SpaceConstructionVehicle();
 	~SpaceConstructionVehicle();
 	virtual void Init() override;
@@ -62,6 +65,7 @@ public:
 	void CollisionUpdate();
 	void BuildingConstruction();
 	void BuildCommandUI();
+	void RectSzie(int sizeX, int sizeY);
 	void BuildActive();
 	void Command();
 };

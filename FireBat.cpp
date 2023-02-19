@@ -191,6 +191,7 @@ void FireBat::Attack()
 
 void FireBat::Update()
 {
+	IMAGEMANAGER->FogUpdate(position, 30);
 
 	if (KEYMANAGER->GetOnceKeyDown(VK_F2))
 	{

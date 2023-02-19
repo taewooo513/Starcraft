@@ -75,9 +75,9 @@ void GridManager::Render()
 	//{
 	//	for (int i = 0; i < 512; i++)
 	//	{
-	//		if (float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x <= WINSIZE_X && float(j) * 8.f * 1.5f - IMAGEMANAGER-//>GetCameraPosition().x >= 0)
+	//		if (float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x <= WINSIZE_X && float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x >= 0)
 	//		{
-	//			if (float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y <= WINSIZE_Y && float(i) * 8.f * 1.5f - IMAGEMANAGER-//>GetCameraPosition().y >= 0)
+	//			if (float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y <= WINSIZE_Y && float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y >= 0)
 	//			{
 	//				if (regionsTile[j][i].isBuildTag == 0)
 	//				{
@@ -88,7 +88,7 @@ void GridManager::Render()
 	//					IMAGEMANAGER->DrawRectRed({
 	//						float(j) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
 	//						float(i) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, 
-	//						{ float(j) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * /1.5f /+ float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y });
+	//						{ float(j) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().x,float(i) * 8.f * 1.5f + float(1) * 8.f * 1.5f - IMAGEMANAGER->GetCameraPosition().y });
 	//				}
 	//			}
 	//		}

@@ -19,6 +19,7 @@ void Effect::Update()
 	if (m_image->GetIsEnd())
 	{
 		m_isEnd = true;
+		m_isDestroy = true;
 	}
 }
 

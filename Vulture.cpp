@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Vulture.h"
 #include "Player.h"
-
+#include "VultureBullet.h"
 Vulture::Vulture()
 {
 }
@@ -17,10 +17,11 @@ void Vulture::Init()
 	m_maxHp = 80;
 	m_hp = m_maxHp;
 
+	range = 250;
 	grid = GRIDMANAGER->AddGrid(this, 4, 4, 20, 20, -2, -1);
 	grid->gridTag = rand() % 10000 + 100;
 	player->AddUnit(this);
-
+	m_attack = 14;
 	img[8] = IMAGEMANAGER->FindImage("Vulture_1");
 	img[7] = IMAGEMANAGER->FindImage("Vulture_2");
 	img[6] = IMAGEMANAGER->FindImage("Vulture_3");
@@ -35,6 +36,31 @@ void Vulture::Init()
 
 void Vulture::Update()
 {
+	if (attackObject == nullptr)
+	{
+		for (auto iter : player->otherPlayer->m_units)
+		{
+			float dest = sqrt((iter->position.x - position.x) * (iter->position.x - position.x) + (iter->position.y - position.y) * (iter->position.y - position.y));
+			if (range > dest)
+			{
+				attackObject = iter;
+				break;
+			}
+		}
+	}
+	else
+	{
+		if (attackObject->isdeath == true)
+		{
+			attackObject = nullptr;
+		}
+	}
+	if (attackObject != nullptr)
+	{
+		Attack();
+	}
+	IMAGEMANAGER->FogUpdate(position, 30);
+
 	if (isDeath == true)
 	{
 		if (player != nullptr)
@@ -207,12 +233,29 @@ void Vulture::Move()
 			m_speed = 0;
 		}
 	}
-	grid->Update();
 }
 
 void Vulture::Attack()
 {
-
+	float dest = sqrt((attackObject->position.x - position.x) * (attackObject->position.x - position.x) + (attackObject->position.y - position.y) * (attackObject->position.y - position.y));
+	fireImageDel2 += DELTA_TIME;
+	if (range > dest)
+	{
+		if (fireImageDel2 > 1.25f)
+		{
+			attackObject->m_hp -= m_attack;
+			fireImageDel2 = 0;
+			VultureBullet* bull = new VultureBullet;
+			bull->destPos = attackObject->position;
+			OBJECTMANAGER->AddObject(bull, "Vulturebullet", position.x, position.y, 1);
+		}
+		m_dest = { 0,0 };
+	}
+	else
+	{
+		m_dest = attackObject->position;
+		player->Astar(position, m_dest, this);
+	}
 }
 
 void Vulture::CollisionUpdate()
