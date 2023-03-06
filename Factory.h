@@ -11,6 +11,7 @@ class Factory : public Build
 	};
 	vImage* idleAnimation;
 	vector<AddUnit> addUnitQueue;
+	bool asdf = false;
 public:
 	CImage* m_buildImage[4];
 

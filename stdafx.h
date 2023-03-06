@@ -6,8 +6,11 @@
 #pragma comment(lib,"windowscodecs.lib")
 #include <mmsystem.h>
 #pragma comment(lib,"winmm.lib")
-
+#include <thread>
+#include <shared_mutex>
 #include <initguid.h>
+#include <concurrent_queue.h>
+//concurent_queue
 #include <windows.h>
 #include <functional>
 #include <locale>

@@ -11,6 +11,7 @@ private:
 	};
 	vImage* workImage;
 	vector<AddUnit> addUnitQueue;
+	bool sadf = false;
 public:
 	CImage* m_buildImage[4];
 

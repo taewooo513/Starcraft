@@ -53,7 +53,6 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 		regionQueue.pop();
 
 		MapRegions* nextNode = nullptr;
-		int dest = 0;
 
 		for (auto& nextRegion : iter.second->nearRegions)
 		{
@@ -117,7 +116,6 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 			break;
 		}
 	}
-
 }
 
 void Player::Init()
@@ -708,6 +706,10 @@ void Player::Update()
 
 void Player::Render()
 {
+	if (KEYMANAGER->GetOnceKeyDown(VK_F5))
+	{
+		m_mineral += 10000;
+	}
 	IMAGEMANAGER->MapRender();
 }
 

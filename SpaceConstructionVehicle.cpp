@@ -16,10 +16,18 @@ SpaceConstructionVehicle::SpaceConstructionVehicle()
 
 SpaceConstructionVehicle::~SpaceConstructionVehicle()
 {
-
+	player->m_suff -= 1;
 	if (player->m_selectUnit == this)
 	{
 		player->m_selectUnit = nullptr;
+	}
+	for (auto iter = player->m_selectUnits.begin(); iter < player->m_selectUnits.end(); iter++)
+	{
+		if ((*iter) == this)
+		{
+			player->m_selectUnits.erase(iter);
+			break;
+		}
 	}
 	for (auto iter = player->m_units.begin(); iter < player->m_units.end(); iter++)
 	{
@@ -33,6 +41,8 @@ SpaceConstructionVehicle::~SpaceConstructionVehicle()
 
 void SpaceConstructionVehicle::Init()
 {
+	sparkImg = IMAGEMANAGER->AddImageVectorCopy("SCVEffect");
+	sparkImg->Setting(0.1, true);
 	m_maxHp = 60;
 	m_hp = m_maxHp;
 	BuildTimer = 3;
@@ -89,8 +99,6 @@ void SpaceConstructionVehicle::Move()
 	nowRegionPos = position / 1.5 / 8;
 	int regionId = GRIDMANAGER->regionsTile[(int)nowRegionPos.x][(int)nowRegionPos.y].regionsIds;
 
-
-
 	if (regionId != -1)
 	{
 		if (moveNodeStack.empty() == false)
@@ -99,13 +107,11 @@ void SpaceConstructionVehicle::Move()
 			{
 				moveNodeStack.pop();
 				grid->Astar(4, 4);
-
 			}
 			if (moveNodeStack.empty() == false)
 			{
 				if (grid->moveStack2.empty() == true)
 					grid->Astar(4, 4);
-
 			}
 		}
 		else
@@ -178,6 +184,8 @@ void SpaceConstructionVehicle::Move()
 
 void SpaceConstructionVehicle::Update()
 {
+	grid->Update();
+
 	if (isdeath == true)
 	{
 		ObjectDestroyed();
@@ -194,9 +202,12 @@ void SpaceConstructionVehicle::Update()
 	{
 		if (GRIDMANAGER->regionsTile[(int)(position.x / 1.5f / 8.f)][(int)(position.y / 1.5f / 8.f)].isBuildTag != 0)
 		{
-			position.x += cos(5) * DELTA_TIME * 100;
-			position.y += sin(5) * DELTA_TIME * 100;
-			imgRot = 5;
+			if (GRIDMANAGER->regionsTile[(int)(position.x / 1.5f / 8.f)][(int)(position.y / 1.5f / 8.f)].isBuildTag != grid->gridTag)
+			{
+				position.x += cos(5) * DELTA_TIME * 100;
+				position.y += sin(5) * DELTA_TIME * 100;
+				imgRot = 5;
+			}
 		}
 	}
 	else
@@ -295,7 +306,8 @@ void SpaceConstructionVehicle::Update()
 					auto lastMe = me;
 					for (auto iter : player->resrouces)
 					{
-						float dest = sqrt((iter->position.x - position.x) * (iter->position.x - position.x) + (iter->position.y - position.y) * (iter->position.y - position.y));
+						float dest = sqrt((iter->position.x - position.x) * (iter->position.x - position.x)
+							+ (iter->position.y - position.y) * (iter->position.y - position.y));
 						if (fDest > dest && dest < 150)
 						{
 							if (typeid(*iter).name() == typeid(Mineral).name())
@@ -392,13 +404,14 @@ void SpaceConstructionVehicle::Render()
 		}
 	}
 
-	if (m_nowBuild == nullptr)
+	if (m_nowBuild == nullptr || m_speed2 != 0)
 	{
 		IMAGEMANAGER->CenterRenderBlendBlack(m_idleImage[(int)rr], position, 1.5f, 0, isR);
 	}
 	else
 	{
 		IMAGEMANAGER->CenterRenderBlendBlack(m_actionImage_1[(int)rr], position, 1.5f, 0, isR);
+		sparkImg->CenterRenderBlendBlack({ position.x - 45 + cosf(imgRot - 3.141592 / 2) * 50,position.y - 50 + sinf(imgRot - 3.141592 / 2) * 50 }, 1.5f, 0, false);
 	}
 
 	m_isClick = false;
@@ -421,28 +434,63 @@ void SpaceConstructionVehicle::UIRender()
 		}
 		if (KEYMANAGER->GetOnceKeyDown('A') && player->buildList[Player::BuildList::eBarrack] == true)
 		{
-			buildIndex = eAcademy;
-			page = 4;
+			if (player->m_mineral - 150 >= 0)
+			{
+				buildIndex = eAcademy;
+				page = 4;
+			}
+			else
+			{
+				SOUNDMANAGER->play("taderr00", 0.5f);
+			}
 		}
 		if (KEYMANAGER->GetOnceKeyDown('B') && player->buildList[Player::BuildList::eCommandCenter] == true)
 		{
-			buildIndex = eBarrack;
-			page = 4;
+			if (player->m_mineral - 150 >= 0)
+			{
+				buildIndex = eBarrack;
+				page = 4;
+			}
+			else
+			{
+				SOUNDMANAGER->play("taderr00", 0.5f);
+			}
 		}
 		if (KEYMANAGER->GetOnceKeyDown('C'))
 		{
-			buildIndex = eCommandCenter;
-			page = 4;
+			if (player->m_mineral - 400 >= 0)
+			{
+				buildIndex = eCommandCenter;
+				page = 4;
+			}
+			else
+			{
+				SOUNDMANAGER->play("taderr00", 0.5f);
+			}
 		}
 		if (KEYMANAGER->GetOnceKeyDown('E') && player->buildList[Player::BuildList::eBarrack] == true)
 		{
-			buildIndex = eEngin;
-			page = 4;
+			if (player->m_mineral - 125 >= 0)
+			{
+				buildIndex = eEngin;
+				page = 4;
+			}
+			else
+			{
+				SOUNDMANAGER->play("taderr00", 0.5f);
+			}
 		}
 		if (KEYMANAGER->GetOnceKeyDown('S') && player->buildList[Player::BuildList::eCommandCenter] == true)
 		{
-			buildIndex = eDepot;
-			page = 4;
+			if (player->m_mineral - 100 >= 0)
+			{
+				buildIndex = eDepot;
+				page = 4;
+			}
+			else
+			{
+				SOUNDMANAGER->play("taderr00", 0.5f);
+			}
 		}
 	}
 	else if (page == 2)
@@ -453,23 +501,51 @@ void SpaceConstructionVehicle::UIRender()
 		}
 		if (KEYMANAGER->GetOnceKeyDown('F') && player->buildList[Player::BuildList::eBarrack] == true)
 		{
-			buildIndex = eFactory;
-			page = 4;
+			if (player->m_mineral - 200 >= 0)
+			{
+				buildIndex = eFactory;
+				page = 4;
+			}
+			else
+			{
+				SOUNDMANAGER->play("taderr00", 0.5f);
+			}
 		}
 		if (KEYMANAGER->GetOnceKeyDown('S') && player->buildList[Player::BuildList::eFactory] == true)
 		{
-			buildIndex = eStarport;
-			page = 4;
+			if (player->m_mineral - 150 >= 0)
+			{
+				buildIndex = eStarport;
+				page = 4;
+			}
+			else
+			{
+				SOUNDMANAGER->play("taderr00", 0.5f);
+			}
 		}
 		if (KEYMANAGER->GetOnceKeyDown('A') && player->buildList[Player::BuildList::eFactory] == true)
 		{
-			buildIndex = eArmory;
-			page = 4;
+			if (player->m_mineral - 100 >= 0)
+			{
+				buildIndex = eArmory;
+				page = 4;
+			}
+			else
+			{
+				SOUNDMANAGER->play("taderr00", 0.5f);
+			}
 		}
 		if (KEYMANAGER->GetOnceKeyDown('I') && player->buildList[Player::BuildList::eArmory] == true)
 		{
-			buildIndex = eScience;
-			page = 4;
+			if (player->m_mineral - 100 >= 0)
+			{
+				buildIndex = eScience;
+				page = 4;
+			}
+			else
+			{
+				SOUNDMANAGER->play("taderr00", 0.5f);
+			}
 		}
 	}
 	else if (page == 4)
@@ -594,6 +670,7 @@ void SpaceConstructionVehicle::BuildObject()
 			switch (buildIndex)
 			{
 			case eCommandCenter:
+				player->m_mineral -= 400;
 				m_nowBuild = new CommandCenter;
 				m_nowBuild->SetPlayer(player);
 				m_isBuild = false;
@@ -604,6 +681,7 @@ void SpaceConstructionVehicle::BuildObject()
 					, 0);
 				break;
 			case eBarrack:
+				player->m_mineral -= 150;
 				m_nowBuild = new Barrack;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
@@ -614,6 +692,7 @@ void SpaceConstructionVehicle::BuildObject()
 					, 0);
 				break;
 			case eFactory:
+				player->m_mineral -= 150;
 				m_nowBuild = new Factory;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
@@ -624,6 +703,7 @@ void SpaceConstructionVehicle::BuildObject()
 					, 0);
 				break;
 			case eAcademy:
+				player->m_mineral -= 150;
 				m_nowBuild = new Academy;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
@@ -634,6 +714,7 @@ void SpaceConstructionVehicle::BuildObject()
 					, 0);
 				break;
 			case eEngin:
+				player->m_mineral -= 125;
 				m_nowBuild = new EngineeringBay;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
@@ -644,6 +725,7 @@ void SpaceConstructionVehicle::BuildObject()
 					, 0);
 				break;
 			case eDepot:
+				player->m_mineral -= 100;
 				m_nowBuild = new Depot;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
@@ -654,6 +736,7 @@ void SpaceConstructionVehicle::BuildObject()
 					, 0);
 				break;
 			case eStarport:
+				player->m_mineral -= 150;
 				m_nowBuild = new Starport;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
@@ -664,6 +747,7 @@ void SpaceConstructionVehicle::BuildObject()
 					, 0);
 				break;
 			case eArmory:
+				player->m_mineral -= 150;
 				m_nowBuild = new Armory;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
@@ -674,6 +758,7 @@ void SpaceConstructionVehicle::BuildObject()
 					, 0);
 				break;
 			case eScience:
+				player->m_mineral -= 150;
 				m_nowBuild = new ScienceFacility;
 				m_isBuild = false;
 				m_nowBuild->SetPlayer(player);
@@ -719,16 +804,7 @@ void SpaceConstructionVehicle::Command()
 		}
 		else if (page == 1)
 		{
-			if (KEYMANAGER->GetOnceKeyDown('B')) // 베럭
-			{
-				buildIndex = eBarrack;
-				page = 4;
-			}
-			if (KEYMANAGER->GetOnceKeyDown('C')) //커멘드 센터
-			{
-				buildIndex = eCommandCenter;
-				page = 4;
-			}
+
 		}
 	}
 	else

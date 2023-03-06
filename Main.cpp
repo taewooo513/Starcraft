@@ -26,6 +26,9 @@ void Main::Init()
 	SOUNDMANAGER->addSound("tnswht00", "./Resources/Sound/bldg/tnswht00.wav", false, false);
 	SOUNDMANAGER->addSound("tmswht00", "./Resources/Sound/bldg/tmswht00.wav", false, false);
 
+	SOUNDMANAGER->addSound("taderr00", "./Resources/Sound/advisor/taderr00.wav", false, false);
+	SOUNDMANAGER->addSound("taderr02", "./Resources/Sound/advisor/taderr02.wav", false, false);
+
 	//scv
 	SOUNDMANAGER->addSound("tscwht00", "./Resources/Sound/scv/tscwht00.wav", false, false);
 	SOUNDMANAGER->addSound("tscwht01", "./Resources/Sound/scv/tscwht01.wav", false, false);

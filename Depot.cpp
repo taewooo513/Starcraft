@@ -7,6 +7,7 @@ Depot::Depot()
 
 Depot::~Depot()
 {
+	player->m_maxSuff -= 8;
 	if (player->m_selectBuild == this)
 	{
 		player->m_selectBuild = nullptr;
@@ -35,14 +36,13 @@ void Depot::Init()
 	m_buildImage[1] = IMAGEMANAGER->FindImage("tbldsml0001");
 	m_buildImage[2] = IMAGEMANAGER->FindImage("tbldsml0002");
 	m_buildImage[3] = IMAGEMANAGER->FindImage("depot0001");
-
-	m_maxCompleteTime = 10.5f;
+	m_maxCompleteTime = 25.f;
 	m_completeTime = 0;
 	m_costM = 100;
 	m_costG = 0;
 	m_buildIndex = 0;
-	m_maxHp = 1000;
-	m_hp = 1;
+	m_maxHp = 500;
+	m_hp = 500;
 }
 
 void Depot::Update()
@@ -59,8 +59,6 @@ void Depot::Update()
 
 void Depot::Render()
 {
-	IMAGEMANAGER->DrawRect({ (float)clickRect.left,(float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
-
 	if (m_isClick == true)
 	{
 		IMAGEMANAGER->DrawCircle({ position.x  ,position.y }, 40, 20);
@@ -78,6 +76,11 @@ void Depot::Render()
 	}
 	else
 	{
+		if (isonce == false)
+		{
+			player->m_maxSuff += 8;
+			isonce = true;
+		}
 		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("depotshad"), { position.x  ,position.y }, 1.5, 0);
 		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("depot0000"), { position.x ,position.y }, 1.5, 0);
 		idle->CenterRenderBlendBlack({ position.x - IMAGEMANAGER->FindImage("depot0000")->GetWidth() * 1.5f / 2 ,position.y - IMAGEMANAGER->FindImage("depot0000")->GetHeight() * 1.5f / 2 }, 1.5, 0, 0);

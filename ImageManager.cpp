@@ -391,14 +391,19 @@ void ImageManager::LoadMap()
 
 void ImageManager::FogRender()
 {
-	for (int i = 0; i < 512; i++)
+	for (int j = IMAGEMANAGER->GetCameraPosition().x / 8; j < IMAGEMANAGER->GetCameraPosition().x / 8 + WINSIZE_X / 8; j++)
 	{
-		for (int j = 0; j < 512; j++)
+		for (int i = IMAGEMANAGER->GetCameraPosition().y / 8; i < IMAGEMANAGER->GetCameraPosition().y / 8 + WINSIZE_Y / 8; i++)
 		{
-			DrawRect({ (float)j * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x,(float)i * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y },
-				{ (float)j * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x, (float)i * 8 * 1.5f + 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, { 0,0,0,1.f - GRIDMANAGER->regionsTile[j][i].fogTag }, 1);
+			if (i >= 0 && j >= 0)
+				if (GRIDMANAGER->regionsTile[j][i].fogTag == 0)
+					DrawRect({
+					(float)j * 8 * 1.5f ,
+					(float)i * 8 * 1.5f }, {
+					(float)j * 8 * 1.5f + 8 * 1.5f ,
+					(float)i * 8 * 1.5f + 8 * 1.5f },
+						{ 0,0,0,1.f }, 1);
 		}
-
 	}
 }
 
@@ -451,7 +456,7 @@ void ImageManager::DrawUI2(CImage* img, Vector2 vec, float scale, float rot, boo
 	else
 	{
 		matS = D2D1::Matrix3x2F::Scale(-scale, scale);
-		matP = D2D1::Matrix3x2F::Translation(vec.x + img->GetWidth() * scale / 2, vec.y - img->GetHeight() * scale / 2);
+		matP = D2D1::Matrix3x2F::Translation(vec.x + img->GetWidth() * scale / 2, vec.y - img->GetHeight() * scale / 2); 
 	}
 
 	matW = matS * matP * matR;
@@ -664,6 +669,7 @@ void ImageManager::ImageLoad()
 	AddImage("cmdicons0234", L"./Resources/Icon/cmdicons0234.bmp");
 	AddImage("cmdicons0235", L"./Resources/Icon/cmdicons0235.bmp");
 	AddImage("cmdicons0236", L"./Resources/Icon/cmdicons0236.bmp");
+	AddImage("cmdicons0025", L"./Resources/Icon/cmdicons0025.bmp");
 	AddImage("cmdicons0231", L"./Resources/Icon/cmdicons0231.bmp");
 	AddImage("cmdicons0232", L"./Resources/Icon/cmdicons0232.bmp");
 

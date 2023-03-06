@@ -49,6 +49,7 @@ public:
 		eArmory,
 		eScience
 	};
+	vImage* sparkImg;
 	SpaceConstructionVehicle();
 	~SpaceConstructionVehicle();
 	virtual void Init() override;
@@ -59,7 +60,7 @@ public:
 	virtual void Attack() override;
 	virtual void ResetParam() override;
 	Mineral* me;
-
+	float fogTimer = 0;
 	void ImageDirection();
 	void BuildObject();
 	void CollisionUpdate();

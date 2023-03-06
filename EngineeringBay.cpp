@@ -59,8 +59,6 @@ void EngineeringBay::Update()
 
 void EngineeringBay::Render()
 {
-	IMAGEMANAGER->DrawRect({ (float)clickRect.left,(float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
-
 	if (m_isClick == true)
 	{
 		IMAGEMANAGER->DrawCircle({ position.x  ,position.y }, 50, 30);

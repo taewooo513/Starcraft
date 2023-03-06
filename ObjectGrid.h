@@ -18,7 +18,11 @@ public:
 	bool isDestory = false;
 	float lastX, lastY;
 	float x, y;
+	float searchSizeX = 0;
+	float searchSizeY = 0;
 	void Astar(float searchSizeX, float searchSizeY);
+	void Astar2();
+
 	Vector2 destPos;
 	void Init(Object* obj, Vector2 collisionGridSize, Vector2 gridSize, float x, float y);
 	void Update(bool isA = false);

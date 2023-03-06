@@ -47,7 +47,7 @@ void Build::AddBuild(SpaceConstructionVehicle* spaceConstructionVehicle)
 
 		if (m_buildIndex < 3)
 		{
-			m_buildIndex = int(m_completeTime) / int(m_maxCompleteTime / 4);
+			m_buildIndex = int(4 / m_maxCompleteTime * m_completeTime);
 		}
 	}
 }

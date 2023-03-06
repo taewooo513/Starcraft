@@ -37,12 +37,12 @@ void Machines::Init()
 	m_buildImage[3] = IMAGEMANAGER->FindImage("machines0004");
 	vi = IMAGEMANAGER->AddImageVectorCopy("machinec0000");
 	vi->Setting(0.2, false);
-	m_maxCompleteTime = 10.5f;
+	m_maxCompleteTime = 25;
 	m_completeTime = 0;
 	m_costM = 100;
 	m_costG = 0;
 	m_buildIndex = 0;
-	m_maxHp = 1000;
+	m_maxHp = 750;
 	m_hp = 1;
 }
 
@@ -59,11 +59,14 @@ void Machines::Update()
 		}
 		else
 		{
-			if (addUnitQueue.front().unit == 1)
+			if (addUnitQueue.front().unit == 0)
 			{
-				Vulture* vulture = new Vulture;
-				vulture->SetPlayer(player);
-				OBJECTMANAGER->AddObject(vulture, "fireBat", position.x, position.y, 1);
+				player->isFastVulture = true;
+				addUnitQueue.erase(addUnitQueue.begin());
+			}
+			else if (addUnitQueue.front().unit == 1)
+			{
+				player->isSModeUp = true;
 				addUnitQueue.erase(addUnitQueue.begin());
 			}
 		}
@@ -78,8 +81,6 @@ void Machines::Update()
 
 void Machines::Render()
 {
-	IMAGEMANAGER->DrawRect({ (float)clickRect.left,(float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
-
 	if (m_isClick == true)
 	{
 		IMAGEMANAGER->DrawCircle({ position.x,position.y }, 50, 30);
@@ -134,18 +135,48 @@ void Machines::UIRender()
 	}
 	else
 	{
-		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[0].x + 25,UIPosition[0].y + 25 }, 1.7, 0, 0);
-		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0287"), { UIPosition[0].x - 5  ,UIPosition[0].y - 7 }, 1.7, 0, 0);
+		if (KEYMANAGER->GetOnceKeyDown('T'))
+		{
+			addUnitQueue.push_back({ 0,0,60 });
+		}
+		if (KEYMANAGER->GetOnceKeyDown('S'))
+		{
+			addUnitQueue.push_back({ 1,0,60 });
+		}
+		if (KEYMANAGER->GetOnceKeyDown('M'))
+		{
 
+		}
+		if (player->isFastVulture == false)
+		{
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[0].x + 25,UIPosition[0].y + 25 }, 1.7, 0, 0);
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0287"), { UIPosition[0].x - 5  ,UIPosition[0].y - 7 }, 1.7, 0, 0);
+		}
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[1].x + 25,UIPosition[1].y + 25 }, 1.7, 0, 0);
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0243"), { UIPosition[1].x + 8 ,UIPosition[1].y + 8 }, 1.7, 0, 0);
 
-		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
-		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0245"), { UIPosition[2].x - 5 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
+		if (player->isSModeUp == false)
+		{
+
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0245"), { UIPosition[2].x - 5 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
+		}
 
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0282"), { UIPosition[8].x - 1 ,UIPosition[8].y - 2 }, 1.7, 0, 0);
 
+
+		if (addUnitQueue.size() != 0)
+		{
+			for (int i = 0; i < 41; i++)
+			{
+				if (addUnitQueue[0].maxTime / 41 * i < addUnitQueue[0].timeNow)
+				{
+					IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("Coll"), { float(535 + i * 4),694 }, 0.8, 0, 0);
+				}
+			}
+			IMAGEMANAGER->DirectDrawText(L"Building", { 500,660 }, { 15,15 }, { 255,255,255,1 });
+		}
 	}
 
 	IMAGEMANAGER->DirectDrawText(L"Terran Machine Shop", { 400,625 }, { 15,15 });

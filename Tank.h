@@ -12,11 +12,12 @@ public:
 	CImage* sModeImg;
 	CImage* sModeTImg[9];
 
+	float astarTimer = 0;
 	vImage* sMode;
 	vImage* sModeT;
 
 	float imgRot = 0;
-	float astarTimer = 0;
+	float astarTimer2 = 0;
 	Tank();
 	int moveFrame = 0;
 	float fireImageDel2 = 0;

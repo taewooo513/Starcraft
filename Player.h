@@ -9,6 +9,8 @@ class Build;
 class Player
 {
 private:
+	
+
 	RECT mapRect;
 	vImage* m_cursorImage;
 	float m_clickRad = 0;
@@ -23,6 +25,12 @@ private:
 	float m_clickEndX;
 	float m_clickEndY;
 public:
+	bool isSModeUp = false;
+	bool isFastVulture = false;
+
+	int attackNormal = 0;
+	int armorNormal = 0;
+
 	enum BuildList
 	{
 		eCommandCenter,

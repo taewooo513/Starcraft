@@ -10,6 +10,24 @@ ObjectManager::~ObjectManager()
 	Release();
 }
 
+void ObjectManager::ThreadPool()
+{
+	while (true) {
+		std::unique_lock<std::mutex> lock(m_job_q_);
+		cv_job_q_.wait(lock, [this]() { 
+			return !this->astarQueue.empty() || stop_all; });
+		if (stop_all && this->astarQueue.empty()) {
+			return;
+		}
+
+		std::function<void()> job = std::move(*astarQueue.unsafe_begin());
+		astarQueue.try_pop(*astarQueue.unsafe_begin());
+		lock.unlock();
+
+		job();
+	}
+}
+
 Object* ObjectManager::AddObject(Object* _obj, string name, float x, float y, int tagNum)
 {
 	if (tagNum < eEndTag)
@@ -33,6 +51,8 @@ void ObjectManager::Update()
 			(iter)->Update();
 		}
 	}
+	
+	//ThreadPool();
 	for (int i = 0; i < eEndTag; i++)
 	{
 		for (auto iter = m_objects[i].begin(); iter != m_objects[i].end();)
@@ -63,7 +83,7 @@ void ObjectManager::Render()
 
 void ObjectManager::UIRender()
 {
-	
+
 }
 
 void ObjectManager::Release()

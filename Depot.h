@@ -9,6 +9,7 @@ private:
 		float timeNow;
 		float maxTime;
 	};
+	bool isonce = false;
 	vImage* idle;
 	vector<AddUnit> addUnitQueue;
 public:

@@ -38,7 +38,7 @@ void Factory::Init()
 	m_buildImage[2] = IMAGEMANAGER->FindImage("tbldlrg0002");
 	m_buildImage[3] = IMAGEMANAGER->FindImage("factory0001");
 
-	m_maxCompleteTime = 10.5f;
+	m_maxCompleteTime = 50;
 	m_completeTime = 0;
 	m_costM = 100;
 	m_costG = 0;
@@ -67,17 +67,39 @@ void Factory::Update()
 		{
 			if (addUnitQueue.front().unit == 1)
 			{
-				Vulture* vulture = new Vulture;
-				vulture->SetPlayer(player);
-				OBJECTMANAGER->AddObject(vulture, "fireBat", position.x, position.y + 100, 1);
-				addUnitQueue.erase(addUnitQueue.begin());
+				if (player->m_suff + 2 <= player->m_maxSuff)
+				{
+					Vulture* vulture = new Vulture;
+					vulture->SetPlayer(player);
+					OBJECTMANAGER->AddObject(vulture, "fireBat", position.x, position.y + 100, 1);
+					addUnitQueue.erase(addUnitQueue.begin());
+				}
+				else
+				{
+					if (asdf == false)
+					{
+						SOUNDMANAGER->play("taderr02", 0.5f);
+						asdf = true;
+					}
+				}
 			}
 			else if (addUnitQueue.front().unit == 2)
 			{
-				Tank* vulture = new Tank;
-				vulture->SetPlayer(player);
-				OBJECTMANAGER->AddObject(vulture, "fireBat", position.x, position.y + 100, 1);
-				addUnitQueue.erase(addUnitQueue.begin());
+				if (player->m_suff + 2 <= player->m_maxSuff)
+				{
+					Tank* vulture = new Tank;
+					vulture->SetPlayer(player);
+					OBJECTMANAGER->AddObject(vulture, "fireBat", position.x, position.y + 100, 1);
+					addUnitQueue.erase(addUnitQueue.begin());
+				}
+				else
+				{
+					if (asdf == false)
+					{
+						SOUNDMANAGER->play("taderr02", 0.5f);
+						asdf = true;
+					}
+				}
 			}
 		}
 	}
@@ -92,8 +114,6 @@ void Factory::Update()
 
 void Factory::Render()
 {
-	IMAGEMANAGER->DrawRect({ (float)clickRect.left,(float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
-
 	if (m_isClick == true)
 	{
 		IMAGEMANAGER->DrawCircle({ position.x,position.y }, 50, 30);
@@ -149,11 +169,41 @@ void Factory::UIRender()
 		{
 			if (KEYMANAGER->GetOnceKeyDown('V'))
 			{
-				addUnitQueue.push_back({ 1,0,1 });
+				if (player->m_mineral - 75 >= 0)
+				{
+					if (player->m_suff + 2 <= player->m_maxSuff)
+					{
+						player->m_mineral -= 75;
+						addUnitQueue.push_back({ 1,0,19 });
+					}
+					else
+					{
+						SOUNDMANAGER->play("taderr02", 0.5f);
+					}
+				}
+				else
+				{
+					SOUNDMANAGER->play("taderr00", 0.5f);
+				}
 			}
 			if (KEYMANAGER->GetOnceKeyDown('T'))
 			{
-				addUnitQueue.push_back({ 2,0,1 });
+				if (player->m_mineral - 150 >= 0)
+				{
+					if (player->m_suff + 2 <= player->m_maxSuff)
+					{
+						player->m_mineral -= 150;
+						addUnitQueue.push_back({ 2,0,31 });
+					}
+					else
+					{
+						SOUNDMANAGER->play("taderr02", 0.5f);
+					}
+				}
+				else
+				{
+					SOUNDMANAGER->play("taderr00", 0.5f);
+				}
 			}
 			if (KEYMANAGER->GetOnceKeyDown('G'))
 			{
@@ -175,7 +225,7 @@ void Factory::UIRender()
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0002"), { UIPosition[0].x - 1 ,UIPosition[0].y - 2 }, 1.7, 0, 0);
 
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[1].x + 25,UIPosition[1].y + 25 }, 1.7, 0, 0);
-		if (player->buildList[Player::BuildList::eArmory])
+		if (mac != nullptr)
 		{
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0023"), { UIPosition[1].x - 1 ,UIPosition[1].y - 2 }, 1.7, 0, 0);
 		}

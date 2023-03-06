@@ -37,7 +37,7 @@ void Barrack::Init()
 	m_buildImage[2] = IMAGEMANAGER->FindImage("tbldlrg0002");
 	m_buildImage[3] = IMAGEMANAGER->FindImage("tbarrack0001");
 
-	m_maxCompleteTime = 1000.5f;
+	m_maxCompleteTime = 50;
 	m_completeTime = 0;
 	m_costM = 100;
 	m_costG = 0;
@@ -56,23 +56,48 @@ void Barrack::Update()
 		if (addUnitQueue.front().timeNow < addUnitQueue.front().maxTime)
 		{
 			addUnitQueue.front().timeNow += DELTA_TIME;
+			sadf = true;
 		}
 		else
 		{
 			addUnitQueue.front().timeNow = addUnitQueue.front().maxTime;
+
+
 			if (addUnitQueue.front().unit == 1)
 			{
-				Marine* marine = new Marine;
-				marine->SetPlayer(player);
-				OBJECTMANAGER->AddObject(marine, "marine", position.x, position.y + 100, 1);
-				addUnitQueue.erase(addUnitQueue.begin());
+				if (player->m_suff + 1 <= player->m_maxSuff)
+				{
+					Marine* marine = new Marine;
+					marine->SetPlayer(player);
+					OBJECTMANAGER->AddObject(marine, "marine", position.x, position.y + 100, 1);
+					addUnitQueue.erase(addUnitQueue.begin());
+				}
+				else
+				{
+					if (sadf == false)
+					{
+						SOUNDMANAGER->play("taderr02", 0.5f);
+						sadf = true;
+					}
+				}
 			}
 			else if (addUnitQueue.front().unit == 2)
 			{
-				FireBat* fireBat = new FireBat;
-				fireBat->SetPlayer(player);
-				OBJECTMANAGER->AddObject(fireBat, "fireBat", position.x, position.y + 100, 1);
-				addUnitQueue.erase(addUnitQueue.begin());
+				if (player->m_suff + 1 <= player->m_maxSuff)
+				{
+					FireBat* fireBat = new FireBat;
+					fireBat->SetPlayer(player);
+					OBJECTMANAGER->AddObject(fireBat, "fireBat", position.x, position.y + 100, 1);
+					addUnitQueue.erase(addUnitQueue.begin());
+				}
+				else
+				{
+					if (sadf == false)
+					{
+						SOUNDMANAGER->play("taderr02", 0.5f);
+						sadf = true;
+					}
+				}
 			}
 		}
 	}
@@ -86,7 +111,6 @@ void Barrack::Update()
 
 void Barrack::Render()
 {
-	IMAGEMANAGER->DrawRect({ (float)clickRect.left,(float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
 	if (m_isClick == true)
 	{
 		IMAGEMANAGER->DrawCircle({ position.x  ,position.y }, 50, 30);
@@ -125,14 +149,43 @@ void Barrack::UIRender()
 	{
 		if (KEYMANAGER->GetOnceKeyDown('M'))
 		{
-			addUnitQueue.push_back({ 1,0,1 });
+			if (player->m_mineral - 50 >= 0)
+			{
+				if (player->m_suff + 1 <= player->m_maxSuff)
+				{
+					player->m_mineral -= 50;
+					addUnitQueue.push_back({ 1,0,15 });
+				}
+				else
+				{
+					SOUNDMANAGER->play("taderr02", 0.5f);
+				}
+			}
+			else
+			{
+				SOUNDMANAGER->play("taderr00", 0.5f);
+			}
 		}
 		if (KEYMANAGER->GetOnceKeyDown('F'))
 		{
-			addUnitQueue.push_back({ 2,0,12.6 });
+			if (player->m_mineral - 50 >= 0)
+			{
+				if (player->m_suff + 1 <= player->m_maxSuff)
+				{
+					player->m_mineral -= 50;
+					addUnitQueue.push_back({ 2,0,12.6 });
+				}
+				else
+				{
+					SOUNDMANAGER->play("taderr02", 0.5f);
+				}
+			}
+			else
+			{
+				SOUNDMANAGER->play("taderr00", 0.5f);
+			}
 		}
 	}
-
 
 	if (m_buildIndex < 4)
 	{

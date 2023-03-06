@@ -255,7 +255,9 @@ void Marine::Update()
 	{
 		for (auto iter : player->otherPlayer->m_units)
 		{
-			float dest = sqrt((iter->position.x - position.x) * (iter->position.x - position.x) + (iter->position.y - position.y) * (iter->position.y - position.y));
+			float dest = sqrt(
+				(iter->position.x - position.x) * (iter->position.x - position.x) + 
+				(iter->position.y - position.y) * (iter->position.y - position.y));
 			if (range > dest)
 			{
 				attackObject = iter;
@@ -266,7 +268,9 @@ void Marine::Update()
 		{
 			for (auto iter : player->otherPlayer->m_builds)
 			{
-				float dest = sqrt((iter->position.x - position.x) * (iter->position.x - position.x) + (iter->position.y - position.y) * (iter->position.y - position.y));
+				float dest = sqrt(
+					(iter->position.x - position.x) * (iter->position.x - position.x) +
+					(iter->position.y - position.y) * (iter->position.y - position.y));
 				if (range > dest)
 				{
 					attackObject = iter;
@@ -509,6 +513,15 @@ void Marine::UIRender()
 
 void Marine::Release()
 {
+	for (auto iter = player->m_selectUnits.begin(); iter < player->m_selectUnits.end(); iter++)
+	{
+		if ((*iter) == this)
+		{
+			player->m_selectUnits.erase(iter);
+			break;
+		}
+	}
+	player->m_suff -= 1;
 }
 
 void Marine::CollisionUpdate()

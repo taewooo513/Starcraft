@@ -221,9 +221,13 @@ void MapReader::MapRegionSetting()
 			}
 			if (cy != 4096)
 			{
-				vectorList.push(new MapRegions{ Vector2{ (float)(int)(cx / 8),(float)(int)(cy / 8) } ,regionId });
+				vectorList.push(new MapRegions{
+					Vector2{ (float)(int)(cx / 8),(float)(int)(cy / 8) } ,regionId });
 				region->regionsIds[cy / 8][cx / 8].regionsIds = regionId;
-				mapRegions.push_back(new MapRegions{ Vector2{ (float)(int)(cx / 8),(float)(int)(cy / 8) } ,regionId,{(int)(cx / 8),(int)(cy / 8),(int)(cx / 8),(int)(cy / 8)} });
+				mapRegions.push_back(new MapRegions{ 
+					Vector2{ (float)(int)(cx / 8),(float)(int)(cy / 8) } ,
+					regionId,
+					{(int)(cx / 8),(int)(cy / 8),(int)(cx / 8),(int)(cy / 8)} });
 				regionId++;
 			}
 		}

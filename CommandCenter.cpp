@@ -36,7 +36,7 @@ void CommandCenter::Init()
 	grid->gridTag = 3;
 	player->AddBuild(this);
 
-	m_maxCompleteTime = 12.8f;
+	m_maxCompleteTime = 75;
 	m_completeTime = 0;
 	m_costM = 400;
 	m_costG = 0;
@@ -62,11 +62,18 @@ void CommandCenter::Update()
 		}
 		else
 		{
-			addUnitQueue.front().timeNow = addUnitQueue.front().maxTime;
-			SpaceConstructionVehicle* scv = new SpaceConstructionVehicle;
-			scv->SetPlayer(player);
-			OBJECTMANAGER->AddObject(scv, "scv", position.x - 20, position.y + 100, 1);
-			addUnitQueue.erase(addUnitQueue.begin());
+			if (player->m_suff + 1 <= player->m_maxSuff)
+			{
+				addUnitQueue.front().timeNow = addUnitQueue.front().maxTime;
+				SpaceConstructionVehicle* scv = new SpaceConstructionVehicle;
+				scv->SetPlayer(player);
+				OBJECTMANAGER->AddObject(scv, "scv", position.x - 20, position.y + 100, 1);
+				addUnitQueue.erase(addUnitQueue.begin());
+			}
+			else
+			{
+				SOUNDMANAGER->play("taderr02", 0.5f);
+			}
 		}
 	}
 
@@ -82,8 +89,6 @@ void CommandCenter::Update()
 
 void CommandCenter::Render()
 {
-	IMAGEMANAGER->DrawRect({ (float)clickRect.left,(float)clickRect.top }, { (float)clickRect.right,(float)clickRect.bottom });
-
 	if (m_isClick == true)
 	{
 		IMAGEMANAGER->DrawCircle({ position.x,position.y }, 50, 30);
@@ -115,7 +120,7 @@ void CommandCenter::Render()
 		}
 
 		if (isWork == true)
-			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("controlt"), { position.x - 96 ,position.y - 130 }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("controlt"), { position.x  ,position.y  }, 1.5, 0);
 	}
 	m_isClick = false;
 }
@@ -131,7 +136,22 @@ void CommandCenter::UIRender()
 	{
 		if (KEYMANAGER->GetOnceKeyDown('S'))
 		{
-			addUnitQueue.push_back({ 1,0,2.6 });
+			if (player->m_mineral - 50 >= 0)
+			{
+				if (player->m_suff + 1 <= player->m_maxSuff)
+				{
+					player->m_mineral -= 50;
+					addUnitQueue.push_back({ 1,0,12.6 });
+				}
+				else
+				{
+					SOUNDMANAGER->play("taderr02", 0.5f);
+				}
+			}
+			else
+			{
+				SOUNDMANAGER->play("taderr00", 0.5f);
+			}
 		}
 	}
 	if (addUnitQueue.size() == 0)
@@ -170,6 +190,7 @@ void CommandCenter::UIRender()
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), { UIPosition[8].x - 1 ,UIPosition[8].y - 2 }, 1.7, 0, 0);
 			if (KEYMANAGER->GetOnceKeyDown(VK_ESCAPE))
 			{
+				player->m_mineral += 50;
 				addUnitQueue.pop_back();
 			}
 		}

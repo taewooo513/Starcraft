@@ -3,8 +3,15 @@
 #include "Object.h"
 #include "Unit.h"
 #include "MapReader.h"
-
 void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
+{
+	//OBJECTMANAGER->astarQueue.push([&]() {Astar2(); });
+	this->searchSizeX = searchSizeX;
+	this->searchSizeY = searchSizeY;
+	Astar2();
+}
+
+void ObjectGrid::Astar2()
 {
 	if (lastX != 0 && lastY != 0) // Astar를 위해 현재 서있는 그리드를 지워준다
 	{
@@ -28,7 +35,6 @@ void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
 	Vector2 tileStartPos;
 	tileStartPos = obj->position / 1.5 / 8;
 	Vector2 tileEndPos = unit->m_dest / 1.5 / 8;
-
 	if (IMAGEMANAGER->GetMapReader()->region->regionsIds[(int)tileStartPos.y][(int)tileStartPos.x].regionsIds == -1)
 	{
 		return;
@@ -85,15 +91,12 @@ void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
 	if (isF == true)
 	{
 		priority_queue <pair< pair<float, float>, Vector2>, vector<pair<pair<float, float>, Vector2>>, comp2> regionQueue;
+		c++;
 
-		vector<Vector2> openNode; // 오픈 노드인지 체크
+		vector<Vector2> openNode;
 		tileEndPos.x = (int)tileEndPos.x;
 		tileEndPos.y = (int)tileEndPos.y;
-		c++;
-		if (c < 500)
-		{
-			return;
-		}
+		
 		regionQueue.push(make_pair(make_pair(0, 0), tileEndPos));
 		openNode.push_back(tileEndPos);
 		while (regionQueue.empty() == false)
@@ -188,6 +191,10 @@ void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
 
 	while (regionQueue.empty() == false)
 	{
+		if (c > 10)
+		{
+			break;
+		}
 		auto iter = regionQueue.top();
 		regionQueue.pop();
 		if ((int)iter.first.x == (int)tileEndPos.x && (int)iter.first.y == (int)tileEndPos.y)
@@ -292,6 +299,10 @@ void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
 	}
 	lastX = fx;
 	lastY = fy;
+
+	if (moveStack2.empty() == false)
+		moveStack2.pop();
+
 }
 
 void ObjectGrid::Init(Object* obj, Vector2 collisionGridSize, Vector2 gridSize, float x, float y)
