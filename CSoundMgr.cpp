@@ -89,8 +89,8 @@ void CSoundMgr::play(string keyName, float volume)
 	{
 		if (keyName == iter->first)
 		{
-			_system->playSound(*iter->second, nullptr,false, &_channel[count]);
-
+			_system->playSound(*iter->second, nullptr, false, &_channel[count]);
+			
 			_channel[count]->setVolume(volume);
 
 			break;
@@ -148,6 +148,23 @@ void CSoundMgr::resume(string keyName)
 			_channel[count]->setPaused(false);
 
 			break;
+		}
+	}
+}
+
+bool CSoundMgr::isPause(string key)
+{
+	arrSoundIter iter = _mTotalSounds.begin();
+
+	int count = 0;
+
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (key == iter->first)
+		{
+			bool a;
+			_channel[count]->isPlaying(&a);
+			return a;
 		}
 	}
 }

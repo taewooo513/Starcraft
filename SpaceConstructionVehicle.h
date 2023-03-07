@@ -12,6 +12,7 @@ private:
 	bool isFA = false;
 	float timer = 0;
 	float m_dir = 0;
+	int soundIdx = 0;
 	CImage* m_idleImage[9];
 	CImage* m_actionImage_1[9];
 	CImage* m_actionImage_2[9];

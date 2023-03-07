@@ -33,7 +33,7 @@ public:
 	void pause(string keyName);
 	void stop(string keyName);
 	void resume(string keyName);
-
+	bool isPause(string key);
 	bool isPlaySound(string keyName);
 	bool isPauseSound(string keyName);
 

@@ -147,6 +147,7 @@
       <Filter>Game\Object\Build\Terran\Factory</Filter>
     </ClCompile>
     <ClCompile Include="VultureBullet.cpp" />
+    <ClCompile Include="ThreadPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -289,6 +290,7 @@
       <Filter>Game\Object\Build\Terran\Factory</Filter>
     </ClInclude>
     <ClInclude Include="VultureBullet.h" />
+    <ClInclude Include="ThreadPool.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">

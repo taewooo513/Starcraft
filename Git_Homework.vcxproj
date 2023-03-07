@@ -190,6 +190,7 @@
     </ClCompile>
     <ClCompile Include="Tank.cpp" />
     <ClCompile Include="TestScene.cpp" />
+    <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="TimerManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Unit.cpp" />
@@ -243,6 +244,7 @@
     <ClInclude Include="Storm\Storm.h" />
     <ClInclude Include="Tank.h" />
     <ClInclude Include="TestScene.h" />
+    <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="TimerManager.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Unit.h" />

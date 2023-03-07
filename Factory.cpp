@@ -127,11 +127,12 @@ void Factory::Render()
 	}
 	else
 	{
-		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { position.x ,position.y }, 1.5, 0);
 	}
+	IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { position.x ,position.y }, 1.5, 0);
+	idleAnimation->CenterRenderBlendBlack({ position.x - (float)(128.f * 1.5 / 2.f),position.y - float(160.f * 1.5 / 2.f) }, 1.5, 0, 0);
+	cout << idleAnimation->GetImages()[0]->GetWidth();
 	if (!addUnitQueue.empty())
 	{
-		idleAnimation->CenterRenderBlendBlack({ position.x - m_buildImage[0]->GetWidth() * 1.5f / 2,position.y - -m_buildImage[0]->GetHeight() * 1.5f / 2 }, 1.5, 0, 0);
 	}
 	m_isClick = false;
 }

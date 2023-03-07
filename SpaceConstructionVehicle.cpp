@@ -410,6 +410,54 @@ void SpaceConstructionVehicle::Render()
 	}
 	else
 	{
+		string str;
+		switch (soundIdx)
+		{
+		case 0:
+			str = "edrrep00";
+			break;
+		case 1:
+			str = "edrrep01";
+			break;
+		case 2:
+			str = "edrrep02";
+			break;
+		case 3:
+			str = "edrrep03";
+			break;
+		case 4:
+			str = "edrrep04";
+			break;
+		}
+		cout << str << endl;
+		cout << SOUNDMANAGER->isPause(str) << endl;
+		if (SOUNDMANAGER->isPause(str) == false)
+		{
+			soundIdx++;
+			switch (soundIdx)
+			{
+			case 0:
+				str = "edrrep00";
+				break;
+			case 1:
+				str = "edrrep01";
+				break;
+			case 2:
+				str = "edrrep02";
+				break;
+			case 3:
+				str = "edrrep03";
+				break;
+			case 4:
+				str = "edrrep04";
+				break;
+			default:
+				soundIdx = 0;
+			}
+			
+			SOUNDMANAGER->play(str, 0.5f);
+		}
+
 		IMAGEMANAGER->CenterRenderBlendBlack(m_actionImage_1[(int)rr], position, 1.5f, 0, isR);
 		sparkImg->CenterRenderBlendBlack({ position.x - 45 + cosf(imgRot - 3.141592 / 2) * 50,position.y - 50 + sinf(imgRot - 3.141592 / 2) * 50 }, 1.5f, 0, false);
 	}

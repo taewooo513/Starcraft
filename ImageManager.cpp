@@ -395,7 +395,7 @@ void ImageManager::FogRender()
 	{
 		for (int i = IMAGEMANAGER->GetCameraPosition().y / 8; i < IMAGEMANAGER->GetCameraPosition().y / 8 + WINSIZE_Y / 8; i++)
 		{
-			if (i >= 0 && j >= 0)
+			if (i >= 0 && j >= 0 && j < 511 && i < 511)
 				if (GRIDMANAGER->regionsTile[j][i].fogTag == 0)
 					DrawRect({
 					(float)j * 8 * 1.5f ,
