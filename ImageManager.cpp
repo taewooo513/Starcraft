@@ -776,6 +776,18 @@ void ImageManager::ImageLoad()
 	AddWireImage("wirefram0123", "./Resources/Icon2/wirefram0123.bmp");
 	AddWireImage("wirefram0109", "./Resources/Icon2/wirefram0109.bmp");
 
+	AddWireImage("grpwire0000", "./Resources/Icon3/grpwire0000.bmp");
+	AddWireImage("grpwire0002", "./Resources/Icon3/grpwire0002.bmp");
+	AddWireImage("grpwire0005", "./Resources/Icon3/grpwire0005.bmp");
+	AddWireImage("grpwire0007", "./Resources/Icon3/grpwire0007.bmp");
+	AddWireImage("grpwire0106", "./Resources/Icon3/grpwire0106.bmp");
+	AddWireImage("grpwire0113", "./Resources/Icon3/grpwire0113.bmp");
+	AddWireImage("grpwire0111", "./Resources/Icon3/grpwire0111.bmp");
+	AddWireImage("grpwire0112", "./Resources/Icon3/grpwire0112.bmp");
+	AddWireImage("grpwire0120", "./Resources/Icon3/grpwire0120.bmp");
+	AddWireImage("grpwire0123", "./Resources/Icon3/grpwire0123.bmp");
+	AddWireImage("grpwire0109", "./Resources/Icon3/grpwire0109.bmp");
+
 	AddImage("cmdicons0323", L"./Resources/Icon/cmdicons0323.bmp"); //°ø¾÷
 	AddImage("cmdicons0238", L"./Resources/Icon/cmdicons0238.bmp"); //¾ÆÄ«µ¥¹Ì 
 	AddImage("cmdicons0237", L"./Resources/Icon/cmdicons0237.bmp"); //½ºÆÀÆå 
