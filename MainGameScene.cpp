@@ -42,6 +42,7 @@ void MainGameScene::Update()
 void MainGameScene::Render()
 {
 	player1->Render();
+
 	//IMAGEMANAGER->Render(IMAGEMANAGER->FindImage("titleBackGround"), { 0,0 }, 1.7f, 0);
 }
 

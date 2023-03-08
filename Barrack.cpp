@@ -32,6 +32,10 @@ void Barrack::Init()
 	grid->gridTag = 3;
 
 	player->AddBuild(this);
+	m_shadImage[0] = IMAGEMANAGER->FindImage("tb2shad0000");
+	m_shadImage[1] = IMAGEMANAGER->FindImage("tb2shad0001");
+	m_shadImage[2] = IMAGEMANAGER->FindImage("tb2shad0002");
+
 	m_buildImage[0] = IMAGEMANAGER->FindImage("tbldlrg0000");
 	m_buildImage[1] = IMAGEMANAGER->FindImage("tbldlrg0001");
 	m_buildImage[2] = IMAGEMANAGER->FindImage("tbldlrg0002");
@@ -44,6 +48,7 @@ void Barrack::Init()
 	m_buildIndex = 0;
 	m_maxHp = 1000;
 	m_hp = 1;
+	lasthp = 1;
 }
 
 void Barrack::Update()
@@ -118,13 +123,20 @@ void Barrack::Render()
 	if (m_buildIndex < 4)
 	{
 		if (m_buildIndex < 3)
+		{
+			IMAGEMANAGER->CenterRenderBlendBlack(m_shadImage[m_buildIndex], { position.x  ,position.y }, 1.5, 0);
 			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x  ,position.y }, 1.5, 0);
+		}
 		else
+		{
+			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("tbrshad0001"), { position.x ,position.y }, 1.5, 0, 0);
+
 			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x  ,position.y }, 1.5, 0);
+		}
 	}
 	else
 	{
-		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("tbrshad0000"), { position.x ,position.y }, 1.5, 0, 0.5f);
+		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("tbrshad0000"), { position.x ,position.y }, 1.5, 0, 0);
 		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("tbarrack0000"), { position.x ,position.y }, 1.5, 0);
 	}
 	if (!addUnitQueue.empty())
@@ -272,5 +284,12 @@ void Barrack::UIRender()
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0286"), { UIPosition[5].x - 1 ,UIPosition[5].y - 2 }, 1.7, 0, 0);
 
 	}
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0111"]->wireImages[3][damageIndex[0]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0111"]->wireImages[1][damageIndex[1]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0111"]->wireImages[2][damageIndex[2]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0111"]->wireImages[0][damageIndex[3]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+
+	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 295,730 }, { 12,12 }, { 0,255,0,1 });
+
 	IMAGEMANAGER->DirectDrawText(L"Terran Barracks", { 400,625 }, { 15,15 });
 }

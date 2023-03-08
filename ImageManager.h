@@ -7,8 +7,8 @@ private:
 	int	  width;
 	int	  height;
 	float delay;
-	ID2D1Bitmap* bitmap;
 public:
+	ID2D1Bitmap* bitmap;
 	CImage(ID2D1Bitmap* bitmap, int width, int height) :
 		bitmap(bitmap), width(width), height(height)
 	{
@@ -31,12 +31,26 @@ public:
 	void SetHeight(int height) { this->height = height; }
 	ID2D1Bitmap* GetBitMap() { return bitmap; }
 };
+class WireFrame
+{
+public:
+	HBITMAP defaultImage;
+	map<int, vector<CImage*>> wireImages;
+};
 
 class vImage;
 class MapReader;
 class ImageManager : public Singleton<ImageManager>
 {
 private:
+	typedef struct
+	{
+		BYTE r;
+		BYTE g;
+		BYTE b;
+		BYTE padding;
+	} RGBAbyte;
+
 	MapReader* mapReader;
 	D2D1_ELLIPSE* elipse;
 	struct comp
@@ -62,6 +76,7 @@ private:
 	IDWriteTextLayout* pTextLayout_;
 
 public:
+	map<string, WireFrame*> wires;
 	map<string, CImage*> mapToolImage;
 	ImageManager();
 	~ImageManager();
@@ -71,6 +86,7 @@ public:
 	void Init(ID2D1DeviceContext* context, IDXGISwapChain1* swapChain);
 	void CameraSetting();
 
+	void AddWireImage(std::string key,std::string path);
 	ID2D1Bitmap* AddBitmap(std::wstring path, UINT* Width, UINT* Height);
 	CImage* AddImage(const std::string key, std::wstring path);
 	CImage* FindImage(const std::string key);
@@ -122,6 +138,7 @@ public:
 
 #define IMAGEMANAGER ImageManager::GetInstance()
 
+
 class vImage
 {
 private:
@@ -138,6 +155,7 @@ private:
 public:
 	vImage() {}
 	~vImage() {}
+
 
 	void Setting(float delayTime, bool isLoop)
 	{

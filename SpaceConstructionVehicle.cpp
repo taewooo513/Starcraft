@@ -90,7 +90,7 @@ void SpaceConstructionVehicle::Init()
 	randomMoveTime = 0;
 	mineTimer = 0;
 	isFA = true;
-
+	lasthp = m_hp;
 }
 
 void SpaceConstructionVehicle::Move()
@@ -454,12 +454,33 @@ void SpaceConstructionVehicle::Render()
 			default:
 				soundIdx = 0;
 			}
-			
+
 			SOUNDMANAGER->play(str, 0.5f);
 		}
 
 		IMAGEMANAGER->CenterRenderBlendBlack(m_actionImage_1[(int)rr], position, 1.5f, 0, isR);
 		sparkImg->CenterRenderBlendBlack({ position.x - 45 + cosf(imgRot - 3.141592 / 2) * 50,position.y - 50 + sinf(imgRot - 3.141592 / 2) * 50 }, 1.5f, 0, false);
+	}
+
+
+	if ((lasthp - m_hp) >= m_maxHp / 16)
+	{
+		radf = (lasthp - m_hp);
+		int fas = radf / (m_maxHp / 16);
+		lasthp -= fas * (m_maxHp / 16);
+		for (int i = 0; i < fas; )
+		{
+			int rrrrr = rand() % 4;
+			if (damageIndex[rrrrr] < 3)
+			{
+				damageIndex[rrrrr]++;
+				i++;
+			}
+			if (damageIndex[0] == 3 && damageIndex[1] == 3 && damageIndex[2] == 3 && damageIndex[3] == 3)
+			{
+				break;
+			}
+		}
 	}
 
 	m_isClick = false;
@@ -470,9 +491,12 @@ void SpaceConstructionVehicle::UIRender()
 	Command();
 	m_isClick = true;
 
-	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("wirefram0106"), { 319,680 }, 1.5, 0, 0);
-	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 285,730 }, { 12,12 }, { 0,255,0,1 });
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0007"]->wireImages[3][damageIndex[0]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0007"]->wireImages[1][damageIndex[1]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0007"]->wireImages[2][damageIndex[2]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0007"]->wireImages[0][damageIndex[3]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
 
+	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 295,730 }, { 12,12 }, { 0,255,0,1 });
 
 	if (page == 1)
 	{

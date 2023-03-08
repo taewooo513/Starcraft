@@ -456,7 +456,7 @@ void ImageManager::DrawUI2(CImage* img, Vector2 vec, float scale, float rot, boo
 	else
 	{
 		matS = D2D1::Matrix3x2F::Scale(-scale, scale);
-		matP = D2D1::Matrix3x2F::Translation(vec.x + img->GetWidth() * scale / 2, vec.y - img->GetHeight() * scale / 2); 
+		matP = D2D1::Matrix3x2F::Translation(vec.x + img->GetWidth() * scale / 2, vec.y - img->GetHeight() * scale / 2);
 	}
 
 	matW = matS * matP * matR;
@@ -472,6 +472,173 @@ void ImageManager::DrawUI2(CImage* img, Vector2 vec, float scale, float rot, boo
 	saturationEffect->SetInputEffect(0, blendEffect);
 
 	m_d2dContext->DrawImage(saturationEffect.Get());
+}
+
+void ImageManager::AddWireImage(std::string key, std::string path)
+{
+	UINT _width = 0, _height = 0;
+
+	ComPtr<ID2D1ColorContext> colorContext;
+	m_d2dContext->CreateColorContext(D2D1_COLOR_SPACE_SRGB, nullptr, 0, &colorContext);
+
+	D2D1_BITMAP_PROPERTIES pros = D2D1::BitmapProperties();
+	pros.pixelFormat = D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED);
+
+	RGBAbyte* rgb[4][4] = {
+		{ new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64] },
+		 { new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64] },
+		  { new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64] },
+		   { new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64] }
+	};
+	WireFrame* wire = new WireFrame;
+
+	D2D1_SIZE_U s;
+	s.height = 64;
+	s.width = 64;
+
+	HDC hdc = GetDC(_hWnd);
+	wire->defaultImage = (HBITMAP)LoadImage(hInst, path.c_str(), IMAGE_BITMAP, 64, 64, LR_LOADFROMFILE);
+
+	vector<CImage*> vec1;
+	wire->wireImages.insert(make_pair(0, vec1));
+
+	vector<CImage*> vec2;
+	wire->wireImages.insert(make_pair(1, vec2));
+
+	vector<CImage*> vec3;
+	wire->wireImages.insert(make_pair(2, vec3));
+
+	vector<CImage*> vec4;
+	wire->wireImages.insert(make_pair(3, vec4));
+
+	HDC dc;
+	dc = CreateCompatibleDC(hdc);
+	(HBITMAP)SelectObject(dc, wire->defaultImage);
+	HBITMAP hOBit = (HBITMAP)SelectObject(dc, wire->defaultImage);
+	for (int i = 0; i < 64; i++)
+	{
+		for (int j = 0; j < 64; j++)
+		{
+			auto color = GetPixel(dc, i, j);
+			int r = GetRValue(color);
+			int g = GetGValue(color);
+			int b = GetBValue(color);
+
+			for (int k = 0; k < 4; k++)
+			{
+				if (r == 252 && g == 252 && b == 56 && k == 0)
+				{
+					auto find = wire->wireImages.find(0);
+					rgb[0][0][i + j * 64].r = 24;
+					rgb[0][0][i + j * 64].g = 252;
+					rgb[0][0][i + j * 64].b = 16;
+
+					rgb[0][1][i + j * 64].r = 56;
+					rgb[0][1][i + j * 64].g = 252;
+					rgb[0][1][i + j * 64].b = 252;
+
+					rgb[0][2][i + j * 64].r = 20;
+					rgb[0][2][i + j * 64].g = 140;
+					rgb[0][2][i + j * 64].b = 248;
+
+					rgb[0][3][i + j * 64].r = 24;
+					rgb[0][3][i + j * 64].g = 24;
+					rgb[0][3][i + j * 64].b = 200;
+				}
+				else if (r == 248 && g == 140 && b == 20 && k == 1)
+				{
+					auto find = wire->wireImages.find(1);
+					rgb[1][0][i + j * 64].r = 24;
+					rgb[1][0][i + j * 64].g = 252;
+					rgb[1][0][i + j * 64].b = 16;
+
+					rgb[1][1][i + j * 64].r = 56;
+					rgb[1][1][i + j * 64].g = 252;
+					rgb[1][1][i + j * 64].b = 252;
+
+					rgb[1][2][i + j * 64].r = 20;
+					rgb[1][2][i + j * 64].g = 140;
+					rgb[1][2][i + j * 64].b = 248;
+
+					rgb[1][3][i + j * 64].r = 24;
+					rgb[1][3][i + j * 64].g = 24;
+					rgb[1][3][i + j * 64].b = 200;
+				}
+				else if (r == 200 && g == 24 && b == 24 && k == 2)
+				{
+					auto find = wire->wireImages.find(2);
+					rgb[2][0][i + j * 64].r = 24;
+					rgb[2][0][i + j * 64].g = 252;
+					rgb[2][0][i + j * 64].b = 16;
+
+					rgb[2][1][i + j * 64].r = 56;
+					rgb[2][1][i + j * 64].g = 252;
+					rgb[2][1][i + j * 64].b = 252;
+
+					rgb[2][2][i + j * 64].r = 20;
+					rgb[2][2][i + j * 64].g = 140;
+					rgb[2][2][i + j * 64].b = 248;
+
+					rgb[2][3][i + j * 64].r = 24;
+					rgb[2][3][i + j * 64].g = 24;
+					rgb[2][3][i + j * 64].b = 200;
+				}
+				else if (r == 16 && g == 252 && b == 24 && k == 3)
+				{
+					auto find = wire->wireImages.find(3);
+					rgb[3][0][i + j * 64].r = 24;
+					rgb[3][0][i + j * 64].g = 252;
+					rgb[3][0][i + j * 64].b = 16;
+
+					rgb[3][1][i + j * 64].r = 56;
+					rgb[3][1][i + j * 64].g = 252;
+					rgb[3][1][i + j * 64].b = 252;
+
+					rgb[3][2][i + j * 64].r = 20;
+					rgb[3][2][i + j * 64].g = 140;
+					rgb[3][2][i + j * 64].b = 248;
+
+					rgb[3][3][i + j * 64].r = 24;
+					rgb[3][3][i + j * 64].g = 24;
+					rgb[3][3][i + j * 64].b = 200;
+				}
+				else
+				{
+					for (int v = 0; v < 4; v++)
+					{
+						rgb[k][v][i + j * 64].r = 0;
+						rgb[k][v][i + j * 64].g = 0;
+						rgb[k][v][i + j * 64].b = 0;
+					}
+				}
+			}
+		}
+	}
+	//DC 해제
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			ID2D1Bitmap* bitmap;
+
+			HRESULT hr = m_d2dContext->CreateBitmap(s, pros, &bitmap);
+
+			D2D1_RECT_U rect = { 0 , 0 ,64 , 64 };
+			bitmap->CopyFromMemory(&rect, rgb[i][j], 4 * 64);
+			CImage* img = new CImage;
+			img->bitmap = bitmap;
+			wire->wireImages[i].push_back(img);
+		}
+	}
+	ReleaseDC(_hWnd, hdc);
+	wires.insert(make_pair(key, wire));
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			SAFE_DELETE(rgb[i][j]);
+		}
+	}
 }
 
 ID2D1Bitmap* ImageManager::AddBitmap(std::wstring path, UINT* Width, UINT* Height)
@@ -597,7 +764,17 @@ void ImageManager::ImageLoad()
 	AddImage("backgnd", L"./Resources/backgnd.bmp");
 	// 미네랄
 
-
+	AddWireImage("wirefram0000", "./Resources/Icon2/wirefram0000.bmp");
+	AddWireImage("wirefram0002", "./Resources/Icon2/wirefram0002.bmp");
+	AddWireImage("wirefram0005", "./Resources/Icon2/wirefram0005.bmp");
+	AddWireImage("wirefram0007", "./Resources/Icon2/wirefram0007.bmp");
+	AddWireImage("wirefram0106", "./Resources/Icon2/wirefram0106.bmp");
+	AddWireImage("wirefram0113", "./Resources/Icon2/wirefram0113.bmp");
+	AddWireImage("wirefram0111", "./Resources/Icon2/wirefram0111.bmp");
+	AddWireImage("wirefram0112", "./Resources/Icon2/wirefram0112.bmp");
+	AddWireImage("wirefram0120", "./Resources/Icon2/wirefram0120.bmp");
+	AddWireImage("wirefram0123", "./Resources/Icon2/wirefram0123.bmp");
+	AddWireImage("wirefram0109", "./Resources/Icon2/wirefram0109.bmp");
 
 	AddImage("cmdicons0323", L"./Resources/Icon/cmdicons0323.bmp"); //공업
 	AddImage("cmdicons0238", L"./Resources/Icon/cmdicons0238.bmp"); //아카데미 
@@ -610,6 +787,10 @@ void ImageManager::ImageLoad()
 	AddImage("cmdicons0287", L"./Resources/Icon/cmdicons0287.bmp"); //벌쳐 발업cmdicons0333
 	AddImage("cmdicons0333", L"./Resources/Icon/cmdicons0333.bmp"); //공중 공업
 
+	AddImage("min01sha0000", L"./Resources/min/min01sha0000.bmp"); //SCVcmdicons0007 벌처
+	AddImage("min01sha0001", L"./Resources/min/min01sha0001.bmp"); //SCVcmdicons0007 벌처
+	AddImage("min01sha0002", L"./Resources/min/min01sha0002.bmp"); //SCVcmdicons0007 벌처
+	AddImage("min01sha0003", L"./Resources/min/min01sha0003.bmp"); //SCVcmdicons0007 벌처
 
 
 	AddImage("cmdicons0002", L"./Resources/Icon/cmdicons0002.bmp"); //SCVcmdicons0007 벌처
@@ -682,6 +863,14 @@ void ImageManager::ImageLoad()
 	AddImage("tbldmed0001", L"./Resources/Bulid/Building2/tbldmed0001.bmp"); // stop
 	AddImage("tbldmed0002", L"./Resources/Bulid/Building2/tbldmed0002.bmp"); // move
 
+	AddImage("tb3shad0000", L"./Resources/Bulid/Building2/tb3shad0000.bmp"); // attack 
+	AddImage("tb3shad0001", L"./Resources/Bulid/Building2/tb3shad0001.bmp"); // stop
+	AddImage("tb3shad0002", L"./Resources/Bulid/Building2/tb3shad0002.bmp"); // move
+
+	AddImage("tb2shad0000", L"./Resources/Bulid/Buliding/tb2shad0000.bmp"); // attack 
+	AddImage("tb2shad0001", L"./Resources/Bulid/Buliding/tb2shad0001.bmp"); // stop
+	AddImage("tb2shad0002", L"./Resources/Bulid/Buliding/tb2shad0002.bmp"); // move
+
 	AddImage("tbldsml0000", L"./Resources/Bulid/Building3/tbldsml0000.bmp"); // attack 
 	AddImage("tbldsml0001", L"./Resources/Bulid/Building3/tbldsml0001.bmp"); // stop
 	AddImage("tbldsml0002", L"./Resources/Bulid/Building3/tbldsml0002.bmp"); // move
@@ -697,6 +886,9 @@ void ImageManager::ImageLoad()
 	AddImageVector("DepotIdle", L"./Resources/Bulid/depot/Idle/depott00", 0, 5);
 
 	// 커멘드 센터 
+	AddImage("tccshad0000", L"./Resources/Bulid/CommandCenter/tccshad0000.bmp"); // 일반상태 
+	AddImage("tccshad0001", L"./Resources/Bulid/CommandCenter/tccshad0001.bmp"); // 일반상태 
+
 	AddImage("control0000", L"./Resources/Bulid/CommandCenter/control0000.bmp"); // 일반상태 
 	AddImage("control0001", L"./Resources/Bulid/CommandCenter/control0001.bmp"); // 완성전단계
 	AddImage("control0002", L"./Resources/Bulid/CommandCenter/control0002.bmp"); // Up 1
@@ -714,6 +906,10 @@ void ImageManager::ImageLoad()
 	//아카데미
 	AddImage("academy0000", L"./Resources/Bulid/Academy/academy0000.bmp"); // 일반상태 
 	AddImage("academy0001", L"./Resources/Bulid/Academy/academy0001.bmp"); // 완성전단계
+
+	AddImage("tacshad0000", L"./Resources/Bulid/Academy/tacshad0000.bmp"); // 일반상태 
+	AddImage("tacshad0001", L"./Resources/Bulid/Academy/tacshad0001.bmp"); // 완성전단계
+
 
 	//아머리
 	AddImage("chemlab0000", L"./Resources/Bulid/Armory/chemlab0000.bmp"); // 일반상태 
@@ -746,6 +942,7 @@ void ImageManager::ImageLoad()
 	AddImageVector("bang2Effect", L"./Resources/ty/bang2/tbangs00", 0, 8);
 
 	AddImage("tbrshad0000", L"./Resources/Bulid/Barrack/shad/tbrshad0000.bmp"); // 공중에 뜨기전
+	AddImage("tbrshad0001", L"./Resources/Bulid/Barrack/shad/tbrshad0001.bmp"); // 공중에 뜨기전
 
 
 	AddImage("starport0000", L"./Resources/Bulid/starport/starport0000.bmp"); // 평상시
@@ -769,6 +966,13 @@ void ImageManager::ImageLoad()
 	AddImage("cmdicons0112", L"./Resources/Icon/cmdicons0112.bmp"); // 아카데미
 
 	// 펙토리
+	AddImage("tfashad0000", L"./Resources/Bulid/Factory/tfashad0000.bmp"); // 기본
+	AddImage("tfashad0001", L"./Resources/Bulid/Factory/tfashad0001.bmp"); // 기본
+
+	AddImage("tmsshad0000", L"./Resources/Bulid/Factory/tmsshad0000.bmp"); // 기본
+	AddImage("tmsshad0001", L"./Resources/Bulid/Factory/tmsshad0001.bmp"); // 기본
+
+
 	AddImage("factory0000", L"./Resources/Bulid/Factory/factory0000.bmp"); // 기본
 	AddImage("factory0001", L"./Resources/Bulid/Factory/factory0001.bmp"); // 완성 전
 	AddImage("factory0002", L"./Resources/Bulid/Factory/factory0002.bmp"); // 띄우기 1
@@ -783,6 +987,7 @@ void ImageManager::ImageLoad()
 	AddImage("machines0004", L"./Resources/Bulid/Factory/machines0004.bmp"); // 띄우기 4
 
 	AddImageVector("machinec0000", L"./Resources/Bulid/Factory/machinec00", 0, 3); // 완성 전
+	AddImageVector("tmsshad0000", L"./Resources/Bulid/Factory/tmsshad00", 1, 4); // 완성 전
 
 	AddImageVector("FactoryIdle", L"./Resources/Bulid/Factory/Idle/factoryt00", 0, 2);
 	AddImageVector("grenade0000", L"./Resources/Vulture/grenade00", 0, 3);

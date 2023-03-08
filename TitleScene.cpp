@@ -92,6 +92,8 @@ void TitleScene::Render()
 	//IMAGEMANAGER->DrawRect({ (float)button[0].left , (float)button[0].top }, { (float)button[0].right, (float)button[0].bottom });
 	//IMAGEMANAGER->DrawRect({ (float)button[1].left , (float)button[1].top }, { (float)button[1].right, (float)button[1].bottom });
 	//IMAGEMANAGER->DrawRect({ (float)button[3].left , (float)button[3].top }, { (float)button[3].right, (float)button[3].bottom });
+
+
 }
 
 void TitleScene::Release()

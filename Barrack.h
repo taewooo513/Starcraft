@@ -14,6 +14,7 @@ private:
 	bool sadf = false;
 public:
 	CImage* m_buildImage[4];
+	CImage* m_shadImage[4];
 
 	Barrack();
 	virtual ~Barrack();

@@ -3,10 +3,13 @@
 class Object
 {
 public:
+	float lasthp = 0;
+	int radf = 0;
 	Vector2 position;
 	ObjectGrid* grid;
 	RECT clickRect;
 	float m_hp;
+	int damageIndex[4] = { 0 };
 
 	Vector2 UIPosition[9] = {
 		{847,606},
@@ -21,6 +24,8 @@ public:
 	};
 private:
 	string name;
+	int m_lastHp;
+	int reasf =0;
 	bool m_isObjectDestroyed = false;
 
 public:

@@ -7,6 +7,8 @@ private:
 	int nowCount = 0;
 public:
 	CImage* resourceImage[4];
+	CImage* resourceshadImage[4];
+
 	Mineral();
 	~Mineral();
 	

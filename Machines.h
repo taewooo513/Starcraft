@@ -10,6 +10,8 @@ class Machines : public Build
 		float maxTime;
 	};
 	vImage* idleAnimation;
+	vImage* idleshadAnimation;
+
 	vector<AddUnit> addUnitQueue;
 public:
 	CImage* m_buildImage[4];

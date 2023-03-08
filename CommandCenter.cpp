@@ -49,7 +49,7 @@ void CommandCenter::Init()
 	buildImage[1] = IMAGEMANAGER->FindImage("tbldlrg0001");
 	buildImage[2] = IMAGEMANAGER->FindImage("tbldlrg0002");
 	buildImage[3] = IMAGEMANAGER->FindImage("control0001");
-
+	lasthp = m_hp;
 }
 
 void CommandCenter::Update()
@@ -85,6 +85,26 @@ void CommandCenter::Update()
 	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y + 80;
 	clickRect.top -= IMAGEMANAGER->GetCameraPosition().y + 80;
 	grid->Update();
+
+	if ((lasthp - m_hp) >= m_maxHp / 16)
+	{
+		radf = (lasthp - m_hp);
+		int fas = radf / (m_maxHp / 16);
+		lasthp -= fas * (m_maxHp / 16);
+		for (int i = 0; i < fas; )
+		{
+			int rrrrr = rand() % 4;
+			if (damageIndex[rrrrr] < 3)
+			{
+				damageIndex[rrrrr]++;
+				i++;
+			}
+			if (damageIndex[0] == 3 && damageIndex[1] == 3 && damageIndex[2] == 3 && damageIndex[3] == 3)
+			{
+				break;
+			}
+		}
+	}
 }
 
 void CommandCenter::Render()
@@ -101,11 +121,15 @@ void CommandCenter::Render()
 		}
 		else
 		{
+
+
+			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("tccshad0001"), { position.x  ,position.y }, 1.5, 0);
 			IMAGEMANAGER->CenterRenderBlendBlack(buildImage[m_buildIndex], { position.x  ,position.y }, 1.5, 0);
 		}
 	}
 	else
 	{
+		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("tccshad0000"), { position.x  ,position.y }, 1.5, 0);
 		IMAGEMANAGER->CenterRenderBlendBlack(idle, { position.x  ,position.y }, 1.5, 0);
 	}
 
@@ -120,7 +144,7 @@ void CommandCenter::Render()
 		}
 
 		if (isWork == true)
-			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("controlt"), { position.x  ,position.y  }, 1.5, 0);
+			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("controlt"), { position.x  ,position.y }, 1.5, 0);
 	}
 	m_isClick = false;
 }
@@ -195,9 +219,12 @@ void CommandCenter::UIRender()
 			}
 		}
 	}
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0106"]->wireImages[3][damageIndex[0]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0106"]->wireImages[1][damageIndex[1]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0106"]->wireImages[2][damageIndex[2]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0106"]->wireImages[0][damageIndex[3]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
 
-	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("wirefram0106"), { 319,680 }, 1.5, 0, 0);
-	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 285,730 }, { 12,12 }, { 0,255,0,1 });
+	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 295,730 }, { 12,12 }, { 0,255,0,1 });
 
 	if (addUnitQueue.size() != 0)
 	{

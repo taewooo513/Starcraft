@@ -61,9 +61,13 @@ void ScienceFacility::Render()
 	if (m_buildIndex < 4)
 	{
 		if (m_buildIndex < 3)
+		{
 			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x  ,position.y }, 1.5, 0);
+		}
 		else
+		{
 			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x  ,position.y }, 1.5, 0);
+		}
 	}
 	else
 	{

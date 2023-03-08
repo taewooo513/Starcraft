@@ -32,6 +32,9 @@ void Academy::Init()
 	m_buildImage[1] = IMAGEMANAGER->FindImage("tbldmed0001");
 	m_buildImage[2] = IMAGEMANAGER->FindImage("tbldmed0002");
 	m_buildImage[3] = IMAGEMANAGER->FindImage("academy0001");
+	m_shadImage[0] = IMAGEMANAGER->FindImage("tb3shad0000");
+	m_shadImage[1] = IMAGEMANAGER->FindImage("tb3shad0001");
+	m_shadImage[2] = IMAGEMANAGER->FindImage("tb3shad0002");
 
 	m_maxCompleteTime = 50.f;
 	m_completeTime = 0;
@@ -66,12 +69,20 @@ void Academy::Render()
 	if (m_buildIndex < 4)
 	{
 		if (m_buildIndex < 3)
+		{
+
+			IMAGEMANAGER->RenderBlendBlack(m_shadImage[m_buildIndex], { position.x - 72 ,position.y - 100 }, 1.5, 0);
 			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 72 ,position.y - 100 }, 1.5, 0);
+		}
 		else
+		{
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tacshad0001"), { position.x - 72,position.y - 100 }, 1.5, 0);
 			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 72 ,position.y - 100 }, 1.5, 0);
+		}
 	}
 	else
 	{
+		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tacshad0000"), { position.x - 72,position.y - 100 }, 1.5, 0);
 		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("academy0000"), { position.x - 72,position.y - 100 }, 1.5, 0);
 	}
 	m_isClick = false;
@@ -102,6 +113,12 @@ void Academy::UIRender()
 			}
 		}
 	}
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0112"]->wireImages[3][damageIndex[0]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0112"]->wireImages[1][damageIndex[1]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0112"]->wireImages[2][damageIndex[2]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0112"]->wireImages[0][damageIndex[3]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+
+	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 295,730 }, { 12,12 }, { 0,255,0,1 });
 
 	IMAGEMANAGER->DirectDrawText(L"Terran Academy", { 400,625 }, { 15,15 });
 }

@@ -134,6 +134,7 @@ void Marine::Init()
 	m_isClick = false;
 	m_maxHp = 40;
 	m_hp = m_maxHp;
+	lasthp = m_hp;
 }
 
 void Marine::Move()
@@ -256,7 +257,7 @@ void Marine::Update()
 		for (auto iter : player->otherPlayer->m_units)
 		{
 			float dest = sqrt(
-				(iter->position.x - position.x) * (iter->position.x - position.x) + 
+				(iter->position.x - position.x) * (iter->position.x - position.x) +
 				(iter->position.y - position.y) * (iter->position.y - position.y));
 			if (range > dest)
 			{
@@ -466,15 +467,32 @@ void Marine::Render()
 		}
 	}
 	IMAGEMANAGER->FogUpdate(position, 30);
-
 	m_isClick = false;
+
+	if ((lasthp - m_hp) >= m_maxHp / 16)
+	{
+		radf = (lasthp - m_hp);
+		int fas = radf / (m_maxHp / 16);
+		lasthp -= fas * (m_maxHp / 16);
+		for (int i = 0; i < fas; )
+		{
+			int rrrrr = rand() % 4;
+			if (damageIndex[rrrrr] < 3)
+			{
+				damageIndex[rrrrr]++;
+				i++;
+			}
+			if (damageIndex[0] == 3 && damageIndex[1] == 3 && damageIndex[2] == 3 && damageIndex[3] == 3)
+			{
+				break;
+			}
+		}
+	}
 }
 
 void Marine::UIRender()
 {
 	m_isClick = true;
-	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("wirefram0000"), { 319,680 }, 1.5, 0, 0);
-	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 300,730 }, { 12,12 }, { 0,255,0,1 });
 
 	IMAGEMANAGER->DirectDrawText(L"Private", { 460,655 }, { 15,15 }, { 255,255,255,1 });
 
@@ -505,8 +523,17 @@ void Marine::UIRender()
 	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[6].x + 25,UIPosition[6].y + 25 }, 1.7, 0, 0);
 	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0237"), { UIPosition[6].x ,UIPosition[6].y + 3 }, 1.7, 0, 0);
 
-	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("wirefram0106"), { 319,680 }, 1.5, 0, 0);
-	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 285,730 }, { 12,12 }, { 0,255,0,1 });
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0000"]->wireImages[3][damageIndex[0]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0000"]->wireImages[1][damageIndex[1]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0000"]->wireImages[2][damageIndex[2]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0000"]->wireImages[0][damageIndex[3]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+
+	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 295,730 }, { 12,12 }, { 0,255,0,1 });
+
+	if (KEYMANAGER->GetOnceKeyDown(VK_F5))
+	{
+		m_hp -= 1;
+	}
 
 	m_attack = 5;
 }

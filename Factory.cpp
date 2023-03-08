@@ -38,7 +38,7 @@ void Factory::Init()
 	m_buildImage[2] = IMAGEMANAGER->FindImage("tbldlrg0002");
 	m_buildImage[3] = IMAGEMANAGER->FindImage("factory0001");
 
-	m_maxCompleteTime = 50;
+	m_maxCompleteTime = 1;
 	m_completeTime = 0;
 	m_costM = 100;
 	m_costG = 0;
@@ -123,16 +123,20 @@ void Factory::Render()
 		if (m_buildIndex < 3)
 			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x  ,position.y }, 1.5, 0);
 		else
+		{
+			IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("tfashad0001"), position, 1.5, 0, 0);
 			IMAGEMANAGER->CenterRenderBlendBlack(m_buildImage[m_buildIndex], { position.x   ,position.y }, 1.5, 0);
+		}
 	}
 	else
 	{
+		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("tfashad0000"), position, 1.5, 0, 0);
+		IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { position.x ,position.y }, 1.5, 0);
 	}
-	IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("factory0000"), { position.x ,position.y }, 1.5, 0);
-	idleAnimation->CenterRenderBlendBlack({ position.x - (float)(128.f * 1.5 / 2.f),position.y - float(160.f * 1.5 / 2.f) }, 1.5, 0, 0);
 	cout << idleAnimation->GetImages()[0]->GetWidth();
 	if (!addUnitQueue.empty())
 	{
+		idleAnimation->CenterRenderBlendBlack({ position.x - (float)(128.f * 1.5 / 2.f),position.y - float(160.f * 1.5 / 2.f) }, 1.5, 0, 0);
 	}
 	m_isClick = false;
 }
@@ -294,6 +298,12 @@ void Factory::UIRender()
 		}
 		IMAGEMANAGER->DirectDrawText(L"Building", { 500,660 }, { 15,15 }, { 255,255,255,1 });
 	}
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0113"]->wireImages[3][damageIndex[0]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0113"]->wireImages[1][damageIndex[1]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0113"]->wireImages[2][damageIndex[2]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0113"]->wireImages[0][damageIndex[3]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+
+	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 295,730 }, { 12,12 }, { 0,255,0,1 });
 
 	IMAGEMANAGER->DirectDrawText(L"Terran Factory", { 400,625 }, { 15,15 });
 }

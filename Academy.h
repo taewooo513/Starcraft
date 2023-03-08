@@ -13,6 +13,7 @@ private:
 	vector<AddUnit> addUnitQueue;
 public:
 	CImage* m_buildImage[4];
+	CImage* m_shadImage[4];
 
 	Academy();
 	virtual ~Academy();

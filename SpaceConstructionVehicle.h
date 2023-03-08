@@ -53,6 +53,7 @@ public:
 	vImage* sparkImg;
 	SpaceConstructionVehicle();
 	~SpaceConstructionVehicle();
+
 	virtual void Init() override;
 	virtual void Move() override;
 	virtual void Update() override;

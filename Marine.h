@@ -40,6 +40,8 @@ public:
 
 	void CollisionUpdate();
 
+	float lasthp = 0;
+	int radf = 0;
 	Vector2 d = { 0,0 };
 	float astarTimer = 0;
 };

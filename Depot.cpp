@@ -43,6 +43,7 @@ void Depot::Init()
 	m_buildIndex = 0;
 	m_maxHp = 500;
 	m_hp = 500;
+	lasthp = m_hp;
 }
 
 void Depot::Update()
@@ -86,6 +87,26 @@ void Depot::Render()
 		idle->CenterRenderBlendBlack({ position.x - IMAGEMANAGER->FindImage("depot0000")->GetWidth() * 1.5f / 2 ,position.y - IMAGEMANAGER->FindImage("depot0000")->GetHeight() * 1.5f / 2 }, 1.5, 0, 0);
 	}
 	m_isClick = false;
+
+	if ((lasthp - m_hp) >= m_maxHp / 16)
+	{
+		radf = (lasthp - m_hp);
+		int fas = radf / (m_maxHp / 16);
+		lasthp -= fas * (m_maxHp / 16);
+		for (int i = 0; i < fas; )
+		{
+			int rrrrr = rand() % 4;
+			if (damageIndex[rrrrr] < 3)
+			{
+				damageIndex[rrrrr]++;
+				i++;
+			}
+			if (damageIndex[0] == 3 && damageIndex[1] == 3 && damageIndex[2] == 3 && damageIndex[3] == 3)
+			{
+				break;
+			}
+		}
+	}
 }
 
 void Depot::Release()
@@ -101,6 +122,13 @@ void Depot::UIRender()
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[8].x + 25,UIPosition[8].y + 25 }, 1.7, 0, 0);
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0236"), { UIPosition[8].x - 1 ,UIPosition[8].y - 2 }, 1.7, 0, 0);
 	}
+
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0109"]->wireImages[3][damageIndex[0]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0109"]->wireImages[1][damageIndex[1]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0109"]->wireImages[2][damageIndex[2]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0109"]->wireImages[0][damageIndex[3]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+
+	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 295,730 }, { 12,12 }, { 0,255,0,1 });
 
 	IMAGEMANAGER->DirectDrawText(L"Terran Supply Depot", { 400,625 }, { 15,15 });
 	IMAGEMANAGER->DirectDrawText(L"Supplies Used: " + to_wstring(player->m_suff), { 400,675 }, { 12,12 });

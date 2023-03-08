@@ -24,6 +24,8 @@ Machines::~Machines()
 
 void Machines::Init()
 {
+	idleshadAnimation = IMAGEMANAGER->AddImageVectorCopy("tmsshad0000");
+	idleshadAnimation->Setting(0.2, true);
 	idleAnimation = IMAGEMANAGER->AddImageVectorCopy("machines");
 	idleAnimation->Setting(0.2, true);
 	grid = GRIDMANAGER->AddGrid(this, 10, 4, 4, 2, -7, -5);
@@ -90,15 +92,21 @@ void Machines::Render()
 		if (m_buildIndex < 3)
 			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 66,position.y - 110 }, 1.5, 0);
 		else
+		{
 			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 96  ,position.y - 130 }, 1.5, 0);
+			IMAGEMANAGER->RenderBlendBlack(m_buildImage[m_buildIndex], { position.x - 96  ,position.y - 130 }, 1.5, 0);
+		}
 	}
 	else
 	{
 		vi->CenterRenderBlendBlack({ position.x - 96,position.y - 130 }, 1.5, 0, 0);
+		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("tmsshad0000"), { position.x - 96,position.y - 127 }, 1.5, 0);
 		IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("machines"), { position.x - 96,position.y - 127 }, 1.5, 0);
+
 	}
 	if (!addUnitQueue.empty())
 	{
+		idleshadAnimation->CenterRenderBlendBlack({ position.x - 96  ,position.y - 130 }, 1.5, 0, 0);
 		idleAnimation->CenterRenderBlendBlack({ position.x - 96  ,position.y - 130 }, 1.5, 0, 0);
 	}
 	m_isClick = false;
@@ -178,6 +186,13 @@ void Machines::UIRender()
 			IMAGEMANAGER->DirectDrawText(L"Building", { 500,660 }, { 15,15 }, { 255,255,255,1 });
 		}
 	}
+
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0120"]->wireImages[3][damageIndex[0]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0120"]->wireImages[1][damageIndex[1]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0120"]->wireImages[2][damageIndex[2]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0120"]->wireImages[0][damageIndex[3]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+
+	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 295,730 }, { 12,12 }, { 0,255,0,1 });
 
 	IMAGEMANAGER->DirectDrawText(L"Terran Machine Shop", { 400,625 }, { 15,15 });
 }
