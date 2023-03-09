@@ -3,27 +3,28 @@
 #include "Object.h"
 #include "Unit.h"
 #include "MapReader.h"
-void ObjectGrid::Astar(float searchSizeX, float searchSizeY)
+void ObjectGrid::Astar(float searchSizeX, float searchSizeY, bool isMine)
 {
 	//OBJECTMANAGER->astarQueue.push([&]() {Astar2(); });
 	this->searchSizeX = searchSizeX;
 	this->searchSizeY = searchSizeY;
-	Astar2();
+	Astar2(isMine);
 }
 
-void ObjectGrid::Astar2()
+void ObjectGrid::Astar2(bool isMine)
 {
-	if (lastX != 0 && lastY != 0) // Astar를 위해 현재 서있는 그리드를 지워준다
-	{
-		for (int i = lastX; i < lastX + m_collisionGridSize.x; i++)
+	if (isMine == false)
+		if (lastX != 0 && lastY != 0) // Astar를 위해 현재 서있는 그리드를 지워준다
 		{
-			for (int j = lastY; j < lastY + m_collisionGridSize.y; j++)
+			for (int i = lastX; i < lastX + m_collisionGridSize.x; i++)
 			{
-				if (GRIDMANAGER->regionsTile[i][j].isBuildTag == gridTag)
-					GRIDMANAGER->regionsTile[i][j].isBuildTag = 0;
+				for (int j = lastY; j < lastY + m_collisionGridSize.y; j++)
+				{
+					if (GRIDMANAGER->regionsTile[i][j].isBuildTag == gridTag)
+						GRIDMANAGER->regionsTile[i][j].isBuildTag = 0;
+				}
 			}
 		}
-	}
 
 	auto unit = dynamic_cast<Unit*>(obj);
 
@@ -96,7 +97,7 @@ void ObjectGrid::Astar2()
 		vector<Vector2> openNode;
 		tileEndPos.x = (int)tileEndPos.x;
 		tileEndPos.y = (int)tileEndPos.y;
-		
+
 		regionQueue.push(make_pair(make_pair(0, 0), tileEndPos));
 		openNode.push_back(tileEndPos);
 		while (regionQueue.empty() == false)
@@ -286,17 +287,17 @@ void ObjectGrid::Astar2()
 
 	int fx = (int)(obj->position.x / 8 / 1.5) + x;
 	int fy = (int)(obj->position.y / 8 / 1.5) + y;
-
-	for (int i = fx; i < fx + m_collisionGridSize.x; i++)
-	{
-		for (int j = fy; j < fy + m_collisionGridSize.y; j++)
+	if (isMine == false)
+		for (int i = fx; i < fx + m_collisionGridSize.x; i++)
 		{
-			if (GRIDMANAGER->regionsTile[i][j].isBuildTag == 0)
+			for (int j = fy; j < fy + m_collisionGridSize.y; j++)
 			{
-				GRIDMANAGER->regionsTile[i][j].isBuildTag = gridTag;
+				if (GRIDMANAGER->regionsTile[i][j].isBuildTag == 0)
+				{
+					GRIDMANAGER->regionsTile[i][j].isBuildTag = gridTag;
+				}
 			}
 		}
-	}
 	lastX = fx;
 	lastY = fy;
 
@@ -318,6 +319,7 @@ void ObjectGrid::Init(Object* obj, Vector2 collisionGridSize, Vector2 gridSize, 
 void ObjectGrid::Update(bool isA)
 {
 
+
 	if (lastX != 0 && lastY != 0)
 	{
 		for (int i = lastX; i < lastX + m_collisionGridSize.x; i++)
@@ -331,15 +333,12 @@ void ObjectGrid::Update(bool isA)
 	}
 	int fx = (int)(obj->position.x / 8 / 1.5) + x;
 	int fy = (int)(obj->position.y / 8 / 1.5) + y;
-	if (isA == false)
+	for (int i = fx; i < fx + m_collisionGridSize.x; i++)
 	{
-		for (int i = fx; i < fx + m_collisionGridSize.x; i++)
+		for (int j = fy; j < fy + m_collisionGridSize.y; j++)
 		{
-			for (int j = fy; j < fy + m_collisionGridSize.y; j++)
-			{
-				if (GRIDMANAGER->regionsTile[i][j].isBuildTag == 0)
-					GRIDMANAGER->regionsTile[i][j].isBuildTag = gridTag;
-			}
+			if (GRIDMANAGER->regionsTile[i][j].isBuildTag == 0)
+				GRIDMANAGER->regionsTile[i][j].isBuildTag = gridTag;
 		}
 	}
 	lastX = fx;

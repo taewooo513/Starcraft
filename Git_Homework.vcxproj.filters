@@ -148,6 +148,12 @@
     </ClCompile>
     <ClCompile Include="VultureBullet.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
+    <ClCompile Include="Gas.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TGas.cpp">
+      <Filter>Game\Object\Build\Terran</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneManager.h">
@@ -291,6 +297,12 @@
     </ClInclude>
     <ClInclude Include="VultureBullet.h" />
     <ClInclude Include="ThreadPool.h" />
+    <ClInclude Include="Gas.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TGas.h">
+      <Filter>Game\Object\Build\Terran</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -442,6 +454,9 @@
     </Filter>
     <Filter Include="Game\Object\Unit\Terran\SCV">
       <UniqueIdentifier>{03114c72-cddd-44bd-9475-b82d72379b8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Resource">
+      <UniqueIdentifier>{9195a643-c07d-4c12-baf5-917be67e44eb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

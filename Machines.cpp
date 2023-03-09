@@ -176,6 +176,8 @@ void Machines::UIRender()
 
 		if (addUnitQueue.size() != 0)
 		{
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("coolTimeBar"), { 535,694 }, 0.8, 0, 0);
+
 			for (int i = 0; i < 41; i++)
 			{
 				if (addUnitQueue[0].maxTime / 41 * i < addUnitQueue[0].timeNow)

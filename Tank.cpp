@@ -53,6 +53,36 @@ void Tank::Init()
 	grid->gridTag = rand() % 10000 + 100;
 	player->AddUnit(this);
 
+	simg[8] = IMAGEMANAGER->FindImage("tank0000s");
+	simg[7] = IMAGEMANAGER->FindImage("tank0002s");
+	simg[6] = IMAGEMANAGER->FindImage("tank0004s");
+	simg[5] = IMAGEMANAGER->FindImage("tank0006s");
+	simg[4] = IMAGEMANAGER->FindImage("tank0008s");
+	simg[3] = IMAGEMANAGER->FindImage("tank0010s");
+	simg[2] = IMAGEMANAGER->FindImage("tank0012s");
+	simg[1] = IMAGEMANAGER->FindImage("tank0014s");
+	simg[0] = IMAGEMANAGER->FindImage("tank0016s");
+
+	simg1[8] = IMAGEMANAGER->FindImage("tank0018s");
+	simg1[7] = IMAGEMANAGER->FindImage("tank0020s");
+	simg1[6] = IMAGEMANAGER->FindImage("tank0022s");
+	simg1[5] = IMAGEMANAGER->FindImage("tank0024s");
+	simg1[4] = IMAGEMANAGER->FindImage("tank0026s");
+	simg1[3] = IMAGEMANAGER->FindImage("tank0028s");
+	simg1[2] = IMAGEMANAGER->FindImage("tank0030s");
+	simg1[1] = IMAGEMANAGER->FindImage("tank0032s");
+	simg1[0] = IMAGEMANAGER->FindImage("tank0033s");
+
+	simg2[8] = IMAGEMANAGER->FindImage("tank0035s");
+	simg2[7] = IMAGEMANAGER->FindImage("tank0037s");
+	simg2[6] = IMAGEMANAGER->FindImage("tank0039s");
+	simg2[5] = IMAGEMANAGER->FindImage("tank0041s");
+	simg2[4] = IMAGEMANAGER->FindImage("tank0043s");
+	simg2[3] = IMAGEMANAGER->FindImage("tank0045s");
+	simg2[2] = IMAGEMANAGER->FindImage("tank0047s");
+	simg2[1] = IMAGEMANAGER->FindImage("tank0049s");
+	simg2[0] = IMAGEMANAGER->FindImage("tank0050s");
+
 	img[8] = IMAGEMANAGER->FindImage("tank0000");
 	img[7] = IMAGEMANAGER->FindImage("tank0002");
 	img[6] = IMAGEMANAGER->FindImage("tank0004");
@@ -236,14 +266,17 @@ void Tank::Render()
 	{
 		if (moveFrame == 0)
 		{
+			IMAGEMANAGER->CenterRenderBlendBlack(simg[(int)rr], position, 1.5, 0, isR);
 			IMAGEMANAGER->CenterRenderBlendBlack(img[(int)rr], position, 1.5, 0, isR);
 		}
 		else if (moveFrame == 1)
 		{
+			IMAGEMANAGER->CenterRenderBlendBlack(simg1[(int)rr], position, 1.5, 0, isR);
 			IMAGEMANAGER->CenterRenderBlendBlack(img1[(int)rr], position, 1.5, 0, isR);
 		}
 		else if (moveFrame == 2)
 		{
+			IMAGEMANAGER->CenterRenderBlendBlack(simg2[(int)rr], position, 1.5, 0, isR);
 			IMAGEMANAGER->CenterRenderBlendBlack(img2[(int)rr], position, 1.5, 0, isR);
 		}
 		IMAGEMANAGER->CenterRenderBlendBlack(imgT[(int)rr], position, 1.5, 0, isR);

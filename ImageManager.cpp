@@ -799,10 +799,19 @@ void ImageManager::ImageLoad()
 	AddImage("cmdicons0287", L"./Resources/Icon/cmdicons0287.bmp"); //벌쳐 발업cmdicons0333
 	AddImage("cmdicons0333", L"./Resources/Icon/cmdicons0333.bmp"); //공중 공업
 
+	AddImage("gas2", L"./Resources/gas/geyser0000.bmp"); //SCVcmdicons0007 벌처
+	AddImage("gass", L"./Resources/gas/geyshad0000.bmp"); //SCVcmdicons0007 벌처
+
 	AddImage("min01sha0000", L"./Resources/min/min01sha0000.bmp"); //SCVcmdicons0007 벌처
 	AddImage("min01sha0001", L"./Resources/min/min01sha0001.bmp"); //SCVcmdicons0007 벌처
 	AddImage("min01sha0002", L"./Resources/min/min01sha0002.bmp"); //SCVcmdicons0007 벌처
 	AddImage("min01sha0003", L"./Resources/min/min01sha0003.bmp"); //SCVcmdicons0007 벌처
+
+	AddImage("refinery0001", L"./Resources/gas/refinery0001.bmp"); //SCVcmdicons0007 벌처
+	AddImage("refinery0002", L"./Resources/gas/refinery0002.bmp"); //SCVcmdicons0007 벌처
+	AddImage("refinery0003", L"./Resources/gas/refinery0003.bmp"); //SCVcmdicons0007 벌처
+	AddImage("refinery0004", L"./Resources/gas/refinery0004.bmp"); //SCVcmdicons0007 벌처
+	AddImage("refinery0000", L"./Resources/gas/refinery0000.bmp"); //SCVcmdicons0007 벌처
 
 
 	AddImage("cmdicons0002", L"./Resources/Icon/cmdicons0002.bmp"); //SCVcmdicons0007 벌처
@@ -1068,6 +1077,136 @@ void ImageManager::ImageLoad()
 	AddImageVector("editoron", L"./Resources/lobby/Editor/English/editoron", 0, 19, true); // 마우스 
 	AddImageVector("exiton", L"./Resources/lobby/Exit/English/exiton", 0, 29, true); // 마우스
 	AddImageVector("singleon", L"./Resources/lobby/Single Player/English/singleon", 8, 67, true); // 마우스
+
+	AddImage("marin_attack_1_1_s", L"./Resources/marin/tmashad0034.bmp"); // 마린 공격 프레임 1
+	AddImage("marin_attack_1_2_s", L"./Resources/marin/tmashad0036.bmp");
+	AddImage("marin_attack_1_3_s", L"./Resources/marin/tmashad0038.bmp");
+	AddImage("marin_attack_1_4_s", L"./Resources/marin/tmashad0040.bmp");
+	AddImage("marin_attack_1_5_s", L"./Resources/marin/tmashad0042.bmp");
+	AddImage("marin_attack_1_6_s", L"./Resources/marin/tmashad0044.bmp");
+	AddImage("marin_attack_1_7_s", L"./Resources/marin/tmashad0046.bmp");
+	AddImage("marin_attack_1_8_s", L"./Resources/marin/tmashad0048.bmp");
+	AddImage("marin_attack_1_9_s", L"./Resources/marin/tmashad0050.bmp");
+
+	AddImage("marin_attack_2_1_s", L"./Resources/marin/tmashad0051.bmp"); // 마린 공격프레임 2
+	AddImage("marin_attack_2_2_s", L"./Resources/marin/tmashad0053.bmp");
+	AddImage("marin_attack_2_3_s", L"./Resources/marin/tmashad0055.bmp");
+	AddImage("marin_attack_2_4_s", L"./Resources/marin/tmashad0057.bmp");
+	AddImage("marin_attack_2_5_s", L"./Resources/marin/tmashad0059.bmp");
+	AddImage("marin_attack_2_6_s", L"./Resources/marin/tmashad0061.bmp");
+	AddImage("marin_attack_2_7_s", L"./Resources/marin/tmashad0063.bmp");
+	AddImage("marin_attack_2_8_s", L"./Resources/marin/tmashad0065.bmp");
+	AddImage("marin_attack_2_9_s", L"./Resources/marin/tmashad0067.bmp");
+
+	AddImage("marin_idle_1_1_s", L"./Resources/marin/tmashad0068.bmp"); // 마린 기본 모션
+	AddImage("marin_idle_1_2_s", L"./Resources/marin/tmashad0070.bmp");
+	AddImage("marin_idle_1_3_s", L"./Resources/marin/tmashad0072.bmp");
+	AddImage("marin_idle_1_4_s", L"./Resources/marin/tmashad0074.bmp");
+	AddImage("marin_idle_1_5_s", L"./Resources/marin/tmashad0076.bmp");
+	AddImage("marin_idle_1_6_s", L"./Resources/marin/tmashad0078.bmp");
+	AddImage("marin_idle_1_7_s", L"./Resources/marin/tmashad0080.bmp");
+	AddImage("marin_idle_1_8_s", L"./Resources/marin/tmashad0082.bmp");
+	AddImage("marin_idle_1_9_s", L"./Resources/marin/tmashad0084.bmp");
+
+	AddImage("marin_idle_action_1_1_s", L"./Resources/marin/tmashad0000.bmp"); // 마린 대기 모션 가만히 있을때 2
+	AddImage("marin_idle_action_1_2_s", L"./Resources/marin/tmashad0002.bmp");
+	AddImage("marin_idle_action_1_3_s", L"./Resources/marin/tmashad0004.bmp");
+	AddImage("marin_idle_action_1_4_s", L"./Resources/marin/tmashad0006.bmp");
+	AddImage("marin_idle_action_1_5_s", L"./Resources/marin/tmashad0008.bmp");
+	AddImage("marin_idle_action_1_6_s", L"./Resources/marin/tmashad0010.bmp");
+	AddImage("marin_idle_action_1_7_s", L"./Resources/marin/tmashad0012.bmp");
+	AddImage("marin_idle_action_1_8_s", L"./Resources/marin/tmashad0014.bmp");
+	AddImage("marin_idle_action_1_9_s", L"./Resources/marin/tmashad0016.bmp");
+
+	AddImage("marin_idle_action_2_1_s", L"./Resources/marin/tmashad0018.bmp"); // 마린 대기 모션 가만히 있을때 2
+	AddImage("marin_idle_action_2_2_s", L"./Resources/marin/tmashad0020.bmp");
+	AddImage("marin_idle_action_2_3_s", L"./Resources/marin/tmashad0022.bmp");
+	AddImage("marin_idle_action_2_4_s", L"./Resources/marin/tmashad0024.bmp");
+	AddImage("marin_idle_action_2_5_s", L"./Resources/marin/tmashad0026.bmp");
+	AddImage("marin_idle_action_2_6_s", L"./Resources/marin/tmashad0028.bmp");
+	AddImage("marin_idle_action_2_7_s", L"./Resources/marin/tmashad0030.bmp");
+	AddImage("marin_idle_action_2_8_s", L"./Resources/marin/tmashad0032.bmp");
+	AddImage("marin_idle_action_2_9_s", L"./Resources/marin/tmashad0034.bmp");
+
+	AddImage("marin_run_1_1_s", L"./Resources/marin/tmashad0085.bmp"); // 마린
+	AddImage("marin_run_1_2_s", L"./Resources/marin/tmashad0087.bmp"); // 마린
+	AddImage("marin_run_1_3_s", L"./Resources/marin/tmashad0089.bmp"); // 마린
+	AddImage("marin_run_1_4_s", L"./Resources/marin/tmashad0091.bmp"); // 마린
+	AddImage("marin_run_1_5_s", L"./Resources/marin/tmashad0093.bmp"); // 마린
+	AddImage("marin_run_1_6_s", L"./Resources/marin/tmashad0095.bmp"); // 마린
+	AddImage("marin_run_1_7_s", L"./Resources/marin/tmashad0097.bmp"); // 마린
+	AddImage("marin_run_1_8_s", L"./Resources/marin/tmashad0099.bmp"); // 마린
+	AddImage("marin_run_1_9_s", L"./Resources/marin/tmashad0101.bmp"); // 마린
+
+	AddImage("marin_run_2_1_s", L"./Resources/marin/tmashad0102.bmp"); // 마린
+	AddImage("marin_run_2_2_s", L"./Resources/marin/tmashad0104.bmp"); // 마린
+	AddImage("marin_run_2_3_s", L"./Resources/marin/tmashad0106.bmp"); // 마린
+	AddImage("marin_run_2_4_s", L"./Resources/marin/tmashad0108.bmp"); // 마린
+	AddImage("marin_run_2_5_s", L"./Resources/marin/tmashad0110.bmp"); // 마린
+	AddImage("marin_run_2_6_s", L"./Resources/marin/tmashad0112.bmp"); // 마린
+	AddImage("marin_run_2_7_s", L"./Resources/marin/tmashad0114.bmp"); // 마린
+	AddImage("marin_run_2_8_s", L"./Resources/marin/tmashad0116.bmp"); // 마린
+	AddImage("marin_run_2_9_s", L"./Resources/marin/tmashad0118.bmp"); // 마린
+
+	AddImage("marin_run_3_1_s", L"./Resources/marin/tmashad0119.bmp"); // 마린
+	AddImage("marin_run_3_2_s", L"./Resources/marin/tmashad0121.bmp"); // 마린
+	AddImage("marin_run_3_3_s", L"./Resources/marin/tmashad0123.bmp"); // 마린
+	AddImage("marin_run_3_4_s", L"./Resources/marin/tmashad0125.bmp"); // 마린
+	AddImage("marin_run_3_5_s", L"./Resources/marin/tmashad0127.bmp"); // 마린
+	AddImage("marin_run_3_6_s", L"./Resources/marin/tmashad0129.bmp"); // 마린
+	AddImage("marin_run_3_7_s", L"./Resources/marin/tmashad0131.bmp"); // 마린
+	AddImage("marin_run_3_8_s", L"./Resources/marin/tmashad0133.bmp"); // 마린
+	AddImage("marin_run_3_9_s", L"./Resources/marin/tmashad0135.bmp"); // 마린
+
+	AddImage("marin_run_4_1_s", L"./Resources/marin/tmashad0136.bmp"); // 마린
+	AddImage("marin_run_4_2_s", L"./Resources/marin/tmashad0138.bmp"); // 마린
+	AddImage("marin_run_4_3_s", L"./Resources/marin/tmashad0140.bmp"); // 마린
+	AddImage("marin_run_4_4_s", L"./Resources/marin/tmashad0142.bmp"); // 마린
+	AddImage("marin_run_4_5_s", L"./Resources/marin/tmashad0144.bmp"); // 마린
+	AddImage("marin_run_4_6_s", L"./Resources/marin/tmashad0146.bmp"); // 마린
+	AddImage("marin_run_4_7_s", L"./Resources/marin/tmashad0148.bmp"); // 마린
+	AddImage("marin_run_4_8_s", L"./Resources/marin/tmashad0150.bmp"); // 마린
+	AddImage("marin_run_4_9_s", L"./Resources/marin/tmashad0152.bmp"); // 마린
+
+	AddImage("marin_run_5_1_s", L"./Resources/marin/tmashad0153.bmp"); // 마린
+	AddImage("marin_run_5_2_s", L"./Resources/marin/tmashad0155.bmp"); // 마린
+	AddImage("marin_run_5_3_s", L"./Resources/marin/tmashad0157.bmp"); // 마린
+	AddImage("marin_run_5_4_s", L"./Resources/marin/tmashad0159.bmp"); // 마린
+	AddImage("marin_run_5_5_s", L"./Resources/marin/tmashad0161.bmp"); // 마린
+	AddImage("marin_run_5_6_s", L"./Resources/marin/tmashad0163.bmp"); // 마린
+	AddImage("marin_run_5_7_s", L"./Resources/marin/tmashad0165.bmp"); // 마린
+	AddImage("marin_run_5_8_s", L"./Resources/marin/tmashad0167.bmp"); // 마린
+	AddImage("marin_run_5_9_s", L"./Resources/marin/tmashad0169.bmp"); // 마린
+
+	AddImage("marin_run_6_1_s", L"./Resources/marin/tmashad0170.bmp"); // 마린
+	AddImage("marin_run_6_2_s", L"./Resources/marin/tmashad0172.bmp"); // 마린
+	AddImage("marin_run_6_3_s", L"./Resources/marin/tmashad0174.bmp"); // 마린
+	AddImage("marin_run_6_4_s", L"./Resources/marin/tmashad0176.bmp"); // 마린
+	AddImage("marin_run_6_5_s", L"./Resources/marin/tmashad0178.bmp"); // 마린
+	AddImage("marin_run_6_6_s", L"./Resources/marin/tmashad0180.bmp"); // 마린
+	AddImage("marin_run_6_7_s", L"./Resources/marin/tmashad0182.bmp"); // 마린
+	AddImage("marin_run_6_8_s", L"./Resources/marin/tmashad0184.bmp"); // 마린
+	AddImage("marin_run_6_9_s", L"./Resources/marin/tmashad0186.bmp"); // 마린
+
+	AddImage("marin_run_7_1_s", L"./Resources/marin/tmashad0187.bmp"); // 마린
+	AddImage("marin_run_7_2_s", L"./Resources/marin/tmashad0189.bmp"); // 마린
+	AddImage("marin_run_7_3_s", L"./Resources/marin/tmashad0191.bmp"); // 마린
+	AddImage("marin_run_7_4_s", L"./Resources/marin/tmashad0193.bmp"); // 마린
+	AddImage("marin_run_7_5_s", L"./Resources/marin/tmashad0195.bmp"); // 마린
+	AddImage("marin_run_7_6_s", L"./Resources/marin/tmashad0197.bmp"); // 마린
+	AddImage("marin_run_7_7_s", L"./Resources/marin/tmashad0199.bmp"); // 마린
+	AddImage("marin_run_7_8_s", L"./Resources/marin/tmashad0201.bmp"); // 마린
+	AddImage("marin_run_7_9_s", L"./Resources/marin/tmashad0203.bmp"); // 마린
+
+	AddImage("marin_run_8_1_s", L"./Resources/marin/tmashad0204.bmp"); // 마린
+	AddImage("marin_run_8_2_s", L"./Resources/marin/tmashad0206.bmp"); // 마린
+	AddImage("marin_run_8_3_s", L"./Resources/marin/tmashad0208.bmp"); // 마린
+	AddImage("marin_run_8_4_s", L"./Resources/marin/tmashad0210.bmp"); // 마린
+	AddImage("marin_run_8_5_s", L"./Resources/marin/tmashad0212.bmp"); // 마린
+	AddImage("marin_run_8_6_s", L"./Resources/marin/tmashad0214.bmp"); // 마린
+	AddImage("marin_run_8_7_s", L"./Resources/marin/tmashad0216.bmp"); // 마린
+	AddImage("marin_run_8_8_s", L"./Resources/marin/tmashad0218.bmp"); // 마린
+	AddImage("marin_run_8_9_s", L"./Resources/marin/tmashad0220.bmp"); // 마린
 
 	AddImage("marin_attack_1_1", L"./Resources/marin/Attack/marine0034.bmp"); // 마린 공격 프레임 1
 	AddImage("marin_attack_1_2", L"./Resources/marin/Attack/marine0036.bmp");
@@ -1369,6 +1508,37 @@ void ImageManager::ImageLoad()
 	AddImage("tank0047", L"./Resources/tank/tank0047.bmp"); // 탱크 일반
 	AddImage("tank0049", L"./Resources/tank/tank0049.bmp"); // 탱크 일반
 	AddImage("tank0050", L"./Resources/tank/tank0050.bmp"); // 탱크 일반
+
+	// 그림자
+	AddImage("tank0000s", L"./Resources/tank/ttashad0000.bmp"); // 탱크 일반
+	AddImage("tank0002s", L"./Resources/tank/ttashad0002.bmp"); // 탱크 일반
+	AddImage("tank0004s", L"./Resources/tank/ttashad0004.bmp"); // 탱크 일반
+	AddImage("tank0006s", L"./Resources/tank/ttashad0006.bmp"); // 탱크 일반
+	AddImage("tank0008s", L"./Resources/tank/ttashad0008.bmp"); // 탱크 일반
+	AddImage("tank0010s", L"./Resources/tank/ttashad0010.bmp"); // 탱크 일반
+	AddImage("tank0012s", L"./Resources/tank/ttashad0012.bmp"); // 탱크 일반
+	AddImage("tank0014s", L"./Resources/tank/ttashad0014.bmp"); // 탱크 일반
+	AddImage("tank0016s", L"./Resources/tank/ttashad0016.bmp"); // 탱크 일반
+	// 탱크 일반
+	AddImage("tank0018s", L"./Resources/tank/ttashad0018.bmp"); // 탱크 일반
+	AddImage("tank0020s", L"./Resources/tank/ttashad0020.bmp"); // 탱크 일반
+	AddImage("tank0022s", L"./Resources/tank/ttashad0022.bmp"); // 탱크 일반
+	AddImage("tank0024s", L"./Resources/tank/ttashad0024.bmp"); // 탱크 일반
+	AddImage("tank0026s", L"./Resources/tank/ttashad0026.bmp"); // 탱크 일반
+	AddImage("tank0028s", L"./Resources/tank/ttashad0028.bmp"); // 탱크 일반
+	AddImage("tank0030s", L"./Resources/tank/ttashad0030.bmp"); // 탱크 일반
+	AddImage("tank0032s", L"./Resources/tank/ttashad0032.bmp"); // 탱크 일반
+	AddImage("tank0033s", L"./Resources/tank/ttashad0033.bmp"); // 탱크 일반
+	// 탱크 일반
+	AddImage("tank0035s", L"./Resources/tank/ttashad0035.bmp"); // 탱크 일반
+	AddImage("tank0037s", L"./Resources/tank/ttashad0037.bmp"); // 탱크 일반
+	AddImage("tank0039s", L"./Resources/tank/ttashad0039.bmp"); // 탱크 일반
+	AddImage("tank0041s", L"./Resources/tank/ttashad0041.bmp"); // 탱크 일반
+	AddImage("tank0043s", L"./Resources/tank/ttashad0043.bmp"); // 탱크 일반
+	AddImage("tank0045s", L"./Resources/tank/ttashad0045.bmp"); // 탱크 일반
+	AddImage("tank0047s", L"./Resources/tank/ttashad0047.bmp"); // 탱크 일반
+	AddImage("tank0049s", L"./Resources/tank/ttashad0049.bmp"); // 탱크 일반
+	AddImage("tank0050s", L"./Resources/tank/ttashad0050.bmp"); // 탱크 일반
 
 	AddImage("tankt0000", L"./Resources/tankT/tankt0000.bmp"); // 탱크 일반 머리
 	AddImage("tankt0002", L"./Resources/tankT/tankt0002.bmp"); // 탱크 일반 머리

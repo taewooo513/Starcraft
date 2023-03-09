@@ -132,8 +132,7 @@ void MapToolScene::Render()
 				//IMAGEMANAGER->DirectDrawText(L"ÅÊÅ©", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
 				break;
 			case 10:
-				//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
-				//IMAGEMANAGER->DirectDrawText(L"°¡½º", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
+				IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("gas2"), { iter->x,iter->y }, 1.5, 0, 0);
 				break;
 			case 11:
 				//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
@@ -180,7 +179,7 @@ void MapToolScene::Render()
 				//IMAGEMANAGER->DirectDrawText(L"ÅÊÅ©", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
 				break;
 			case 10:
-				//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
+				IMAGEMANAGER->CenterRenderBlendBlack(IMAGEMANAGER->FindImage("gas2"), { iter->x,iter->y }, 1.5, 0, 0);
 				//IMAGEMANAGER->DirectDrawText(L"°¡½º", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
 				break;
 			case 11:
@@ -309,7 +308,7 @@ void MapToolScene::UIRender()
 		//IMAGEMANAGER->DirectDrawText(L"ÅÊÅ©", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
 		break;
 	case 10:
-		//IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("min010000"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
+		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("gas2"), { (float)_ptMouse.x,(float)_ptMouse.y }, 1.5, 0, 0);
 		//IMAGEMANAGER->DirectDrawText(L"°¡½º", { float((int)i % 2) * 100 + 50 ,200.f + int((int)i / 2) * 100 }, { 10,10 }, { 0,0,0,1 });
 		break;
 	case 11:

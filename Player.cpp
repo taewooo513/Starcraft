@@ -12,6 +12,7 @@
 #include "Tank.h"
 #include "Armory.h"
 #include "Starport.h"
+#include "Gas.h"
 #include "Depot.h"
 #include "Machines.h"
 #include "Vulture.h"
@@ -154,6 +155,13 @@ void Player::Init()
 			Unit* scv = new SpaceConstructionVehicle;
 			scv->SetPlayer(this);
 			OBJECTMANAGER->AddObject(scv, "Unit", iter->x, iter->y, 1);
+		}
+		break;
+		case 10:
+		{
+			Object* me = new Gas;
+			OBJECTMANAGER->AddObject(me, "mimeral", iter->x, iter->y, 0);
+			resrouces.push_back(me);
 		}
 		break;
 		}
@@ -332,9 +340,14 @@ void Player::Update()
 						width = 32.f * 1.5 * 3.f / 2.f;
 						height = 32.f * 1.5 * 2.f / 2.f;
 						break;
+					case SpaceConstructionVehicle::eBuildClass::eGas:
+						width = 32.f * 1.5 * 3.f / 2.f;
+						height = 32.f * 1.5 * 2.f / 2.f;
+						break;
 					}
 
-					if (scv->isBuildAble_ == true)
+
+					if ((scv->buildIndex != 10 && scv->isBuildAble_ == true) || (scv->buildIndex == scv->eGas && scv->isBuildAble_ == true))
 					{
 						scv->m_dest = { (float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + width
 							, (float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + height };
@@ -785,10 +798,10 @@ void Player::UIRender()
 		if (typeid(*iter).name() == typeid(Marine).name())
 		{
 			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0018"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.8, 0);
-			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0000"]->wireImages[3][iter->damageIndex[0]],{ 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
-			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0000"]->wireImages[1][iter->damageIndex[1]],{ 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
-			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0000"]->wireImages[2][iter->damageIndex[2]],{ 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
-			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0000"]->wireImages[0][iter->damageIndex[3]],{ 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0000"]->wireImages[3][iter->damageIndex[0]], { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0000"]->wireImages[1][iter->damageIndex[1]], { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0000"]->wireImages[2][iter->damageIndex[2]], { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0000"]->wireImages[0][iter->damageIndex[3]], { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
 
 		}
 		if (typeid(*iter).name() == typeid(FireBat).name())
@@ -803,10 +816,10 @@ void Player::UIRender()
 		if (typeid(*iter).name() == typeid(Vulture).name())
 		{
 			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0018"), { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.8, 0);
-			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0002"]->wireImages[3][iter->damageIndex[0]],{ 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
-			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0002"]->wireImages[1][iter->damageIndex[1]],{ 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
-			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0002"]->wireImages[2][iter->damageIndex[2]],{ 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
-			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0002"]->wireImages[0][iter->damageIndex[3]],{ 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0002"]->wireImages[3][iter->damageIndex[0]], { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0002"]->wireImages[1][iter->damageIndex[1]], { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0002"]->wireImages[2][iter->damageIndex[2]], { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
+			IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["grpwire0002"]->wireImages[0][iter->damageIndex[3]], { 265 + 60 * float(count / 2),630 + 60 * (float)(count % 2) }, 0.85f, 0);
 		}
 		if (typeid(*iter).name() == typeid(Tank).name())
 		{

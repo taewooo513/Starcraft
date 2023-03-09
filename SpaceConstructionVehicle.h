@@ -48,7 +48,8 @@ public:
 		eDepot,
 		eStarport,
 		eArmory,
-		eScience
+		eScience,
+		eGas
 	};
 	vImage* sparkImg;
 	SpaceConstructionVehicle();

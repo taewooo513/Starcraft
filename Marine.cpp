@@ -11,6 +11,8 @@ void Marine::Init()
 	grid->gridTag = rand() % 10000 + 100;
 	player->AddUnit(this);
 	deathImageTimeDelay = 0;
+	player->m_suff += 1;
+
 	idleImage[8] = IMAGEMANAGER->FindImage("marin_idle_1_1");
 	idleImage[7] = IMAGEMANAGER->FindImage("marin_idle_1_2");
 	idleImage[6] = IMAGEMANAGER->FindImage("marin_idle_1_3");
@@ -20,7 +22,6 @@ void Marine::Init()
 	idleImage[2] = IMAGEMANAGER->FindImage("marin_idle_1_7");
 	idleImage[1] = IMAGEMANAGER->FindImage("marin_idle_1_8");
 	idleImage[0] = IMAGEMANAGER->FindImage("marin_idle_1_9");
-	player->m_suff += 1;
 
 	run1Image[0] = IMAGEMANAGER->FindImage("marin_run_1_1");
 	run1Image[1] = IMAGEMANAGER->FindImage("marin_run_1_2");
@@ -130,6 +131,119 @@ void Marine::Init()
 	fire2Image[2] = IMAGEMANAGER->FindImage("marin_attack_2_7");
 	fire2Image[1] = IMAGEMANAGER->FindImage("marin_attack_2_8");
 	fire2Image[0] = IMAGEMANAGER->FindImage("marin_attack_2_9");
+
+	//
+
+	sidleImage[8] = IMAGEMANAGER->FindImage("marin_idle_1_1_s");
+	sidleImage[7] = IMAGEMANAGER->FindImage("marin_idle_1_2_s");
+	sidleImage[6] = IMAGEMANAGER->FindImage("marin_idle_1_3_s");
+	sidleImage[5] = IMAGEMANAGER->FindImage("marin_idle_1_4_s");
+	sidleImage[4] = IMAGEMANAGER->FindImage("marin_idle_1_5_s");
+	sidleImage[3] = IMAGEMANAGER->FindImage("marin_idle_1_6_s");
+	sidleImage[2] = IMAGEMANAGER->FindImage("marin_idle_1_7_s");
+	sidleImage[1] = IMAGEMANAGER->FindImage("marin_idle_1_8_s");
+	sidleImage[0] = IMAGEMANAGER->FindImage("marin_idle_1_9_s");
+	
+	srun1Image[0] = IMAGEMANAGER->FindImage("marin_run_1_1_s");
+	srun1Image[1] = IMAGEMANAGER->FindImage("marin_run_1_2_s");
+	srun1Image[2] = IMAGEMANAGER->FindImage("marin_run_1_3_s");
+	srun1Image[3] = IMAGEMANAGER->FindImage("marin_run_1_4_s");
+	srun1Image[4] = IMAGEMANAGER->FindImage("marin_run_1_5_s");
+	srun1Image[5] = IMAGEMANAGER->FindImage("marin_run_1_6_s");
+	srun1Image[6] = IMAGEMANAGER->FindImage("marin_run_1_7_s");
+	srun1Image[7] = IMAGEMANAGER->FindImage("marin_run_1_8_s");
+	srun1Image[8] = IMAGEMANAGER->FindImage("marin_run_1_9_s");
+	
+	srun2Image[0] = IMAGEMANAGER->FindImage("marin_run_2_1_s");
+	srun2Image[1] = IMAGEMANAGER->FindImage("marin_run_2_2_s");
+	srun2Image[2] = IMAGEMANAGER->FindImage("marin_run_2_3_s");
+	srun2Image[3] = IMAGEMANAGER->FindImage("marin_run_2_4_s");
+	srun2Image[4] = IMAGEMANAGER->FindImage("marin_run_2_5_s");
+	srun2Image[5] = IMAGEMANAGER->FindImage("marin_run_2_6_s");
+	srun2Image[6] = IMAGEMANAGER->FindImage("marin_run_2_7_s");
+	srun2Image[7] = IMAGEMANAGER->FindImage("marin_run_2_8_s");
+	srun2Image[8] = IMAGEMANAGER->FindImage("marin_run_2_9_s");
+	
+	srun3Image[0] = IMAGEMANAGER->FindImage("marin_run_3_1_s");
+	srun3Image[1] = IMAGEMANAGER->FindImage("marin_run_3_2_s");
+	srun3Image[2] = IMAGEMANAGER->FindImage("marin_run_3_3_s");
+	srun3Image[3] = IMAGEMANAGER->FindImage("marin_run_3_4_s");
+	srun3Image[4] = IMAGEMANAGER->FindImage("marin_run_3_5_s");
+	srun3Image[5] = IMAGEMANAGER->FindImage("marin_run_3_6_s");
+	srun3Image[6] = IMAGEMANAGER->FindImage("marin_run_3_7_s");
+	srun3Image[7] = IMAGEMANAGER->FindImage("marin_run_3_8_s");
+	srun3Image[8] = IMAGEMANAGER->FindImage("marin_run_3_9_s");
+	
+	srun4Image[0] = IMAGEMANAGER->FindImage("marin_run_4_1_s");
+	srun4Image[1] = IMAGEMANAGER->FindImage("marin_run_4_2_s");
+	srun4Image[2] = IMAGEMANAGER->FindImage("marin_run_4_3_s");
+	srun4Image[3] = IMAGEMANAGER->FindImage("marin_run_4_4_s");
+	srun4Image[4] = IMAGEMANAGER->FindImage("marin_run_4_5_s");
+	srun4Image[5] = IMAGEMANAGER->FindImage("marin_run_4_6_s");
+	srun4Image[6] = IMAGEMANAGER->FindImage("marin_run_4_7_s");
+	srun4Image[7] = IMAGEMANAGER->FindImage("marin_run_4_8_s");
+	srun4Image[8] = IMAGEMANAGER->FindImage("marin_run_4_9_s");
+	
+	srun5Image[0] = IMAGEMANAGER->FindImage("marin_run_5_1_s");
+	srun5Image[1] = IMAGEMANAGER->FindImage("marin_run_5_2_s");
+	srun5Image[2] = IMAGEMANAGER->FindImage("marin_run_5_3_s");
+	srun5Image[3] = IMAGEMANAGER->FindImage("marin_run_5_4_s");
+	srun5Image[4] = IMAGEMANAGER->FindImage("marin_run_5_5_s");
+	srun5Image[5] = IMAGEMANAGER->FindImage("marin_run_5_6_s");
+	srun5Image[6] = IMAGEMANAGER->FindImage("marin_run_5_7_s");
+	srun5Image[7] = IMAGEMANAGER->FindImage("marin_run_5_8_s");
+	srun5Image[8] = IMAGEMANAGER->FindImage("marin_run_5_9_s");
+	
+	srun6Image[0] = IMAGEMANAGER->FindImage("marin_run_6_1_s");
+	srun6Image[1] = IMAGEMANAGER->FindImage("marin_run_6_2_s");
+	srun6Image[2] = IMAGEMANAGER->FindImage("marin_run_6_3_s");
+	srun6Image[3] = IMAGEMANAGER->FindImage("marin_run_6_4_s");
+	srun6Image[4] = IMAGEMANAGER->FindImage("marin_run_6_5_s");
+	srun6Image[5] = IMAGEMANAGER->FindImage("marin_run_6_6_s");
+	srun6Image[6] = IMAGEMANAGER->FindImage("marin_run_6_7_s");
+	srun6Image[7] = IMAGEMANAGER->FindImage("marin_run_6_8_s");
+	srun6Image[8] = IMAGEMANAGER->FindImage("marin_run_6_9_s");
+	
+	srun7Image[0] = IMAGEMANAGER->FindImage("marin_run_7_1_s");
+	srun7Image[1] = IMAGEMANAGER->FindImage("marin_run_7_2_s");
+	srun7Image[2] = IMAGEMANAGER->FindImage("marin_run_7_3_s");
+	srun7Image[3] = IMAGEMANAGER->FindImage("marin_run_7_4_s");
+	srun7Image[4] = IMAGEMANAGER->FindImage("marin_run_7_5_s");
+	srun7Image[5] = IMAGEMANAGER->FindImage("marin_run_7_6_s");
+	srun7Image[6] = IMAGEMANAGER->FindImage("marin_run_7_7_s");
+	srun7Image[7] = IMAGEMANAGER->FindImage("marin_run_7_8_s");
+	srun7Image[8] = IMAGEMANAGER->FindImage("marin_run_7_9_s");
+	
+	srun8Image[0] = IMAGEMANAGER->FindImage("marin_run_8_1_s");
+	srun8Image[1] = IMAGEMANAGER->FindImage("marin_run_8_2_s");
+	srun8Image[2] = IMAGEMANAGER->FindImage("marin_run_8_3_s");
+	srun8Image[3] = IMAGEMANAGER->FindImage("marin_run_8_4_s");
+	srun8Image[4] = IMAGEMANAGER->FindImage("marin_run_8_5_s");
+	srun8Image[5] = IMAGEMANAGER->FindImage("marin_run_8_6_s");
+	srun8Image[6] = IMAGEMANAGER->FindImage("marin_run_8_7_s");
+	srun8Image[7] = IMAGEMANAGER->FindImage("marin_run_8_8_s");
+	srun8Image[8] = IMAGEMANAGER->FindImage("marin_run_8_9_s");
+	
+	sfire1Image[8] = IMAGEMANAGER->FindImage("marin_attack_1_1_s");
+	sfire1Image[7] = IMAGEMANAGER->FindImage("marin_attack_1_2_s");
+	sfire1Image[6] = IMAGEMANAGER->FindImage("marin_attack_1_3_s");
+	sfire1Image[5] = IMAGEMANAGER->FindImage("marin_attack_1_4_s");
+	sfire1Image[4] = IMAGEMANAGER->FindImage("marin_attack_1_5_s");
+	sfire1Image[3] = IMAGEMANAGER->FindImage("marin_attack_1_6_s");
+	sfire1Image[2] = IMAGEMANAGER->FindImage("marin_attack_1_7_s");
+	sfire1Image[1] = IMAGEMANAGER->FindImage("marin_attack_1_8_s");
+	sfire1Image[0] = IMAGEMANAGER->FindImage("marin_attack_1_9_s");
+	
+	sfire2Image[8] = IMAGEMANAGER->FindImage("marin_attack_2_1_s");
+	sfire2Image[7] = IMAGEMANAGER->FindImage("marin_attack_2_2_s");
+	sfire2Image[6] = IMAGEMANAGER->FindImage("marin_attack_2_3_s");
+	sfire2Image[5] = IMAGEMANAGER->FindImage("marin_attack_2_4_s");
+	sfire2Image[4] = IMAGEMANAGER->FindImage("marin_attack_2_5_s");
+	sfire2Image[3] = IMAGEMANAGER->FindImage("marin_attack_2_6_s");
+	sfire2Image[2] = IMAGEMANAGER->FindImage("marin_attack_2_7_s");
+	sfire2Image[1] = IMAGEMANAGER->FindImage("marin_attack_2_8_s");
+	sfire2Image[0] = IMAGEMANAGER->FindImage("marin_attack_2_9_s");
+
 	m_attack = 5;
 	m_isClick = false;
 	m_maxHp = 40;
@@ -361,6 +475,7 @@ void Marine::Render()
 		{
 			if (attackObject == nullptr)
 			{
+				IMAGEMANAGER->CenterRenderBlendBlack(sidleImage[(int)rr], position, 1.5f, 0, isR);
 				IMAGEMANAGER->CenterRenderBlendBlack(idleImage[(int)rr], position, 1.5f, 0, isR);
 				nowFire = false;
 				onceFire = true;
@@ -389,10 +504,12 @@ void Marine::Render()
 
 				if (nowFire == false)
 				{
+					IMAGEMANAGER->CenterRenderBlendBlack(sfire1Image[(int)rr], position, 1.5f, 0, isR);
 					IMAGEMANAGER->CenterRenderBlendBlack(fire1Image[(int)rr], position, 1.5f, 0, isR);
 				}
 				else
 				{
+					IMAGEMANAGER->CenterRenderBlendBlack(sfire2Image[(int)rr], position, 1.5f, 0, isR);
 					IMAGEMANAGER->CenterRenderBlendBlack(fire2Image[(int)rr], position, 1.5f, 0, isR);
 				}
 			}
@@ -408,30 +525,39 @@ void Marine::Render()
 			switch (runFrame)
 			{
 			case 0:
+				IMAGEMANAGER->CenterRenderBlendBlack(srun1Image[8 - (int)rr], position, 1.5f, 0, isR);
 				IMAGEMANAGER->CenterRenderBlendBlack(run1Image[8 - (int)rr], position, 1.5f, 0, isR);
 				break;
 			case 1:
+				IMAGEMANAGER->CenterRenderBlendBlack(srun2Image[8 - (int)rr], position, 1.5f, 0, isR);
 				IMAGEMANAGER->CenterRenderBlendBlack(run2Image[8 - (int)rr], position, 1.5f, 0, isR);
 				break;
 			case 2:
+				IMAGEMANAGER->CenterRenderBlendBlack(srun3Image[8 - (int)rr], position, 1.5f, 0, isR);
 				IMAGEMANAGER->CenterRenderBlendBlack(run3Image[8 - (int)rr], position, 1.5f, 0, isR);
 				break;
 			case 3:
+				IMAGEMANAGER->CenterRenderBlendBlack(srun4Image[8 - (int)rr], position, 1.5f, 0, isR);
 				IMAGEMANAGER->CenterRenderBlendBlack(run4Image[8 - (int)rr], position, 1.5f, 0, isR);
 				break;
 			case 4:
+				IMAGEMANAGER->CenterRenderBlendBlack(srun5Image[8 - (int)rr], position, 1.5f, 0, isR);
 				IMAGEMANAGER->CenterRenderBlendBlack(run5Image[8 - (int)rr], position, 1.5f, 0, isR);
 				break;
 			case 5:
+				IMAGEMANAGER->CenterRenderBlendBlack(srun6Image[8 - (int)rr], position, 1.5f, 0, isR);
 				IMAGEMANAGER->CenterRenderBlendBlack(run6Image[8 - (int)rr], position, 1.5f, 0, isR);
 				break;
 			case 6:
+				IMAGEMANAGER->CenterRenderBlendBlack(srun7Image[8 - (int)rr], position, 1.5f, 0, isR);
 				IMAGEMANAGER->CenterRenderBlendBlack(run7Image[8 - (int)rr], position, 1.5f, 0, isR);
 				break;
 			case 7:
+				IMAGEMANAGER->CenterRenderBlendBlack(srun8Image[8 - (int)rr], position, 1.5f, 0, isR);
 				IMAGEMANAGER->CenterRenderBlendBlack(run8Image[8 - (int)rr], position, 1.5f, 0, isR);
 				break;
 			default:
+				IMAGEMANAGER->CenterRenderBlendBlack(srun8Image[8 - (int)rr], position, 1.5f, 0, isR);
 				IMAGEMANAGER->CenterRenderBlendBlack(run8Image[8 - (int)rr], position, 1.5f, 0, isR);
 				runFrame = 0;
 				break;

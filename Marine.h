@@ -6,7 +6,6 @@ public:
 	CImage* idleImage[9];
 	CImage* fire1Image[9];
 	CImage* fire2Image[9];
-
 	CImage* run1Image[9];
 	CImage* run2Image[9];
 	CImage* run3Image[9];
@@ -15,6 +14,19 @@ public:
 	CImage* run6Image[9];
 	CImage* run7Image[9];
 	CImage* run8Image[9];
+
+	CImage* sidleImage[9];
+	CImage* sfire1Image[9];
+	CImage* sfire2Image[9];
+	CImage* srun1Image[9];
+	CImage* srun2Image[9];
+	CImage* srun3Image[9];
+	CImage* srun4Image[9];
+	CImage* srun5Image[9];
+	CImage* srun6Image[9];
+	CImage* srun7Image[9];
+	CImage* srun8Image[9];
+
 	CImage* deathImage[8];
 	bool nowFire = false;
 	bool isDeath = false;

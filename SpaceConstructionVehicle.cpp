@@ -2,6 +2,7 @@
 #include "SpaceConstructionVehicle.h"
 #include "Barrack.h"
 #include "CommandCenter.h"
+#include "TGas.h"
 #include "Build.h"
 #include "Factory.h"
 #include "Academy.h"
@@ -106,18 +107,18 @@ void SpaceConstructionVehicle::Move()
 			if (moveNodeStack.top()->regionId == regionId)
 			{
 				moveNodeStack.pop();
-				grid->Astar(4, 4);
+				grid->Astar(4, 4, me != nullptr);
 			}
 			if (moveNodeStack.empty() == false)
 			{
 				if (grid->moveStack2.empty() == true)
-					grid->Astar(4, 4);
+					grid->Astar(4, 4, me != nullptr);
 			}
 		}
 		else
 		{
 			if (grid->moveStack2.empty() == true)
-				grid->Astar(4, 4);
+				grid->Astar(4, 4, me != nullptr);
 			//여기선 다음 레기온과의 최단거리 
 		}
 	}
@@ -147,7 +148,7 @@ void SpaceConstructionVehicle::Move()
 				}
 				else
 				{
-					grid->Astar(4, 4);
+					grid->Astar(4, 4, me != nullptr);
 				}
 				//astarTimer = 0.1f;
 				astarTimer -= DELTA_TIME;
@@ -177,15 +178,18 @@ void SpaceConstructionVehicle::Move()
 			m_speed = 0;
 		}
 	}
-
-	grid->Update(true);
-
+	if (grid->moveStack2.empty() && moveNodeStack.empty())
+	{
+		d = { 0,0 };
+		m_dest = { 0,0 };
+		m_speed = 0;
+		if (buildIndex != 0)
+			m_isBuild = true;
+	}
 }
 
 void SpaceConstructionVehicle::Update()
 {
-	grid->Update();
-
 	if (isdeath == true)
 	{
 		ObjectDestroyed();
@@ -564,6 +568,14 @@ void SpaceConstructionVehicle::UIRender()
 				SOUNDMANAGER->play("taderr00", 0.5f);
 			}
 		}
+		if (KEYMANAGER->GetOnceKeyDown('R') && player->buildList[Player::BuildList::eCommandCenter] == true)
+		{
+			if (player->m_mineral - 100 >= 0)
+			{
+				buildIndex = eGas;
+				page = 4;
+			}
+		}
 	}
 	else if (page == 2)
 	{
@@ -650,12 +662,12 @@ void SpaceConstructionVehicle::ResetParam()
 	if (me != nullptr)
 	{
 		me->nowMineUnit = nullptr;
+		me = nullptr;
 	}
 	if (m_nowBuild == nullptr)
 	{
 		buildIndex = 0;
 		m_isBuild = false;
-
 	}
 }
 
@@ -718,7 +730,12 @@ void SpaceConstructionVehicle::BuildingConstruction()
 			(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) ,
 			(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
 			RectSzie(3, 2);
-
+			break;
+		case eGas:
+			IMAGEMANAGER->RenderBlendBlack(IMAGEMANAGER->FindImage("refinery0000"), {
+			(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50,
+			(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) - 50 }, 1.5, 0);
+			RectSzie(4, 3);
 			break;
 		}
 	}
@@ -840,6 +857,17 @@ void SpaceConstructionVehicle::BuildObject()
 					buildPos.y
 					, 0);
 				break;
+			case eGas:
+				player->m_mineral -= 100;
+				m_nowBuild = new TGas;
+				m_isBuild = false;
+				m_nowBuild->SetPlayer(player);
+				buildIndex = 0;
+				OBJECTMANAGER->AddObject(m_nowBuild, "CommandCenter",
+					buildPos.x + 1,
+					buildPos.y
+					, 0);
+				break;
 			}
 		}
 	}
@@ -936,7 +964,6 @@ void SpaceConstructionVehicle::BuildCommandUI()
 		{
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0230"), { UIPosition[2].x - 1 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
-
 
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[1].x + 25,UIPosition[1].y + 25 }, 1.7, 0, 0);
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0229"), { UIPosition[1].x - 1 ,UIPosition[1].y - 2 }, 1.7, 0, 0);
@@ -1080,15 +1107,27 @@ void SpaceConstructionVehicle::RectSzie(int sizeX, int sizeY)
 			searchX = searchX / 1.5f / 8;
 			searchY = searchY / 1.5f / 8;
 			bool isBuildAble = false;
+			bool isGasAbel = false;
 			for (int x2 = searchX; x2 < searchX + 4; x2++)
 			{
 				for (int y2 = searchY; y2 < searchY + 4; y2++)
 				{
-					if (GRIDMANAGER->regionsTile[x2][y2].isBuildTag != 0)
+					if (buildIndex != eGas)
 					{
-						isBuildAble = true;
-						isBuildAble_ = false;
-						break;
+						if (GRIDMANAGER->regionsTile[x2][y2].isBuildTag != 0)
+						{
+							isBuildAble = true;
+							isBuildAble_ = false;
+							break;
+						}
+					}
+					else
+					{
+						if (GRIDMANAGER->regionsTile[x2][y2].isBuildTag != 0)
+						{
+							isBuildAble = false;
+							break;
+						}
 					}
 				}
 				if (isBuildAble == true)
@@ -1106,11 +1145,11 @@ void SpaceConstructionVehicle::RectSzie(int sizeX, int sizeY)
 			else
 			{
 				IMAGEMANAGER->DrawRect({
-					(float)((_ptMouse.x + (int)IMAGEMANAGER->GetCameraPosition().x % (int)(32 * 1.5f)) / (int)(32.f * 1.5f) * (32.f * 1.5)) + i * 32 * 1.5f ,
-					(float)((_ptMouse.y + (int)IMAGEMANAGER->GetCameraPosition().y % (int)(32 * 1.5f)) / (int)(32.f * 1.5f) * (32.f * 1.5)) + j * 32 * 1.5f }, {
-					(float)((_ptMouse.x + (int)IMAGEMANAGER->GetCameraPosition().x % (int)(32 * 1.5f)) / (int)(32.f * 1.5f) * (32.f * 1.5)) + float(i * 32 * 1.5f + 32 * 1.5) ,
-					(float)((_ptMouse.y + (int)IMAGEMANAGER->GetCameraPosition().y % (int)(32 * 1.5f)) / (int)(32.f * 1.5f) * (32.f * 1.5)) + float(j * 32 * 1.5f + 32 * 1.5)
-					}, { 1,0,0,0.5 }, 1);
+						(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + i * 32 * 1.5f - IMAGEMANAGER->GetCameraPosition().x,
+						(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + j * 32 * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, {
+						(float)((int)(_ptMouse.x + IMAGEMANAGER->GetCameraPosition().x) / (int)(32.f * 1.5f) * (32.f * 1.5)) + i * 32 * 1.5f + float(32 * 1.5) - IMAGEMANAGER->GetCameraPosition().x ,
+						(float)((int)(_ptMouse.y + IMAGEMANAGER->GetCameraPosition().y) / (int)(32.f * 1.5f) * (32.f * 1.5)) + j * 32 * 1.5f + float(32 * 1.5) - IMAGEMANAGER->GetCameraPosition().y
+						}, { 1,0,0,0.5 }, 1);
 			}
 		}
 	}

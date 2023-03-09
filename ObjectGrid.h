@@ -20,8 +20,8 @@ public:
 	float x, y;
 	float searchSizeX = 0;
 	float searchSizeY = 0;
-	void Astar(float searchSizeX, float searchSizeY);
-	void Astar2();
+	void Astar(float searchSizeX, float searchSizeY, bool isMine = false);
+	void Astar2(bool isMine);
 
 	Vector2 destPos;
 	void Init(Object* obj, Vector2 collisionGridSize, Vector2 gridSize, float x, float y);

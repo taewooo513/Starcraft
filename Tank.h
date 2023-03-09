@@ -6,6 +6,10 @@ public:
 	CImage* img[9];
 	CImage* img1[9];
 	CImage* img2[9];
+	CImage* simg[9];
+	CImage* simg1[9];
+	CImage* simg2[9];
+
 	CImage* imgT[9];
 	CImage* imgsT[9];
 

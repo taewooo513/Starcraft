@@ -166,6 +166,7 @@
     <ClCompile Include="Factory.cpp" />
     <ClCompile Include="FireBat.cpp" />
     <ClCompile Include="FlyUnit.cpp" />
+    <ClCompile Include="Gas.cpp" />
     <ClCompile Include="GridManager.cpp" />
     <ClCompile Include="ImageManager.cpp" />
     <ClCompile Include="IOFillManager.cpp" />
@@ -193,6 +194,7 @@
     </ClCompile>
     <ClCompile Include="Tank.cpp" />
     <ClCompile Include="TestScene.cpp" />
+    <ClCompile Include="TGas.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="TimerManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
@@ -221,6 +223,7 @@
     <ClInclude Include="Factory.h" />
     <ClInclude Include="FireBat.h" />
     <ClInclude Include="FlyUnit.h" />
+    <ClInclude Include="Gas.h" />
     <ClInclude Include="GridManager.h" />
     <ClInclude Include="ImageManager.h" />
     <ClInclude Include="IOFillManager.h" />
@@ -247,6 +250,7 @@
     <ClInclude Include="Storm\Storm.h" />
     <ClInclude Include="Tank.h" />
     <ClInclude Include="TestScene.h" />
+    <ClInclude Include="TGas.h" />
     <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="TimerManager.h" />
     <ClInclude Include="TitleScene.h" />
