@@ -10,6 +10,8 @@ TitleScene::~TitleScene()
 
 void TitleScene::Init()
 {
+
+
 	SOUNDMANAGER->play("main-menu", 0.5f);
 	/*
 	"

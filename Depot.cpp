@@ -28,7 +28,14 @@ void Depot::Init()
 	idle->Setting(0.1f, true);
 	grid = GRIDMANAGER->AddGrid(this, 12, 9, 3, 2, -6, -5);
 
-
+	idleP[0] = IMAGEMANAGER->AddImageVectorCopy("Advisor1P");
+	idleP[1] = IMAGEMANAGER->AddImageVectorCopy("Advisor2P");
+	idleP[2] = IMAGEMANAGER->AddImageVectorCopy("Advisor3P");
+	idleP[3] = IMAGEMANAGER->AddImageVectorCopy("Advisor4P");
+	idleP[0]->Setting(0.1f, false);
+	idleP[1]->Setting(0.1f, false);
+	idleP[2]->Setting(0.1f, false);
+	idleP[3]->Setting(0.1f, false);
 	grid->gridTag = 3;
 
 	player->AddBuild(this);
@@ -135,4 +142,18 @@ void Depot::UIRender()
 	IMAGEMANAGER->DirectDrawText(L"Supplies Provided: 8", { 400,695 }, { 12,12 });
 	IMAGEMANAGER->DirectDrawText(L"Total Supplies: " + to_wstring(player->m_maxSuff), { 400,715 }, { 12,12 });
 	IMAGEMANAGER->DirectDrawText(L"Supplies Max: 200", { 400,735 }, { 12,12 });
+
+	idleP[randImgaeP]->UIRenderBlendBlack({ 660,655 }, 1.5, 0, 0);
+	if (idleP[randImgaeP]->GetIsEnd())
+	{
+		if (rand() % 5 != 0)
+		{
+			randImgaeP = 0;
+		}
+		else
+		{
+			randImgaeP = rand() % 3 + 1;
+		}
+		idleP[randImgaeP]->Reset();
+	}
 }

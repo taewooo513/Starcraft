@@ -23,6 +23,14 @@ Armory::~Armory()
 
 void Armory::Init()
 {
+	idleP[0] = IMAGEMANAGER->AddImageVectorCopy("Advisor1P");
+	idleP[1] = IMAGEMANAGER->AddImageVectorCopy("Advisor2P");
+	idleP[2] = IMAGEMANAGER->AddImageVectorCopy("Advisor3P");
+	idleP[3] = IMAGEMANAGER->AddImageVectorCopy("Advisor4P");
+	idleP[0]->Setting(0.1f, false);
+	idleP[1]->Setting(0.1f, false);
+	idleP[2]->Setting(0.1f, false);
+	idleP[3]->Setting(0.1f, false);
 	grid = GRIDMANAGER->AddGrid(this, 14, 8, 3, 2, 2, 1);
 	grid->gridTag = 3;
 

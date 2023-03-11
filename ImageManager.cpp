@@ -389,6 +389,182 @@ void ImageManager::LoadMap()
 	mapReader->Init(m_d2dContext);
 }
 
+void ImageManager::AddWireImage(std::string key)
+{
+	D2D1_SIZE_U s;
+	s.height = 64;
+	s.width = 64;
+	ComPtr<ID2D1ColorContext> colorContext;
+	m_d2dContext->CreateColorContext(D2D1_COLOR_SPACE_SRGB, nullptr, 0, &colorContext);
+
+	D2D1_BITMAP_PROPERTIES pros = D2D1::BitmapProperties();
+	pros.pixelFormat = D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED);
+
+	RGBAbyte*** rgb = new RGBAbyte * *[4];
+	for (int i = 0; i < 4; i++)
+	{
+		rgb[i] = new RGBAbyte * [4];
+		for (int i2 = 0; i2 < 4; i2++)
+		{
+			rgb[i][i2] = new RGBAbyte[64 * 64];
+		}
+	}
+
+	auto find = wires.find(key);
+	if (find == wires.end())
+	{
+		return;
+	}
+	auto wire = find->second;
+	for (int i = 0; i < 64; i++)
+	{
+		for (int j = 0; j < 64; j++)
+		{
+			auto color = GetPixel(wire->dc, i, j);
+			int r = GetRValue(color);
+			int g = GetGValue(color);
+			int b = GetBValue(color);
+
+			for (int k = 0; k < 4; k++)
+			{
+				if (r == 252 && g == 252 && b == 56 && k == 0)
+				{
+					rgb[0][0][i + j * 64].r = 24;
+					rgb[0][0][i + j * 64].g = 252;
+					rgb[0][0][i + j * 64].b = 16;
+					rgb[0][0][i + j * 64].padding = 255;
+
+					rgb[0][1][i + j * 64].r = 56;
+					rgb[0][1][i + j * 64].g = 252;
+					rgb[0][1][i + j * 64].b = 252;
+					rgb[0][1][i + j * 64].padding = 255;
+
+					rgb[0][2][i + j * 64].r = 20;
+					rgb[0][2][i + j * 64].g = 140;
+					rgb[0][2][i + j * 64].b = 248;
+					rgb[0][2][i + j * 64].padding = 255;
+
+					rgb[0][3][i + j * 64].r = 24;
+					rgb[0][3][i + j * 64].g = 24;
+					rgb[0][3][i + j * 64].b = 200;
+					rgb[0][3][i + j * 64].padding = 255;
+
+				}
+				else if (r == 248 && g == 140 && b == 20 && k == 1)
+				{
+					rgb[1][0][i + j * 64].r = 24;
+					rgb[1][0][i + j * 64].g = 252;
+					rgb[1][0][i + j * 64].b = 16;
+					rgb[1][0][i + j * 64].padding = 255;
+
+
+					rgb[1][1][i + j * 64].r = 56;
+					rgb[1][1][i + j * 64].g = 252;
+					rgb[1][1][i + j * 64].b = 252;
+					rgb[1][1][i + j * 64].padding = 255;
+
+					rgb[1][2][i + j * 64].r = 20;
+					rgb[1][2][i + j * 64].g = 140;
+					rgb[1][2][i + j * 64].b = 248;
+					rgb[1][2][i + j * 64].padding = 255;
+
+					rgb[1][3][i + j * 64].r = 24;
+					rgb[1][3][i + j * 64].g = 24;
+					rgb[1][3][i + j * 64].b = 200;
+					rgb[1][3][i + j * 64].padding = 255;
+
+				}
+				else if (r == 200 && g == 24 && b == 24 && k == 2)
+				{
+					rgb[2][0][i + j * 64].r = 24;
+					rgb[2][0][i + j * 64].g = 252;
+					rgb[2][0][i + j * 64].b = 16;
+					rgb[2][0][i + j * 64].padding = 255;
+
+					rgb[2][1][i + j * 64].r = 56;
+					rgb[2][1][i + j * 64].g = 252;
+					rgb[2][1][i + j * 64].b = 252;
+					rgb[2][1][i + j * 64].padding = 255;
+
+					rgb[2][2][i + j * 64].r = 20;
+					rgb[2][2][i + j * 64].g = 140;
+					rgb[2][2][i + j * 64].b = 248;
+					rgb[2][2][i + j * 64].padding = 255;
+
+					rgb[2][3][i + j * 64].r = 24;
+					rgb[2][3][i + j * 64].g = 24;
+					rgb[2][3][i + j * 64].b = 200;
+					rgb[2][3][i + j * 64].padding = 255;
+
+				}
+				else if (r == 16 && g == 252 && b == 24 && k == 3)
+				{
+					rgb[3][0][i + j * 64].r = 24;
+					rgb[3][0][i + j * 64].g = 252;
+					rgb[3][0][i + j * 64].b = 16;
+					rgb[3][0][i + j * 64].padding = 255;
+
+					rgb[3][1][i + j * 64].r = 56;
+					rgb[3][1][i + j * 64].g = 252;
+					rgb[3][1][i + j * 64].b = 252;
+					rgb[3][1][i + j * 64].padding = 255;
+
+					rgb[3][2][i + j * 64].r = 20;
+					rgb[3][2][i + j * 64].g = 140;
+					rgb[3][2][i + j * 64].b = 248;
+					rgb[3][2][i + j * 64].padding = 255;
+
+					rgb[3][3][i + j * 64].r = 24;
+					rgb[3][3][i + j * 64].g = 24;
+					rgb[3][3][i + j * 64].b = 200;
+					rgb[3][3][i + j * 64].padding = 255;
+				}
+				else
+				{
+					for (int v = 0; v < 4; v++)
+					{
+						rgb[k][v][i + j * 64].r = 0;
+						rgb[k][v][i + j * 64].g = 0;
+						rgb[k][v][i + j * 64].b = 0;
+						rgb[k][v][i + j * 64].padding = 255;
+					}
+				}
+			}
+		}
+	}
+	//DC 해제
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			RGBAbyte r[64 * 64];
+			for (int i2 = 0; i2 < 64; i2++)
+			{
+				for (int j2 = 0; j2 < 64; j2++)
+				{
+					r[i2 * 64 + j2] = rgb[i][j][i2 * 64 + j2];
+				}
+			}
+			CImage* img = new CImage;
+			HRESULT hr = m_d2dContext->CreateBitmap(s, pros, &img->bitmap);
+			D2D1_RECT_U rectc = { 0 , 0 ,64 , 64 };
+			HRESULT hr2 = img->bitmap->CopyFromMemory(&rectc, r, 4 * 64);
+			img->SetWidth(64);
+			img->SetHeight(64);
+			wire->wireImages[i].push_back(img);
+		}
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			SAFE_DELETE_ARRAY(rgb[i][j]);
+		}
+		SAFE_DELETE_ARRAY(rgb[i]);
+	}
+	SAFE_DELETE_ARRAY(rgb);
+}
+
 void ImageManager::FogRender()
 {
 	for (int j = IMAGEMANAGER->GetCameraPosition().x / 8; j < IMAGEMANAGER->GetCameraPosition().x / 8 + WINSIZE_X / 8; j++)
@@ -478,18 +654,7 @@ void ImageManager::AddWireImage(std::string key, std::string path)
 {
 	UINT _width = 0, _height = 0;
 
-	ComPtr<ID2D1ColorContext> colorContext;
-	m_d2dContext->CreateColorContext(D2D1_COLOR_SPACE_SRGB, nullptr, 0, &colorContext);
 
-	D2D1_BITMAP_PROPERTIES pros = D2D1::BitmapProperties();
-	pros.pixelFormat = D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED);
-
-	RGBAbyte* rgb[4][4] = {
-		{ new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64] },
-		 { new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64] },
-		  { new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64] },
-		   { new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64],new RGBAbyte[64 * 64] }
-	};
 	WireFrame* wire = new WireFrame;
 
 	D2D1_SIZE_U s;
@@ -515,130 +680,10 @@ void ImageManager::AddWireImage(std::string key, std::string path)
 	dc = CreateCompatibleDC(hdc);
 	(HBITMAP)SelectObject(dc, wire->defaultImage);
 	HBITMAP hOBit = (HBITMAP)SelectObject(dc, wire->defaultImage);
-	for (int i = 0; i < 64; i++)
-	{
-		for (int j = 0; j < 64; j++)
-		{
-			auto color = GetPixel(dc, i, j);
-			int r = GetRValue(color);
-			int g = GetGValue(color);
-			int b = GetBValue(color);
+	wire->dc = dc;
 
-			for (int k = 0; k < 4; k++)
-			{
-				if (r == 252 && g == 252 && b == 56 && k == 0)
-				{
-					auto find = wire->wireImages.find(0);
-					rgb[0][0][i + j * 64].r = 24;
-					rgb[0][0][i + j * 64].g = 252;
-					rgb[0][0][i + j * 64].b = 16;
-
-					rgb[0][1][i + j * 64].r = 56;
-					rgb[0][1][i + j * 64].g = 252;
-					rgb[0][1][i + j * 64].b = 252;
-
-					rgb[0][2][i + j * 64].r = 20;
-					rgb[0][2][i + j * 64].g = 140;
-					rgb[0][2][i + j * 64].b = 248;
-
-					rgb[0][3][i + j * 64].r = 24;
-					rgb[0][3][i + j * 64].g = 24;
-					rgb[0][3][i + j * 64].b = 200;
-				}
-				else if (r == 248 && g == 140 && b == 20 && k == 1)
-				{
-					auto find = wire->wireImages.find(1);
-					rgb[1][0][i + j * 64].r = 24;
-					rgb[1][0][i + j * 64].g = 252;
-					rgb[1][0][i + j * 64].b = 16;
-
-					rgb[1][1][i + j * 64].r = 56;
-					rgb[1][1][i + j * 64].g = 252;
-					rgb[1][1][i + j * 64].b = 252;
-
-					rgb[1][2][i + j * 64].r = 20;
-					rgb[1][2][i + j * 64].g = 140;
-					rgb[1][2][i + j * 64].b = 248;
-
-					rgb[1][3][i + j * 64].r = 24;
-					rgb[1][3][i + j * 64].g = 24;
-					rgb[1][3][i + j * 64].b = 200;
-				}
-				else if (r == 200 && g == 24 && b == 24 && k == 2)
-				{
-					auto find = wire->wireImages.find(2);
-					rgb[2][0][i + j * 64].r = 24;
-					rgb[2][0][i + j * 64].g = 252;
-					rgb[2][0][i + j * 64].b = 16;
-
-					rgb[2][1][i + j * 64].r = 56;
-					rgb[2][1][i + j * 64].g = 252;
-					rgb[2][1][i + j * 64].b = 252;
-
-					rgb[2][2][i + j * 64].r = 20;
-					rgb[2][2][i + j * 64].g = 140;
-					rgb[2][2][i + j * 64].b = 248;
-
-					rgb[2][3][i + j * 64].r = 24;
-					rgb[2][3][i + j * 64].g = 24;
-					rgb[2][3][i + j * 64].b = 200;
-				}
-				else if (r == 16 && g == 252 && b == 24 && k == 3)
-				{
-					auto find = wire->wireImages.find(3);
-					rgb[3][0][i + j * 64].r = 24;
-					rgb[3][0][i + j * 64].g = 252;
-					rgb[3][0][i + j * 64].b = 16;
-
-					rgb[3][1][i + j * 64].r = 56;
-					rgb[3][1][i + j * 64].g = 252;
-					rgb[3][1][i + j * 64].b = 252;
-
-					rgb[3][2][i + j * 64].r = 20;
-					rgb[3][2][i + j * 64].g = 140;
-					rgb[3][2][i + j * 64].b = 248;
-
-					rgb[3][3][i + j * 64].r = 24;
-					rgb[3][3][i + j * 64].g = 24;
-					rgb[3][3][i + j * 64].b = 200;
-				}
-				else
-				{
-					for (int v = 0; v < 4; v++)
-					{
-						rgb[k][v][i + j * 64].r = 0;
-						rgb[k][v][i + j * 64].g = 0;
-						rgb[k][v][i + j * 64].b = 0;
-					}
-				}
-			}
-		}
-	}
-	//DC 해제
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			ID2D1Bitmap* bitmap;
-
-			HRESULT hr = m_d2dContext->CreateBitmap(s, pros, &bitmap);
-
-			D2D1_RECT_U rect = { 0 , 0 ,64 , 64 };
-			bitmap->CopyFromMemory(&rect, rgb[i][j], 4 * 64);
-			CImage* img = new CImage;
-			img->bitmap = bitmap;
-			wire->wireImages[i].push_back(img);
-		}
-	}
-	ReleaseDC(_hWnd, hdc);
 	wires.insert(make_pair(key, wire));
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			SAFE_DELETE(rgb[i][j]);
-		}
-	}
+
 }
 
 ID2D1Bitmap* ImageManager::AddBitmap(std::wstring path, UINT* Width, UINT* Height)
@@ -763,30 +808,6 @@ void ImageManager::ImageLoad()
 
 	AddImage("backgnd", L"./Resources/backgnd.bmp");
 	// 미네랄
-
-	AddWireImage("wirefram0000", "./Resources/Icon2/wirefram0000.bmp");
-	AddWireImage("wirefram0002", "./Resources/Icon2/wirefram0002.bmp");
-	AddWireImage("wirefram0005", "./Resources/Icon2/wirefram0005.bmp");
-	AddWireImage("wirefram0007", "./Resources/Icon2/wirefram0007.bmp");
-	AddWireImage("wirefram0106", "./Resources/Icon2/wirefram0106.bmp");
-	AddWireImage("wirefram0113", "./Resources/Icon2/wirefram0113.bmp");
-	AddWireImage("wirefram0111", "./Resources/Icon2/wirefram0111.bmp");
-	AddWireImage("wirefram0112", "./Resources/Icon2/wirefram0112.bmp");
-	AddWireImage("wirefram0120", "./Resources/Icon2/wirefram0120.bmp");
-	AddWireImage("wirefram0123", "./Resources/Icon2/wirefram0123.bmp");
-	AddWireImage("wirefram0109", "./Resources/Icon2/wirefram0109.bmp");
-
-	AddWireImage("grpwire0000", "./Resources/Icon3/grpwire0000.bmp");
-	AddWireImage("grpwire0002", "./Resources/Icon3/grpwire0002.bmp");
-	AddWireImage("grpwire0005", "./Resources/Icon3/grpwire0005.bmp");
-	AddWireImage("grpwire0007", "./Resources/Icon3/grpwire0007.bmp");
-	AddWireImage("grpwire0106", "./Resources/Icon3/grpwire0106.bmp");
-	AddWireImage("grpwire0113", "./Resources/Icon3/grpwire0113.bmp");
-	AddWireImage("grpwire0111", "./Resources/Icon3/grpwire0111.bmp");
-	AddWireImage("grpwire0112", "./Resources/Icon3/grpwire0112.bmp");
-	AddWireImage("grpwire0120", "./Resources/Icon3/grpwire0120.bmp");
-	AddWireImage("grpwire0123", "./Resources/Icon3/grpwire0123.bmp");
-	AddWireImage("grpwire0109", "./Resources/Icon3/grpwire0109.bmp");
 
 	AddImage("cmdicons0323", L"./Resources/Icon/cmdicons0323.bmp"); //공업
 	AddImage("cmdicons0238", L"./Resources/Icon/cmdicons0238.bmp"); //아카데미 
@@ -1077,6 +1098,32 @@ void ImageManager::ImageLoad()
 	AddImageVector("editoron", L"./Resources/lobby/Editor/English/editoron", 0, 19, true); // 마우스 
 	AddImageVector("exiton", L"./Resources/lobby/Exit/English/exiton", 0, 29, true); // 마우스
 	AddImageVector("singleon", L"./Resources/lobby/Single Player/English/singleon", 8, 67, true); // 마우스
+
+	//유닛 초상화
+	AddImageVector("scv1P", L"./Resources/Terran/SCV/tscfid00", 0, 9, true); // 마우스
+	AddImageVector("scv2P", L"./Resources/Terran/SCV/tscfid01", 0, 9, true); // 마우스
+	AddImageVector("scv3P", L"./Resources/Terran/SCV/tscfid02", 0, 9, true); // 마우스
+	AddImageVector("scv4P", L"./Resources/Terran/SCV/tscfid03", 0, 14, true); // 마우스
+
+	AddImageVector("vulture1P", L"./Resources/Terran/Vulture/tvufid00", 0, 9, true); // 마우스
+	AddImageVector("vulture2P", L"./Resources/Terran/Vulture/tvufid01", 0, 9, true); // 마우스
+	AddImageVector("vulture3P", L"./Resources/Terran/Vulture/tvufid02", 0, 9, true); // 마우스
+	AddImageVector("vulture4P", L"./Resources/Terran/Vulture/tvufid03", 0, 15, true); // 마우스
+
+	AddImageVector("Marine1P", L"./Resources/Terran/Marine/tmafid00", 0, 9, true); // 마우스
+	AddImageVector("Marine2P", L"./Resources/Terran/Marine/tmafid01", 0, 9, true); // 마우스
+	AddImageVector("Marine3P", L"./Resources/Terran/Marine/tmafid02", 0, 9, true); // 마우스
+	AddImageVector("Marine4P", L"./Resources/Terran/Marine/tmafid03", 0, 14, true); // 마우스
+
+	AddImageVector("tank1P", L"./Resources/Terran/Seige Tank/ttafid00", 0, 9, true); // 마우스
+	AddImageVector("tank2P", L"./Resources/Terran/Seige Tank/ttafid01", 0, 9, true); // 마우스
+	AddImageVector("tank3P", L"./Resources/Terran/Seige Tank/ttafid02", 0, 9, true); // 마우스
+	AddImageVector("tank4P", L"./Resources/Terran/Seige Tank/ttafid03", 0, 14, true); // 마우스
+
+	AddImageVector("Advisor1P", L"./Resources/Terran/Advisor/tadfid00", 0, 9, true); // 마우스
+	AddImageVector("Advisor2P", L"./Resources/Terran/Advisor/tadfid01", 0, 9, true); // 마우스
+	AddImageVector("Advisor3P", L"./Resources/Terran/Advisor/tadfid02", 0, 9, true); // 마우스
+	AddImageVector("Advisor4P", L"./Resources/Terran/Advisor/tadfid03", 0, 14, true); // 마우스
 
 	AddImage("marin_attack_1_1_s", L"./Resources/marin/tmashad0034.bmp"); // 마린 공격 프레임 1
 	AddImage("marin_attack_1_2_s", L"./Resources/marin/tmashad0036.bmp");

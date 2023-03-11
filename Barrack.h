@@ -17,7 +17,8 @@ public:
 	CImage* m_shadImage[4];
 
 	Barrack();
-	virtual ~Barrack();
+	virtual ~Barrack(); vImage* idleP[4];
+	int randImgaeP = 0;
 
 	virtual void Init() override;
 	virtual void Update() override;

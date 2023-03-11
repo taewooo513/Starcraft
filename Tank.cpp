@@ -36,7 +36,14 @@ void Tank::Init()
 {
 	sMode = IMAGEMANAGER->AddImageVectorCopy("sTank");
 	sModeT = IMAGEMANAGER->AddImageVectorCopy("sTankT");
-
+	idleP[0] = IMAGEMANAGER->AddImageVectorCopy("tank1P");
+	idleP[1] = IMAGEMANAGER->AddImageVectorCopy("tank2P");
+	idleP[2] = IMAGEMANAGER->AddImageVectorCopy("tank3P");
+	idleP[3] = IMAGEMANAGER->AddImageVectorCopy("tank4P");
+	idleP[0]->Setting(0.1f, false);
+	idleP[1]->Setting(0.1f, false);
+	idleP[2]->Setting(0.1f, false);
+	idleP[3]->Setting(0.1f, false);
 	range = 250;
 
 	sMode->Setting(0.2f, false);
@@ -52,7 +59,7 @@ void Tank::Init()
 	grid = GRIDMANAGER->AddGrid(this, 4, 4, 20, 20, -2, -1);
 	grid->gridTag = rand() % 10000 + 100;
 	player->AddUnit(this);
-
+	lasthp = m_hp;
 	simg[8] = IMAGEMANAGER->FindImage("tank0000s");
 	simg[7] = IMAGEMANAGER->FindImage("tank0002s");
 	simg[6] = IMAGEMANAGER->FindImage("tank0004s");
@@ -336,8 +343,12 @@ void Tank::UIRender()
 	else
 		IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0025"), { UIPosition[6].x ,UIPosition[6].y + 3 }, 1.7, 0, 0);
 
-	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("wirefram0106"), { 319,680 }, 1.5, 0, 0);
-	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 285,730 }, { 12,12 }, { 0,255,0,1 });
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0005"]->wireImages[3][damageIndex[0]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0005"]->wireImages[1][damageIndex[1]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0005"]->wireImages[2][damageIndex[2]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0005"]->wireImages[0][damageIndex[3]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+
+	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 295,730 }, { 12,12 }, { 0,255,0,1 });
 
 	IMAGEMANAGER->DirectDrawText(L"Sergeant", { 460,655 }, { 15,15 }, { 255,255,255,1 });
 
@@ -346,6 +357,20 @@ void Tank::UIRender()
 	if (KEYMANAGER->GetOnceKeyDown('S') && (sMode->GetIsEnd() == true || isSMode == false))
 	{
 		isSMode = true;
+	}
+
+	idleP[randImgaeP]->UIRenderBlendBlack({ 660,655 }, 1.5, 0, 0);
+	if (idleP[randImgaeP]->GetIsEnd())
+	{
+		if (rand() % 5 != 0)
+		{
+			randImgaeP = 0;
+		}
+		else
+		{
+			randImgaeP = rand() % 3 + 1;
+		}
+		idleP[randImgaeP]->Reset();
 	}
 }
 

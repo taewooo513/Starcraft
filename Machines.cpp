@@ -31,7 +31,14 @@ void Machines::Init()
 	grid = GRIDMANAGER->AddGrid(this, 10, 4, 4, 2, -7, -5);
 
 	grid->gridTag = 3;
-
+	idleP[0] = IMAGEMANAGER->AddImageVectorCopy("Advisor1P");
+	idleP[1] = IMAGEMANAGER->AddImageVectorCopy("Advisor2P");
+	idleP[2] = IMAGEMANAGER->AddImageVectorCopy("Advisor3P");
+	idleP[3] = IMAGEMANAGER->AddImageVectorCopy("Advisor4P");
+	idleP[0]->Setting(0.1f, false);
+	idleP[1]->Setting(0.1f, false);
+	idleP[2]->Setting(0.1f, false);
+	idleP[3]->Setting(0.1f, false);
 	player->AddBuild(this);
 	m_buildImage[0] = IMAGEMANAGER->FindImage("tbldsml0000");
 	m_buildImage[1] = IMAGEMANAGER->FindImage("tbldsml0001");
@@ -197,4 +204,19 @@ void Machines::UIRender()
 	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 295,730 }, { 12,12 }, { 0,255,0,1 });
 
 	IMAGEMANAGER->DirectDrawText(L"Terran Machine Shop", { 400,625 }, { 15,15 });
+
+	idleP[randImgaeP]->UIRenderBlendBlack({ 660,655 }, 1.5, 0, 0);
+	if (idleP[randImgaeP]->GetIsEnd())
+	{
+		if (rand() % 5 != 0)
+		{
+			randImgaeP = 0;
+		}
+		else
+		{
+			randImgaeP = rand() % 3 + 1;
+		}
+		idleP[randImgaeP]->Reset();
+	}
+
 }

@@ -20,6 +20,8 @@ public:
 	CImage* sfire2Image[9];
 	CImage* srun1Image[9];
 	CImage* srun2Image[9];
+	vImage* idleP[4];
+	int randImgaeP = 0;
 	CImage* srun3Image[9];
 	CImage* srun4Image[9];
 	CImage* srun5Image[9];

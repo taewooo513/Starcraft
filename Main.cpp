@@ -73,6 +73,29 @@ void Main::Init()
 	SOUNDMANAGER->addSound("ttafir00", "./Resources/Sound/tank/ttafir00.wav", false, false);
 	SOUNDMANAGER->addSound("ttafi200", "./Resources/Sound/tank/ttafi200.wav", false, false);
 
+	IMAGEMANAGER->AddWireImage("wirefram0000", "./Resources/Icon2/wirefram0000.bmp");
+	IMAGEMANAGER->AddWireImage("wirefram0002", "./Resources/Icon2/wirefram0002.bmp");
+	IMAGEMANAGER->AddWireImage("wirefram0005", "./Resources/Icon2/wirefram0005.bmp");
+	IMAGEMANAGER->AddWireImage("wirefram0007", "./Resources/Icon2/wirefram0007.bmp");
+	IMAGEMANAGER->AddWireImage("wirefram0106", "./Resources/Icon2/wirefram0106.bmp");
+	IMAGEMANAGER->AddWireImage("wirefram0113", "./Resources/Icon2/wirefram0113.bmp");
+	IMAGEMANAGER->AddWireImage("wirefram0111", "./Resources/Icon2/wirefram0111.bmp");
+	IMAGEMANAGER->AddWireImage("wirefram0112", "./Resources/Icon2/wirefram0112.bmp");
+	IMAGEMANAGER->AddWireImage("wirefram0120", "./Resources/Icon2/wirefram0120.bmp");
+	IMAGEMANAGER->AddWireImage("wirefram0123", "./Resources/Icon2/wirefram0123.bmp");
+	IMAGEMANAGER->AddWireImage("wirefram0109", "./Resources/Icon2/wirefram0109.bmp");
+
+	IMAGEMANAGER->AddWireImage("grpwire0000", "./Resources/Icon3/grpwire0000.bmp");
+	IMAGEMANAGER->AddWireImage("grpwire0002", "./Resources/Icon3/grpwire0002.bmp");
+	IMAGEMANAGER->AddWireImage("grpwire0005", "./Resources/Icon3/grpwire0005.bmp");
+	IMAGEMANAGER->AddWireImage("grpwire0007", "./Resources/Icon3/grpwire0007.bmp");
+	IMAGEMANAGER->AddWireImage("grpwire0106", "./Resources/Icon3/grpwire0106.bmp");
+	IMAGEMANAGER->AddWireImage("grpwire0113", "./Resources/Icon3/grpwire0113.bmp");
+	IMAGEMANAGER->AddWireImage("grpwire0111", "./Resources/Icon3/grpwire0111.bmp");
+	IMAGEMANAGER->AddWireImage("grpwire0112", "./Resources/Icon3/grpwire0112.bmp");
+	IMAGEMANAGER->AddWireImage("grpwire0120", "./Resources/Icon3/grpwire0120.bmp");
+	IMAGEMANAGER->AddWireImage("grpwire0123", "./Resources/Icon3/grpwire0123.bmp");
+	IMAGEMANAGER->AddWireImage("grpwire0109", "./Resources/Icon3/grpwire0109.bmp");
 
 	srand(GetTickCount64());
 	SCENEMANAGER->ChangeScene("TitleScene");

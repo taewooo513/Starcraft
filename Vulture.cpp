@@ -33,6 +33,15 @@ Vulture::~Vulture()
 
 void Vulture::Init()
 {
+	idleP[0] = IMAGEMANAGER->AddImageVectorCopy("vulture1P");
+	idleP[1] = IMAGEMANAGER->AddImageVectorCopy("vulture2P");
+	idleP[2] = IMAGEMANAGER->AddImageVectorCopy("vulture3P");
+	idleP[3] = IMAGEMANAGER->AddImageVectorCopy("vulture4P");
+	idleP[0]->Setting(0.1f, false);
+	idleP[1]->Setting(0.1f, false);
+	idleP[2]->Setting(0.1f, false);
+	idleP[3]->Setting(0.1f, false);
+
 	astarTimer = 0.1;
 	player->m_suff += 1;
 	m_maxHp = 80;
@@ -53,6 +62,7 @@ void Vulture::Init()
 	img[1] = IMAGEMANAGER->FindImage("Vulture_8");
 	img[0] = IMAGEMANAGER->FindImage("Vulture_9");
 	m_isClick = false;
+	lasthp = m_hp;
 }
 
 void Vulture::Update()
@@ -184,11 +194,30 @@ void Vulture::UIRender()
 	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[4].x + 25,UIPosition[4].y + 25 }, 1.7, 0, 0);
 	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0255"), { UIPosition[4].x ,UIPosition[4].y + 3 }, 1.7, 0, 0);
 
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0002"]->wireImages[3][damageIndex[0]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0002"]->wireImages[1][damageIndex[1]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0002"]->wireImages[2][damageIndex[2]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0002"]->wireImages[0][damageIndex[3]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
+
+	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 295,730 }, { 12,12 }, { 0,255,0,1 });
 
 	IMAGEMANAGER->DirectDrawText(L"Sergeant", { 460,655 }, { 15,15 }, { 255,255,255,1 });
 
 	IMAGEMANAGER->DirectDrawText(L"Terran Vulture", { 430,625 }, { 15,15 });
 
+	idleP[randImgaeP]->UIRenderBlendBlack({ 660,655 }, 1.5, 0, 0);
+	if (idleP[randImgaeP]->GetIsEnd())
+	{
+		if (rand() % 5 != 0)
+		{
+			randImgaeP = 0;
+		}
+		else
+		{
+			randImgaeP = rand() % 3 + 1;
+		}
+		idleP[randImgaeP]->Reset();
+	}
 }
 
 void Vulture::Release()

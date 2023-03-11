@@ -15,7 +15,8 @@ public:
 
 	Armory();
 	virtual ~Armory();
-
+	vImage* idleP[4];
+	int randImgaeP = 0;
 	virtual void Init() override;
 	virtual void Update() override;
 	virtual void Render() override;

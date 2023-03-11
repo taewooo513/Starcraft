@@ -42,6 +42,14 @@ SpaceConstructionVehicle::~SpaceConstructionVehicle()
 
 void SpaceConstructionVehicle::Init()
 {
+	idleP[0] = IMAGEMANAGER->AddImageVectorCopy("scv1P");
+	idleP[1] = IMAGEMANAGER->AddImageVectorCopy("scv2P");
+	idleP[2] = IMAGEMANAGER->AddImageVectorCopy("scv3P");
+	idleP[3] = IMAGEMANAGER->AddImageVectorCopy("scv4P");
+	idleP[0]->Setting(0.1f, false);
+	idleP[1]->Setting(0.1f, false);
+	idleP[2]->Setting(0.1f, false);
+	idleP[3]->Setting(0.1f, false);
 	sparkImg = IMAGEMANAGER->AddImageVectorCopy("SCVEffect");
 	sparkImg->Setting(0.1, true);
 	m_maxHp = 60;
@@ -648,9 +656,30 @@ void SpaceConstructionVehicle::UIRender()
 			}
 		}
 	}
+	IMAGEMANAGER->DirectDrawText(L"Private", { 460,655 }, { 15,15 }, { 255,255,255,1 });
 
+	IMAGEMANAGER->DirectDrawText(L"Terran SCV", { 430,625 }, { 15,15 });
+
+	IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0292"), { 453,722 }, 1.7, 0, 0);
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0012"), { 480,750 }, 1.7, 0, 0);
+
+	IMAGEMANAGER->DrawUI2(IMAGEMANAGER->FindImage("cmdicons0288"), { 523 ,722 }, 1.7, 0, 0);
+	IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0012"), { 550,750 }, 1.7, 0, 0);
 	BuildingConstruction();
 	BuildCommandUI();
+	idleP[randImgaeP]->UIRenderBlendBlack({ 660,655 }, 1.5, 0, 0);
+	if (idleP[randImgaeP]->GetIsEnd())
+	{
+		if (rand() % 5 != 0)
+		{
+			randImgaeP = 0;
+		}
+		else
+		{
+			randImgaeP = rand() % 3 + 1;
+		}
+		idleP[randImgaeP]->Reset();
+	}
 }
 
 void SpaceConstructionVehicle::Attack()

@@ -15,6 +15,29 @@ MainGameScene::~MainGameScene()
 
 void MainGameScene::Init()
 {
+	IMAGEMANAGER->AddWireImage("wirefram0000");
+	IMAGEMANAGER->AddWireImage("wirefram0002");
+	IMAGEMANAGER->AddWireImage("wirefram0005");
+	IMAGEMANAGER->AddWireImage("wirefram0007");
+	IMAGEMANAGER->AddWireImage("wirefram0106");
+	IMAGEMANAGER->AddWireImage("wirefram0113");
+	IMAGEMANAGER->AddWireImage("wirefram0111");
+	IMAGEMANAGER->AddWireImage("wirefram0112");
+	IMAGEMANAGER->AddWireImage("wirefram0120");
+	IMAGEMANAGER->AddWireImage("wirefram0123");
+	IMAGEMANAGER->AddWireImage("wirefram0109");
+
+	IMAGEMANAGER->AddWireImage("grpwire0000");
+	IMAGEMANAGER->AddWireImage("grpwire0002");
+	IMAGEMANAGER->AddWireImage("grpwire0005");
+	IMAGEMANAGER->AddWireImage("grpwire0007");
+	IMAGEMANAGER->AddWireImage("grpwire0106");
+	IMAGEMANAGER->AddWireImage("grpwire0113");
+	IMAGEMANAGER->AddWireImage("grpwire0111");
+	IMAGEMANAGER->AddWireImage("grpwire0112");
+	IMAGEMANAGER->AddWireImage("grpwire0120");
+	IMAGEMANAGER->AddWireImage("grpwire0123");
+	IMAGEMANAGER->AddWireImage("grpwire0109");
 	SOUNDMANAGER->stop("main-menu");
 	SOUNDMANAGER->play("terran-1", 0.5f);
 	player1 = new Player;

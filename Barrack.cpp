@@ -28,7 +28,14 @@ void Barrack::Init()
 	workImage = IMAGEMANAGER->AddImageVectorCopy("Barrack_Work");
 	workImage->Setting(0.1, true);
 	grid = GRIDMANAGER->AddGrid(this, 14, 11, 3, 2, -7, -5);
-
+	idleP[0] = IMAGEMANAGER->AddImageVectorCopy("Advisor1P");
+	idleP[1] = IMAGEMANAGER->AddImageVectorCopy("Advisor2P");
+	idleP[2] = IMAGEMANAGER->AddImageVectorCopy("Advisor3P");
+	idleP[3] = IMAGEMANAGER->AddImageVectorCopy("Advisor4P");
+	idleP[0]->Setting(0.1f, false);
+	idleP[1]->Setting(0.1f, false);
+	idleP[2]->Setting(0.1f, false);
+	idleP[3]->Setting(0.1f, false);
 	grid->gridTag = 3;
 
 	player->AddBuild(this);
@@ -290,6 +297,18 @@ void Barrack::UIRender()
 	IMAGEMANAGER->UIRenderBlendBlack(IMAGEMANAGER->wires["wirefram0111"]->wireImages[0][damageIndex[3]], { 319 - 64.f * 1.5f / 2,680 - 64 * 1.5f / 2 }, 1.5f, 0);
 
 	IMAGEMANAGER->DirectDrawText(to_wstring((int)m_hp) + L"/" + to_wstring((int)m_maxHp), { 295,730 }, { 12,12 }, { 0,255,0,1 });
-
+	idleP[randImgaeP]->UIRenderBlendBlack({ 660,655 }, 1.5, 0, 0);
+	if (idleP[randImgaeP]->GetIsEnd())
+	{
+		if (rand() % 5 != 0)
+		{
+			randImgaeP = 0;
+		}
+		else
+		{
+			randImgaeP = rand() % 3 + 1;
+		}
+		idleP[randImgaeP]->Reset();
+	}
 	IMAGEMANAGER->DirectDrawText(L"Terran Barracks", { 400,625 }, { 15,15 });
 }

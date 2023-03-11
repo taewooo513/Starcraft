@@ -19,6 +19,8 @@ public:
 	// Unit을(를) 통해 상속됨
 	virtual void Move() override;
 	virtual void Attack() override;
+	vImage* idleP[4];
+	int randImgaeP = 0;
 	void CollisionUpdate();
 };
 

@@ -23,6 +23,14 @@ Starport::~Starport()
 
 void Starport::Init()
 {
+	idleP[0] = IMAGEMANAGER->AddImageVectorCopy("scv1P");
+	idleP[1] = IMAGEMANAGER->AddImageVectorCopy("scv2P");
+	idleP[2] = IMAGEMANAGER->AddImageVectorCopy("scv3P");
+	idleP[3] = IMAGEMANAGER->AddImageVectorCopy("scv4P");
+	idleP[0]->Setting(0.1f, false);
+	idleP[1]->Setting(0.1f, false);
+	idleP[2]->Setting(0.1f, false);
+	idleP[3]->Setting(0.1f, false);
 	grid = GRIDMANAGER->AddGrid(this, 14, 8, 3, 2, 2, 1);
 	grid->gridTag = 3;
 
@@ -98,4 +106,18 @@ void Starport::UIRender()
 	}
 
 	IMAGEMANAGER->DirectDrawText(L"Terran Starport", { 400,625 }, { 15,15 });
+
+	idleP[randImgaeP]->UIRenderBlendBlack({ 660,655 }, 1.5, 0, 0);
+	if (idleP[randImgaeP]->GetIsEnd())
+	{
+		if (rand() % 5 != 0)
+		{
+			randImgaeP = 0;
+		}
+		else
+		{
+			randImgaeP = rand() % 3 + 1;
+		}
+		idleP[randImgaeP]->Reset();
+	}
 }

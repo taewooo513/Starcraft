@@ -12,6 +12,7 @@ public:
 	virtual void Update() override;
 	virtual void Render() override;
 	virtual void Release() override;
-	virtual void UIRender() override;
+	virtual void UIRender() override; vImage* idleP[4];
+	int randImgaeP = 0;
 };
 

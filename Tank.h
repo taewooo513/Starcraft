@@ -33,6 +33,8 @@ public:
 	virtual void Update() override;
 	virtual void Render() override;
 	virtual void UIRender() override;
+	vImage* idleP[4];
+	int randImgaeP = 0;
 	virtual void Release() override;
 	// Unit을(를) 통해 상속됨
 	virtual void Move() override;

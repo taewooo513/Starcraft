@@ -91,4 +91,18 @@ void ScienceFacility::UIRender()
 	}
 
 	IMAGEMANAGER->DirectDrawText(L"Terran Science Facility", { 400,625 }, { 15,15 });
+
+	idleP[randImgaeP]->UIRenderBlendBlack({ 660,655 }, 1.5, 0, 0);
+	if (idleP[randImgaeP]->GetIsEnd())
+	{
+		if (rand() % 5 != 0)
+		{
+			randImgaeP = 0;
+		}
+		else
+		{
+			randImgaeP = rand() % 3 + 1;
+		}
+		idleP[randImgaeP]->Reset();
+	}
 }

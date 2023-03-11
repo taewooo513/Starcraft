@@ -34,6 +34,7 @@ public:
 class WireFrame
 {
 public:
+	HDC dc;
 	HBITMAP defaultImage;
 	map<int, vector<CImage*>> wireImages;
 };
@@ -82,10 +83,10 @@ public:
 	~ImageManager();
 public:
 	void Test(RECT rc);
-
 	void Init(ID2D1DeviceContext* context, IDXGISwapChain1* swapChain);
 	void CameraSetting();
 
+	void AddWireImage(std::string key);
 	void AddWireImage(std::string key,std::string path);
 	ID2D1Bitmap* AddBitmap(std::wstring path, UINT* Width, UINT* Height);
 	CImage* AddImage(const std::string key, std::wstring path);
