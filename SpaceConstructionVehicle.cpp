@@ -237,6 +237,8 @@ void SpaceConstructionVehicle::Update()
 				float rrr = atan2(m_nowBuild->position.x - position.x, m_nowBuild->position.y - position.y);
 				imgRot = rrr > 0 ? 3.141592 - rrr : -3.141592 - rrr;
 			}
+			buildDest.x = 0;
+			buildDest.y = 0;
 		}
 		else
 		{

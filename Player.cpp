@@ -122,6 +122,7 @@ void Player::Astar(Vector2 startPos, Vector2 endPos, Unit* unit)
 void Player::Init()
 {
 	m_clickRad = 0;
+	OBJECTMANAGER->m_player = this;
 	sizeClick = 1.7;
 	m_isCameraClick = true;
 	m_cursorImage = IMAGEMANAGER->AddImageVectorCopy("arrow0000");
@@ -146,8 +147,16 @@ void Player::Init()
 		{
 			Build* commandCenter = new CommandCenter;
 			commandCenter->SetPlayer(this);
+			IMAGEMANAGER->CameraSetPosition({ float(iter->x - WINSIZE_X / 2.f), float(iter->y - WINSIZE_Y / 2.f) + 80.f });
 			OBJECTMANAGER->AddObject(commandCenter, "Build", iter->x, iter->y, 0);
 			commandCenter->AddComplete();
+		}
+		break;
+		case 6:
+		{
+			Marine* marine = new Marine;
+			marine->SetPlayer(this);
+			OBJECTMANAGER->AddObject(marine, "marine", iter->x, iter->y - 200, 0);
 		}
 		break;
 		case 7:
@@ -729,6 +738,7 @@ void Player::Render()
 void Player::UIRender()
 {
 	IMAGEMANAGER->FogRender();
+	updateTimer += DELTA_TIME;
 	if (updateTimer > 0.5)
 	{
 		for (int x = 0; x < 512; x++)
@@ -784,6 +794,10 @@ void Player::UIRender()
 	int count = 0;
 	for (auto iter : m_selectUnits)
 	{
+		if (count >= 12)
+		{
+			break;
+		}
 		iter->m_isClick = true;
 		if (typeid(*iter).name() == typeid(SpaceConstructionVehicle).name())
 		{

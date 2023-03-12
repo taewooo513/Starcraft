@@ -271,7 +271,7 @@ void ImageManager::UICenterRenderBlendBlack(CImage* img, Vector2 vec, float scal
 	m_d2dContext->DrawImage(blendEffect);
 }
 
-void ImageManager::UICenterRenderBlendBlack2(CImage* img, Vector2 vec, Vector2 scale, float rot, bool isReverse)
+void ImageManager::UICenterRenderBlendBlack2(CImage* img, Vector2 vec, Vector2 scale, float rot, bool isReverse, float alpha)
 {
 	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
 
@@ -328,10 +328,7 @@ void ImageManager::DrawCircle(Vector2 vec, float scaleX, float scaleY, D2D1_COLO
 
 void ImageManager::DrawRect(Vector2 startPos, Vector2 endPos, D2D1_COLOR_F color, int rectStyle)
 {
-	if (startPos.x >= WINSIZE_X || startPos.x <= -30 || startPos.y >= WINSIZE_Y || startPos.y <= -30)
-	{
-		return;
-	}
+
 	D2D1_MATRIX_3X2_F matW, matR, matS, matP;
 	matP = D2D1::Matrix3x2F::Translation(0, 0);
 	matW = matP;
@@ -567,20 +564,20 @@ void ImageManager::AddWireImage(std::string key)
 
 void ImageManager::FogRender()
 {
-	for (int j = IMAGEMANAGER->GetCameraPosition().x / 8; j < IMAGEMANAGER->GetCameraPosition().x / 8 + WINSIZE_X / 8; j++)
+	for (int j = IMAGEMANAGER->GetCameraPosition().x / 8 / 1.5f; j < (IMAGEMANAGER->GetCameraPosition().x + WINSIZE_X) / 8 / 1.5f; j++)
 	{
-		for (int i = IMAGEMANAGER->GetCameraPosition().y / 8; i < IMAGEMANAGER->GetCameraPosition().y / 8 + WINSIZE_Y / 8; i++)
+		for (int i = IMAGEMANAGER->GetCameraPosition().y / 8 / 1.5f; i < (IMAGEMANAGER->GetCameraPosition().y + WINSIZE_Y) / 8 / 1.5f; i++)
 		{
 			if (i >= 0 && j >= 0 && j < 511 && i < 511)
-				if (GRIDMANAGER->regionsTile[j][i].fogTag == 0)
 					DrawRect({
-					(float)j * 8 * 1.5f ,
-					(float)i * 8 * 1.5f }, {
-					(float)j * 8 * 1.5f + 8 * 1.5f ,
-					(float)i * 8 * 1.5f + 8 * 1.5f },
-						{ 0,0,0,1.f }, 1);
+					(float)j * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x ,
+					(float)i * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y }, {
+					(float)j * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().x + 8 * 1.52f ,
+					(float)i * 8 * 1.5f - IMAGEMANAGER->GetCameraPosition().y + 8 * 1.52f },
+						{ 0,0,0,1.f - GRIDMANAGER->regionsTile[j][i].fogTag }, 1);
 		}
 	}
+
 }
 
 void ImageManager::FogUpdate(Vector2 pos, float dest)
@@ -809,6 +806,30 @@ void ImageManager::ImageLoad()
 	AddImage("backgnd", L"./Resources/backgnd.bmp");
 	// ¹Ì³×¶ö
 
+	AddWireImage("wirefram0000", "./Resources/Icon2/wirefram0000.bmp");
+	AddWireImage("wirefram0002", "./Resources/Icon2/wirefram0002.bmp");
+	AddWireImage("wirefram0005", "./Resources/Icon2/wirefram0005.bmp");
+	AddWireImage("wirefram0007", "./Resources/Icon2/wirefram0007.bmp");
+	AddWireImage("wirefram0106", "./Resources/Icon2/wirefram0106.bmp");
+	AddWireImage("wirefram0113", "./Resources/Icon2/wirefram0113.bmp");
+	AddWireImage("wirefram0111", "./Resources/Icon2/wirefram0111.bmp");
+	AddWireImage("wirefram0112", "./Resources/Icon2/wirefram0112.bmp");
+	AddWireImage("wirefram0120", "./Resources/Icon2/wirefram0120.bmp");
+	AddWireImage("wirefram0123", "./Resources/Icon2/wirefram0123.bmp");
+	AddWireImage("wirefram0109", "./Resources/Icon2/wirefram0109.bmp");
+
+	AddWireImage("grpwire0000", "./Resources/Icon3/grpwire0000.bmp");
+	AddWireImage("grpwire0002", "./Resources/Icon3/grpwire0002.bmp");
+	AddWireImage("grpwire0005", "./Resources/Icon3/grpwire0005.bmp");
+	AddWireImage("grpwire0007", "./Resources/Icon3/grpwire0007.bmp");
+	AddWireImage("grpwire0106", "./Resources/Icon3/grpwire0106.bmp");
+	AddWireImage("grpwire0113", "./Resources/Icon3/grpwire0113.bmp");
+	AddWireImage("grpwire0111", "./Resources/Icon3/grpwire0111.bmp");
+	AddWireImage("grpwire0112", "./Resources/Icon3/grpwire0112.bmp");
+	AddWireImage("grpwire0120", "./Resources/Icon3/grpwire0120.bmp");
+	AddWireImage("grpwire0123", "./Resources/Icon3/grpwire0123.bmp");
+	AddWireImage("grpwire0109", "./Resources/Icon3/grpwire0109.bmp");
+
 	AddImage("cmdicons0323", L"./Resources/Icon/cmdicons0323.bmp"); //°ø¾÷
 	AddImage("cmdicons0238", L"./Resources/Icon/cmdicons0238.bmp"); //¾ÆÄ«µ¥¹Ì 
 	AddImage("cmdicons0237", L"./Resources/Icon/cmdicons0237.bmp"); //½ºÆÀÆå 
@@ -844,6 +865,22 @@ void ImageManager::ImageLoad()
 	AddImage("cmdicons0005", L"./Resources/Icon/cmdicons0005.bmp"); //SCVcmdicons0007
 	AddImage("cmdicons0003", L"./Resources/Icon/cmdicons0003.bmp"); //SCVcmdicons0007
 	AddImage("cmdicons0002", L"./Resources/Icon/cmdicons0002.bmp"); //SCVcmdicons0007
+
+	AddImage("tile0000", L"./Resources/ui6/tile0000.bmp"); //SCVcmdicons0007
+	AddImage("tile0001", L"./Resources/ui6/tile0001.bmp"); //SCVcmdicons0007
+	AddImage("tile0002", L"./Resources/ui6/tile0002.bmp"); //SCVcmdicons0007
+	AddImage("tile0003", L"./Resources/ui6/tile0003.bmp"); //SCVcmdicons0007
+	AddImage("tile0004", L"./Resources/ui6/tile0004.bmp"); //SCVcmdicons0007
+	AddImage("tile0005", L"./Resources/ui6/tile0005.bmp"); //SCVcmdicons0007
+	AddImage("tile0006", L"./Resources/ui6/tile0006.bmp"); //SCVcmdicons0007
+	AddImage("tile0007", L"./Resources/ui6/tile0007.bmp"); //SCVcmdicons0007
+	AddImage("tile0008", L"./Resources/ui6/tile0008.bmp"); //SCVcmdicons0007
+
+	AddImage("terran0115", L"./Resources/ui6/terran0115.bmp"); //SCVcmdicons0007
+	AddImage("terran0116", L"./Resources/ui6/terran0116.bmp"); //SCVcmdicons0007
+	AddImage("terran0117", L"./Resources/ui6/terran0117.bmp"); //SCVcmdicons0007
+
+
 
 	// SCV
 	AddImage("wirefram0106", L"./Resources/Icon2/wirefram0106.bmp"); //SCVcmdicons0007
@@ -1611,4 +1648,27 @@ void ImageManager::ImageLoad()
 	AddImageVector("sTankT", L"./Resources/sTankT/stankt00", 17, 99);// ½ÃÁîÅÊÅ© ÇÏ´ÂÁß ¸Ó¸®
 	AddImageVector("sTank", L"./Resources/sTank/stank00", 0, 5); // ½ÃÁîÅÊÅ© ÇÏ´ÂÁß ¸ö
 
+	AddWireImage("wirefram0000", "./Resources/Icon2/wirefram0000.bmp");
+	AddWireImage("wirefram0002", "./Resources/Icon2/wirefram0002.bmp");
+	AddWireImage("wirefram0005", "./Resources/Icon2/wirefram0005.bmp");
+	AddWireImage("wirefram0007", "./Resources/Icon2/wirefram0007.bmp");
+	AddWireImage("wirefram0106", "./Resources/Icon2/wirefram0106.bmp");
+	AddWireImage("wirefram0113", "./Resources/Icon2/wirefram0113.bmp");
+	AddWireImage("wirefram0111", "./Resources/Icon2/wirefram0111.bmp");
+	AddWireImage("wirefram0112", "./Resources/Icon2/wirefram0112.bmp");
+	AddWireImage("wirefram0120", "./Resources/Icon2/wirefram0120.bmp");
+	AddWireImage("wirefram0123", "./Resources/Icon2/wirefram0123.bmp");
+	AddWireImage("wirefram0109", "./Resources/Icon2/wirefram0109.bmp");
+
+	AddWireImage("grpwire0000", "./Resources/Icon3/grpwire0000.bmp");
+	AddWireImage("grpwire0002", "./Resources/Icon3/grpwire0002.bmp");
+	AddWireImage("grpwire0005", "./Resources/Icon3/grpwire0005.bmp");
+	AddWireImage("grpwire0007", "./Resources/Icon3/grpwire0007.bmp");
+	AddWireImage("grpwire0106", "./Resources/Icon3/grpwire0106.bmp");
+	AddWireImage("grpwire0113", "./Resources/Icon3/grpwire0113.bmp");
+	AddWireImage("grpwire0111", "./Resources/Icon3/grpwire0111.bmp");
+	AddWireImage("grpwire0112", "./Resources/Icon3/grpwire0112.bmp");
+	AddWireImage("grpwire0120", "./Resources/Icon3/grpwire0120.bmp");
+	AddWireImage("grpwire0123", "./Resources/Icon3/grpwire0123.bmp");
+	AddWireImage("grpwire0109", "./Resources/Icon3/grpwire0109.bmp");
 }

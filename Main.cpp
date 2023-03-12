@@ -14,9 +14,9 @@ void Main::Init()
 	KEYMANAGER->Init();
 	SOUNDMANAGER->init();
 	TIMERMANAGER->Init();
-	SOUNDMANAGER->addSound("main-menu", "./Resources/Sound/main-menu.mp3", false, true);
-	SOUNDMANAGER->addSound("terran-2", "./Resources/Sound/starcraft-terran-theme-2.mp3", false, true);
-	SOUNDMANAGER->addSound("terran-1", "./Resources/Sound/terran-theme-1.mp3", false, true);
+	SOUNDMANAGER->addSound("main-menu", "./Resources/Sound/main-menu.mp3", true, true);
+	SOUNDMANAGER->addSound("terran-2", "./Resources/Sound/starcraft-terran-theme-2.mp3", true, true);
+	SOUNDMANAGER->addSound("terran-1", "./Resources/Sound/terran-theme-1.mp3", true, true);
 	SOUNDMANAGER->addSound("tscdth00", "./Resources/Sound/scv/tscdth00.wav", false, false);
 	SOUNDMANAGER->addSound("tacwht00", "./Resources/Sound/bldg/tacwht00.wav", false, false);
 	SOUNDMANAGER->addSound("tclwht00", "./Resources/Sound/bldg/tclwht00.wav", false, false);

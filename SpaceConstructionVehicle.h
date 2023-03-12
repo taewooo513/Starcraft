@@ -13,6 +13,7 @@ private:
 	float timer = 0;
 	float m_dir = 0;
 	int soundIdx = 0;
+	Channel* ch = nullptr;
 	CImage* m_idleImage[9];
 	CImage* m_actionImage_1[9];
 	CImage* m_actionImage_2[9];

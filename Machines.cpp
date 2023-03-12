@@ -172,7 +172,6 @@ void Machines::UIRender()
 
 		if (player->isSModeUp == false)
 		{
-
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0000"), { UIPosition[2].x + 25,UIPosition[2].y + 25 }, 1.7, 0, 0);
 			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0245"), { UIPosition[2].x - 5 ,UIPosition[2].y - 2 }, 1.7, 0, 0);
 		}

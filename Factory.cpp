@@ -45,7 +45,7 @@ void Factory::Init()
 	idleP[1]->Setting(0.1f, false);
 	idleP[2]->Setting(0.1f, false);
 	idleP[3]->Setting(0.1f, false);
-	m_maxCompleteTime = 1;
+	m_maxCompleteTime = 50;
 	m_completeTime = 0;
 	m_costM = 100;
 	m_costG = 0;
@@ -86,6 +86,7 @@ void Factory::Update()
 					if (asdf == false)
 					{
 						SOUNDMANAGER->play("taderr02", 0.5f);
+
 						asdf = true;
 					}
 				}
@@ -274,25 +275,67 @@ void Factory::UIRender()
 	if (addUnitQueue.size() != 0)
 	{
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0003"), { 445,700 }, 1.5, 0, 0);
-		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0007"), { 421,673 }, 1.5, 0, 0);
+		if (addUnitQueue[0].unit == 1)
+		{
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0002"), { 421,673 }, 1.5, 0, 0);
+		}
+		else
+		{
+			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0023"), { 421,673 }, 1.5, 0, 0);
+		}
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0011"), { 465,755 }, 1.5, 0, 0);
-
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0004"), { 445,762 }, 1.5, 0, 0);
 		if (addUnitQueue.size() > 1)
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0007"), { 421,735 }, 1.5, 0, 0);
+		{
+			if (addUnitQueue[1].unit == 1)
+			{
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0002"), { 421,735 }, 1.5, 0, 0);
+			}
+			else
+			{
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0023"), { 421,735 }, 1.5, 0, 0);
+
+			}
+		}
 
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0004"), { 505,762 }, 1.5, 0, 0);
 		if (addUnitQueue.size() > 2)
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0007"), { 481,735 }, 1.5, 0, 0);
+			if (addUnitQueue[2].unit == 1)
+			{
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0002"), { 481,735 }, 1.5, 0, 0);
+			}
+			else
+			{
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0023"), { 421,735 }, 1.5, 0, 0);
+			}
+
 
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0004"), { 565,762 }, 1.5, 0, 0);
 		if (addUnitQueue.size() > 3)
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0007"), { 541,735 }, 1.5, 0, 0);
+		{
+			if (addUnitQueue[3].unit == 1)
+			{
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0002"), { 541,735 }, 1.5, 0, 0);
+			}
+			else
+			{
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0023"), { 421,735 }, 1.5, 0, 0);
+			}
+		}
 
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("tcmdbtns0003"), { 625,762 }, 1.5, 0, 0);
 
 		if (addUnitQueue.size() > 4)
-			IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0007"), { 601,735 }, 1.5, 0, 0);
+		{
+			if (addUnitQueue[4].unit == 1)
+			{
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0000"), { 601,735 }, 1.5, 0, 0);
+			}
+			else
+			{
+				IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("cmdicons0023"), { 421,735 }, 1.5, 0, 0);
+			}
+		}
 
 		IMAGEMANAGER->UICenterRenderBlendBlack(IMAGEMANAGER->FindImage("coolTimeBar"), { 535,694 }, 0.8, 0, 0);
 

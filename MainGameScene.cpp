@@ -66,6 +66,9 @@ void MainGameScene::Render()
 {
 	player1->Render();
 
+
+
+
 	//IMAGEMANAGER->Render(IMAGEMANAGER->FindImage("titleBackGround"), { 0,0 }, 1.7f, 0);
 }
 
@@ -79,6 +82,71 @@ void MainGameScene::Release()
 void MainGameScene::UIRender()
 {
 	player1->UIRender();
+	float _X = WINSIZE_X / 4;
+	float _Y = WINSIZE_Y / 4;
+	float w = 50;
+	float h = 26;
+	if (player2->m_builds.size() == 0)
+	{
+		cout << "fdsa";
+		for (int y = 0; y < h; y++)
+		{
+			for (int x = 0; x < w; x++)
+			{
+				if (x == 0 && y == 0)
+				{
+					IMAGEMANAGER->UICenterRenderBlendBlack2(IMAGEMANAGER->FindImage("tile0000"), { _X + x * (IMAGEMANAGER->FindImage("tile0000")->GetWidth() - 1) * 1.5f,_Y + y * (IMAGEMANAGER->FindImage("tile0000")->GetHeight() - 1) * 1.5f }, { 1.5f,1.5f }, 0, 0);
+				}
+				else if (x == w - 1 && y == 0)
+				{
+					IMAGEMANAGER->UICenterRenderBlendBlack2(IMAGEMANAGER->FindImage("tile0002"), { _X + x * (IMAGEMANAGER->FindImage("tile0000")->GetWidth() - 1) * 1.5f,_Y + y * (IMAGEMANAGER->FindImage("tile0000")->GetHeight() - 1) * 1.5f }, { 1.5f,1.5f }, 0, 0);
+				}
+				else if (x == 0 && y == h - 1)
+				{
+					IMAGEMANAGER->UICenterRenderBlendBlack2(IMAGEMANAGER->FindImage("tile0006"), { _X + x * (IMAGEMANAGER->FindImage("tile0000")->GetWidth() - 1) * 1.5f,_Y + y * (IMAGEMANAGER->FindImage("tile0000")->GetHeight() - 1) * 1.5f }, { 1.5f,1.5f }, 0, 0);
+				}
+				else if (x == w - 1 && y == h - 1)
+				{
+					IMAGEMANAGER->UICenterRenderBlendBlack2(IMAGEMANAGER->FindImage("tile0008"), { _X + x * (IMAGEMANAGER->FindImage("tile0000")->GetWidth() - 1) * 1.5f,_Y + y * (IMAGEMANAGER->FindImage("tile0000")->GetHeight() - 1) * 1.5f }, { 1.5f,1.5f }, 0, 0);
+				}
+				else if (y == h - 1)
+				{
+					IMAGEMANAGER->UICenterRenderBlendBlack2(IMAGEMANAGER->FindImage("tile0007"), { _X + x * (IMAGEMANAGER->FindImage("tile0000")->GetWidth() - 1) * 1.5f,_Y + y * (IMAGEMANAGER->FindImage("tile0000")->GetHeight() - 1) * 1.5f }, { 1.5f,1.5f }, 0, 0);
+				}
+				else if (y == 0)
+				{
+					IMAGEMANAGER->UICenterRenderBlendBlack2(IMAGEMANAGER->FindImage("tile0001"), { _X + x * (IMAGEMANAGER->FindImage("tile0000")->GetWidth() - 1) * 1.5f,_Y + y * (IMAGEMANAGER->FindImage("tile0000")->GetHeight() - 1) * 1.5f }, { 1.5f,1.5f }, 0, 0);
+				}
+				else if (x == 0)
+				{
+					IMAGEMANAGER->UICenterRenderBlendBlack2(IMAGEMANAGER->FindImage("tile0003"), { _X + x * (IMAGEMANAGER->FindImage("tile0000")->GetWidth() - 1) * 1.5f,_Y + y * (IMAGEMANAGER->FindImage("tile0000")->GetHeight() - 1) * 1.5f }, { 1.5f,1.5f }, 0, 0);
+				}
+				else if (x == w - 1)
+				{
+					IMAGEMANAGER->UICenterRenderBlendBlack2(IMAGEMANAGER->FindImage("tile0005"), { _X + x * (IMAGEMANAGER->FindImage("tile0000")->GetWidth() - 1) * 1.5f,_Y + y * (IMAGEMANAGER->FindImage("tile0000")->GetHeight() - 1) * 1.5f }, { 1.5f,1.5f }, 0, 0);
+				}
+				else
+				{
+					IMAGEMANAGER->UICenterRenderBlendBlack2(IMAGEMANAGER->FindImage("tile0004"), { _X + x * (IMAGEMANAGER->FindImage("tile0000")->GetWidth() - 1) * 1.5f,_Y + y * (IMAGEMANAGER->FindImage("tile0000")->GetHeight() - 1) * 1.5f }, { 1.5f,1.5f }, 0, 0);
+				}
+			}
+		}
+		for (int x = 0; x < 35; x++)
+		{
+			if (x == 0)
+				IMAGEMANAGER->UICenterRenderBlendBlack2(IMAGEMANAGER->FindImage("terran0115"), { 520 + x * (IMAGEMANAGER->FindImage("tile0000")->GetWidth() - 1) * 1.5f,430 }, { 1.5f,1.5f }, 0, 0);
+			else if (x == 34)
+				IMAGEMANAGER->UICenterRenderBlendBlack2(IMAGEMANAGER->FindImage("terran0117"), { 520 + x * (IMAGEMANAGER->FindImage("tile0000")->GetWidth() - 1) * 1.5f,430 }, { 1.5f,1.5f }, 0, 0);
+			else
+			{
+				IMAGEMANAGER->UICenterRenderBlendBlack2(IMAGEMANAGER->FindImage("terran0116"), { 520 + x * (IMAGEMANAGER->FindImage("tile0000")->GetWidth() - 1) * 1.5f,430 }, { 1.5f,1.5f }, 0, 0);
+			}
+		}
+		IMAGEMANAGER->DirectDrawText(L"Congratulations!", { 380,220 }, { 30 ,30 });
+		IMAGEMANAGER->DirectDrawText(L"You are victorious!", { 350,270 }, { 30 ,30 });
+		IMAGEMANAGER->DirectDrawText(L"V", { 450,340 }, { 30 ,30 });
+		IMAGEMANAGER->DirectDrawText(L"ictory", { 470,340 }, { 30 ,30 }, { 50,255,0 ,255 });
+	}
 
 	IMAGEMANAGER->DrawRegion();
 }

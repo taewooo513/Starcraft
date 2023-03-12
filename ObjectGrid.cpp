@@ -326,8 +326,9 @@ void ObjectGrid::Update(bool isA)
 		{
 			for (int j = lastY; j < lastY + m_collisionGridSize.y; j++)
 			{
-				if (GRIDMANAGER->regionsTile[i][j].isBuildTag == gridTag)
-					GRIDMANAGER->regionsTile[i][j].isBuildTag = 0;
+				if (i > 0 && j > 0)
+					if (GRIDMANAGER->regionsTile[i][j].isBuildTag == gridTag)
+						GRIDMANAGER->regionsTile[i][j].isBuildTag = 0;
 			}
 		}
 	}
@@ -337,8 +338,9 @@ void ObjectGrid::Update(bool isA)
 	{
 		for (int j = fy; j < fy + m_collisionGridSize.y; j++)
 		{
-			if (GRIDMANAGER->regionsTile[i][j].isBuildTag == 0)
-				GRIDMANAGER->regionsTile[i][j].isBuildTag = gridTag;
+			if (fx > 0 && fy > 0)
+				if (GRIDMANAGER->regionsTile[i][j].isBuildTag == 0)
+					GRIDMANAGER->regionsTile[i][j].isBuildTag = gridTag;
 		}
 	}
 	lastX = fx;

@@ -19,6 +19,7 @@ public:
 	CommandCenter();
 	virtual ~CommandCenter();
 	vImage* idleP[4];
+	int ac = 0;
 	int randImgaeP = 0;
 	virtual void Init() override;
 	virtual void Update() override;

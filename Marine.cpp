@@ -5,11 +5,12 @@
 void Marine::Init()
 {
 	range = 300;
-	runImageTimeDelay = 0;
 	astarTimer = 0.1;
 	grid = GRIDMANAGER->AddGrid(this, 2, 2, 20, 20, 0, 0);
 	grid->gridTag = rand() % 10000 + 100;
 	player->AddUnit(this);
+	player->m_suff += 1;
+	runImageTimeDelay = 0;
 	deathImageTimeDelay = 0;
 	player->m_suff += 1;
 
@@ -382,7 +383,7 @@ void Marine::Update()
 			float dest = sqrt(
 				(iter->position.x - position.x) * (iter->position.x - position.x) +
 				(iter->position.y - position.y) * (iter->position.y - position.y));
-			if (range > dest + 20)
+			if (range + 50 > dest)
 			{
 				attackObject = iter;
 				break;
@@ -395,7 +396,7 @@ void Marine::Update()
 				float dest = sqrt(
 					(iter->position.x - position.x) * (iter->position.x - position.x) +
 					(iter->position.y - position.y) * (iter->position.y - position.y));
-				if (range > dest)
+				if (range + 50 > dest)
 				{
 					attackObject = iter;
 					break;
@@ -463,7 +464,7 @@ void Marine::Update()
 	CollisionUpdate();
 
 }
-
+#include "Player2.h"
 void Marine::Render()
 {
 	float rr = 8.f / 3.141592 * abs(rot);
@@ -598,10 +599,13 @@ void Marine::Render()
 			{
 				isdeath = true;
 			}
-
 		}
 	}
-	IMAGEMANAGER->FogUpdate(position, 30);
+	if (&player->m_builds == &OBJECTMANAGER->m_player->m_builds)
+
+	{
+		IMAGEMANAGER->FogUpdate(position, 30);
+	}
 	m_isClick = false;
 
 	if ((lasthp - m_hp) >= m_maxHp / 16)

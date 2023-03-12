@@ -101,17 +101,21 @@ void CommandCenter::Update()
 				scv->SetPlayer(player);
 				OBJECTMANAGER->AddObject(scv, "scv", position.x - 20, position.y + 100, 1);
 				addUnitQueue.erase(addUnitQueue.begin());
+				ac = 0;
 			}
-			else
+			else if (ac == 0)
 			{
+				ac++;
 				SOUNDMANAGER->play("taderr02", 0.5f);
 			}
 		}
 	}
 
 	clickRect = { int(position.x) , int(position.y) , int((position.x + 32 * 4 * 1.5f)) , int((position.y + 32 * 3 * 1.5f)) };
-	IMAGEMANAGER->FogUpdate(position, 30);
-
+	if (&player->m_builds == &OBJECTMANAGER->m_player->m_builds)
+	{
+		IMAGEMANAGER->FogUpdate(position, 30);
+	}
 	clickRect.left -= IMAGEMANAGER->GetCameraPosition().x + 100;
 	clickRect.right -= IMAGEMANAGER->GetCameraPosition().x + 100;
 	clickRect.bottom -= IMAGEMANAGER->GetCameraPosition().y + 80;

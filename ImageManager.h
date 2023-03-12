@@ -87,7 +87,7 @@ public:
 	void CameraSetting();
 
 	void AddWireImage(std::string key);
-	void AddWireImage(std::string key,std::string path);
+	void AddWireImage(std::string key, std::string path);
 	ID2D1Bitmap* AddBitmap(std::wstring path, UINT* Width, UINT* Height);
 	CImage* AddImage(const std::string key, std::wstring path);
 	CImage* FindImage(const std::string key);
@@ -106,7 +106,7 @@ public:
 
 	void CenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse = false);
 	void UICenterRenderBlendBlack(CImage* img, Vector2 vec, float scale, float rot, bool isReverse);
-	void UICenterRenderBlendBlack2(CImage* img, Vector2 vec, Vector2 scale, float rot, bool isReverse);
+	void UICenterRenderBlendBlack2(CImage* img, Vector2 vec, Vector2 scale, float rot, bool isReverse, float alpha = 1);
 
 	void MapRender();
 	void UIMapRender();
@@ -116,7 +116,6 @@ public:
 	void DrawLine(Vector2 startPos, Vector2 endPos);
 	void FogRender();
 	void FogUpdate(Vector2 pos, float dest);
-
 	/*
 */
 	void DrawUI2(CImage* img, Vector2 vec, float scale, float rot, bool isReverse);

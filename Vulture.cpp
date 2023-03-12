@@ -2,33 +2,14 @@
 #include "Vulture.h"
 #include "Player.h"
 #include "VultureBullet.h"
+#include "Player2.h"
 Vulture::Vulture()
 {
 }
 
 Vulture::~Vulture()
 {
-	player->m_suff -= 2;
-	if (player->m_selectUnit == this)
-	{
-		player->m_selectUnit = nullptr;
-	}
-	for (auto iter = player->m_selectUnits.begin(); iter < player->m_selectUnits.end(); iter++)
-	{
-		if ((*iter) == this)
-		{
-			player->m_selectUnits.erase(iter);
-			break;
-		}
-	}
-	for (auto iter = player->m_units.begin(); iter < player->m_units.end(); iter++)
-	{
-		if ((*iter) == this)
-		{
-			player->m_units.erase(iter);
-			break;
-		}
-	}
+
 }
 
 void Vulture::Init()
@@ -69,30 +50,60 @@ void Vulture::Update()
 {
 	if (isdeath == true)
 	{
+		SOUNDMANAGER->play("tscdth00", 0.5f);
+		EFFECTMANAGER->AddEffect("bang2Effect", { position.x - 80,position.y - 100 }, 1.1, 0.07f);
 		ObjectDestroyed();
+	}
+	if (KEYMANAGER->GetOnceKeyDown(VK_F11))
+	{
+		m_hp = 0;
 	}
 	if (m_hp <= 0 && isdeath == false)
 	{
-		SOUNDMANAGER->play("tscdth00", 0.5f);
 		isdeath = true;
-		EFFECTMANAGER->AddEffect("bang2Effect", { position.x - 80,position.y - 100 }, 1.1, 0.07f);
+
+		if (player != nullptr)
+		{
+			if (player->m_selectUnit == this)
+			{
+				player->m_selectUnit = nullptr;
+			}
+			for (auto iter = player->m_selectUnits.begin(); iter != player->m_selectUnits.end(); iter++)
+			{
+				if (*iter == this)
+				{
+					player->m_selectUnits.erase(iter);
+					break;
+				}
+			}
+
+			for (auto iter = player->m_units.begin(); iter != player->m_units.end(); iter++)
+			{
+				if (*iter == this)
+				{
+					player->m_units.erase(iter);
+					break;
+				}
+			}
+		}
 	}
 	if (attackObject == nullptr)
 	{
 		for (auto iter : player->otherPlayer->m_units)
 		{
 			float dest = sqrt((iter->position.x - position.x) * (iter->position.x - position.x) + (iter->position.y - position.y) * (iter->position.y - position.y));
-			if (range > dest)
+			if (range + 50 > dest)
 			{
 				attackObject = iter;
 				break;
 			}
-		}if (attackObject == nullptr)
+		}
+		if (attackObject == nullptr)
 		{
 			for (auto iter : player->otherPlayer->m_builds)
 			{
 				float dest = sqrt((iter->position.x - position.x) * (iter->position.x - position.x) + (iter->position.y - position.y) * (iter->position.y - position.y));
-				if (range > dest)
+				if (range + 50 > dest)
 				{
 					attackObject = iter;
 					break;
@@ -111,8 +122,10 @@ void Vulture::Update()
 	{
 		Attack();
 	}
-	IMAGEMANAGER->FogUpdate(position, 30);
-
+	if (&player->m_builds == &OBJECTMANAGER->m_player->m_builds)
+	{
+		IMAGEMANAGER->FogUpdate(position, 30);
+	}
 	if (isDeath == true)
 	{
 		if (player != nullptr)
@@ -222,6 +235,15 @@ void Vulture::UIRender()
 
 void Vulture::Release()
 {
+	for (auto iter = player->m_selectUnits.begin(); iter < player->m_selectUnits.end(); iter++)
+	{
+		if ((*iter) == this)
+		{
+			player->m_selectUnits.erase(iter);
+			break;
+		}
+	}
+	player->m_suff -= 2;
 }
 
 void Vulture::Move()
